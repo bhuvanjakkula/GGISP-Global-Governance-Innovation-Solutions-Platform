@@ -441,6 +441,44 @@ def save_simulation(project_id: int, data: SaveSimulationRequest):
 
 
 # ---------------------------------------------------------
+# Specialist Quantitative Innovation Engines (13 Domains)
+# ---------------------------------------------------------
+
+@app.get("/api/engines/catalog")
+def get_engines_catalog():
+    from ggisp.specialist_engines import list_specialist_engines
+    return list_specialist_engines()
+
+
+@app.get("/api/engines/{domain_slug}")
+def get_engine_spec(domain_slug: str):
+    from ggisp.specialist_engines import ENGINE_CATALOG
+    slug = domain_slug.strip().lower()
+    if slug not in ENGINE_CATALOG:
+        raise HTTPException(404, f"Specialist engine for domain '{slug}' not found")
+    meta = ENGINE_CATALOG[slug]
+    return {
+        "domain_slug": slug,
+        "engine_name": meta["engine_name"],
+        "reference_institution": meta["reference_institution"],
+        "description": meta["description"],
+        "default_parameters": meta["input_class"]().model_dump(),
+    }
+
+
+@app.post("/api/engines/{domain_slug}/simulate")
+def simulate_specialist_engine(domain_slug: str, parameters: dict):
+    from ggisp.specialist_engines import execute_specialist_engine
+    try:
+        return execute_specialist_engine(domain_slug, parameters)
+    except ValueError as e:
+        raise HTTPException(400, str(e))
+    except Exception as e:
+        logger.exception("Specialist engine '%s' simulation failed", domain_slug)
+        raise HTTPException(500, f"Engine execution failed: {str(e)}")
+
+
+# ---------------------------------------------------------
 # AI Research Assistant (Segregated & Safeguarded)
 # ---------------------------------------------------------
 

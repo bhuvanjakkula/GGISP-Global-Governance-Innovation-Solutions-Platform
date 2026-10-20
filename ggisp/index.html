@@ -397,6 +397,7 @@
       <button class="nav-btn active" data-tab="workspace">Research Workspace</button>
       <button class="nav-btn" data-tab="models">Policy Modelling Lab</button>
       <button class="nav-btn" data-tab="official-data">Official Data Hub</button>
+      <button class="nav-btn" data-tab="specialist">13 Specialist Innovation Engines</button>
     </div>
   </div>
 </header>
@@ -590,6 +591,49 @@
         </div>
 
         <div id="officialDataDisplay">Click "Query Multilateral Hub" to inspect harmonized World Bank, IMF, and WTO data.</div>
+      </div>
+    </div>
+
+    <!-- TAB 4: 13 SPECIALIST INNOVATION ENGINES -->
+    <div id="tab-specialist" class="tab-content" style="display:none;">
+      <div class="panel">
+        <div class="eyebrow">HIGH INNOVATION SUITE • 13 DOMAINS</div>
+        <h2>Specialist Quantitative Innovation Engines</h2>
+        <p>Advanced algorithmic policy solvers for every international domain — from nuclear safeguards and orbital space safety to global minimum taxes and genomic early warning.</p>
+
+        <div style="display: flex; gap: 12px; align-items: center; margin-bottom: 18px; flex-wrap: wrap;">
+          <label style="margin:0; font-size:13px; font-weight:600;">Select Specialist Division:</label>
+          <select id="specialistEngineSelect" style="max-width: 380px;"></select>
+          <button class="btn btn-primary" id="loadEngineSpecBtn">Configure Parameters</button>
+        </div>
+
+        <div id="engineCardHeader" class="record-card" style="margin-bottom:16px; border-left: 3px solid var(--teal-glow);">
+          <div class="record-header">
+            <div>
+              <b id="engineTitleDisplay" style="font-size:15px; color:#fff;">Select an engine</b>
+              <small id="engineInstDisplay" style="color:var(--text-dim); display:block; margin-top:2px;"></small>
+            </div>
+            <span class="tag supported" id="engineSlugBadge">DOMAIN ENGINE</span>
+          </div>
+          <p id="engineDescDisplay" style="font-size:13px; margin: 6px 0 0; color:#cbd5e1;"></p>
+        </div>
+
+        <div class="grid-2">
+          <!-- Parameter Inputs -->
+          <div class="panel" style="padding:16px; background:rgba(15,23,42,0.6);">
+            <div class="eyebrow">ALGORITHMIC PARAMETERS</div>
+            <form id="specialistEngineForm">
+              <div id="engineParamFields"></div>
+              <button class="btn btn-primary" type="submit" style="width:100%; margin-top:14px;">▶ Execute Quantitative Engine</button>
+            </form>
+          </div>
+
+          <!-- Output Display -->
+          <div class="panel" style="padding:16px; background:rgba(15,23,42,0.6);">
+            <div class="eyebrow">SIMULATION OUTPUT & POLICY EVALUATION</div>
+            <div id="engineOutputDisplay"><p class="help">Configure parameters and click "Execute Quantitative Engine" to run calculations.</p></div>
+          </div>
+        </div>
       </div>
     </div>
   </main>
@@ -1250,10 +1294,135 @@ document.addEventListener('submit', async e => {
       notify('Cross-domain simulation completed.');
     }
 
+    if (id === 'specialistEngineForm') {
+      const fd = new FormData(f);
+      const params = {};
+      const item = state.specialistCatalog?.find(c => c.domain_slug === state.selectedEngineSlug);
+      const defaults = item?.default_parameters || {};
+
+      for (const [k, defVal] of Object.entries(defaults)) {
+        if (typeof defVal === 'boolean') {
+          params[k] = Boolean(f.elements[k]?.checked);
+        } else if (typeof defVal === 'number') {
+          params[k] = Number(fd.get(k) || 0);
+        } else {
+          params[k] = String(fd.get(k) || '');
+        }
+      }
+
+      const res = await api(`/api/engines/${state.selectedEngineSlug}/simulate`, {
+        method: 'POST',
+        body: JSON.stringify(params)
+      });
+
+      let outputHtml = `<div class="record-card" style="border-left: 3px solid var(--teal-glow);"><b style="color:#fff; font-size:15px;">${esc(res.engine || item.engine_name)}</b>`;
+      outputHtml += `<div class="row-2" style="margin:10px 0;">`;
+
+      for (const [k, v] of Object.entries(res)) {
+        if (['engine', 'domain', 'methodology', 'treaty_reference', 'international_treaty_benchmark', 'framework_reference', 'regulatory_framework', 'international_architecture'].includes(k)) continue;
+        if (typeof v === 'object' && v !== null && !Array.isArray(v)) {
+          outputHtml += `</div><div class="record-card" style="margin:6px 0;"><b>${k.replace(/_/g, ' ').toUpperCase()}:</b><pre style="font-size:11px; margin:4px 0; color:#cbd5e1;">${esc(JSON.stringify(v, null, 2))}</pre></div><div class="row-2">`;
+        } else if (typeof v === 'string' && (v.includes('CRITICAL') || v.includes('ALERT') || v.includes('COMPLIANT') || v.includes('RECOMMENDATION') || v.includes('STATUS') || v.includes('VIABLE') || v.includes('HARVEST') || v.includes('HAIRCU') || v.includes('DEPLETED'))) {
+          outputHtml += `</div><div class="record-card" style="margin:6px 0; border-left:3px solid #f59e0b;"><b style="color:#f59e0b;">Assessment:</b> <span style="font-size:13px; color:#fff;">${esc(v)}</span></div><div class="row-2">`;
+        } else {
+          outputHtml += `<div class="data-pill"><small>${esc(k.replace(/_/g, ' '))}</small><b>${esc(v)}</b></div>`;
+        }
+      }
+
+      outputHtml += `</div>`;
+      if (res.policy_implication || res.diplomatic_recommendation || res.strategic_recommendation) {
+        const pol = res.policy_implication || res.diplomatic_recommendation || res.strategic_recommendation;
+        outputHtml += `<div class="record-card" style="margin-top:10px; border-left:3px solid #38bdf8;"><b>Strategic Policy Implication:</b><p style="font-size:12px; margin:4px 0; color:#e2e8f0;">${esc(pol)}</p></div>`;
+      }
+      outputHtml += `</div>`;
+
+      $('engineOutputDisplay').innerHTML = outputHtml;
+      notify(`${item.engine_name} successfully simulated!`);
+    }
+
   } catch (err) {
     notify(err.message, 'error');
   }
 });
+
+// ---------------- 13 Specialist Innovation Engines ----------------
+async function loadSpecialistCatalog() {
+  try {
+    const catalog = await api('/api/engines/catalog');
+    state.specialistCatalog = catalog;
+    const sel = $('specialistEngineSelect');
+    if (!sel) return;
+    sel.innerHTML = catalog.map(c => `<option value="${c.domain_slug}">${esc(c.engine_name)} (${esc(c.domain_slug)})</option>`).join('');
+    if (catalog.length > 0) {
+      selectSpecialistEngine(catalog[0].domain_slug);
+    }
+  } catch (err) {
+    console.error('Failed to load specialist catalog:', err);
+  }
+}
+
+function selectSpecialistEngine(slug) {
+  state.selectedEngineSlug = slug;
+  const item = state.specialistCatalog?.find(c => c.domain_slug === slug);
+  if (!item) return;
+
+  $('engineTitleDisplay').textContent = item.engine_name;
+  $('engineInstDisplay').textContent = 'Treaty / Lead Authority: ' + item.reference_institution;
+  $('engineSlugBadge').textContent = item.domain_slug.toUpperCase();
+  $('engineDescDisplay').textContent = item.description;
+
+  const container = $('engineParamFields');
+  const params = item.default_parameters || {};
+  let fieldsHtml = '';
+
+  for (const [key, val] of Object.entries(params)) {
+    const labelText = key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+    const isBool = typeof val === 'boolean';
+    const isNum = typeof val === 'number';
+
+    if (isBool) {
+      fieldsHtml += `
+        <div style="margin-bottom:8px;">
+          <label style="display:flex; align-items:center; gap:8px;">
+            <input type="checkbox" name="${key}" ${val ? 'checked' : ''} style="width:auto;"> ${labelText}
+          </label>
+        </div>
+      `;
+    } else if (isNum) {
+      const step = val % 1 === 0 ? '1' : '0.1';
+      fieldsHtml += `
+        <div style="margin-bottom:8px;">
+          <label>${labelText}</label>
+          <input type="number" step="${step}" name="${key}" value="${val}" required>
+        </div>
+      `;
+    } else {
+      fieldsHtml += `
+        <div style="margin-bottom:8px;">
+          <label>${labelText}</label>
+          <input type="text" name="${key}" value="${esc(val)}" required>
+        </div>
+      `;
+    }
+  }
+
+  container.innerHTML = fieldsHtml;
+  $('engineOutputDisplay').innerHTML = '<p class="help">Ready to run. Adjust parameters and click "Execute Quantitative Engine".</p>';
+}
+
+$('loadEngineSpecBtn')?.addEventListener('click', () => {
+  selectSpecialistEngine($('specialistEngineSelect').value);
+});
+$('specialistEngineSelect')?.addEventListener('change', () => {
+  selectSpecialistEngine($('specialistEngineSelect').value);
+});
+
+// Update init() to also load specialist catalog
+const originalInit = init;
+init = async function() {
+  await originalInit();
+  await loadSpecialistCatalog();
+};
 
 init();
 </script>
