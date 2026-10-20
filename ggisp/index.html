@@ -1,0 +1,1261 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GGISP Platform v0.2 • Global Governance, Innovation & Solutions Platform</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-main: #0b1120;
+      --bg-surface: #111a2e;
+      --bg-card: #17233d;
+      --bg-glass: rgba(23, 35, 61, 0.75);
+      --border: rgba(148, 163, 184, 0.15);
+      --border-accent: rgba(20, 184, 166, 0.4);
+      --teal-glow: #14b8a6;
+      --teal-dark: #0f766e;
+      --cyan: #06b6d4;
+      --gold: #f59e0b;
+      --rose: #f43f5e;
+      --emerald: #10b981;
+      --text-main: #f1f5f9;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+      --radius: 12px;
+      --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg-main);
+      color: var(--text-main);
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif;
+      font-size: 14px;
+      line-height: 1.55;
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(20, 184, 166, 0.12) 0px, transparent 50%),
+        radial-gradient(at 100% 0%, rgba(6, 182, 212, 0.1) 0px, transparent 50%),
+        radial-gradient(at 50% 100%, rgba(15, 23, 42, 0.8) 0px, transparent 50%);
+      min-height: 100vh;
+    }
+    header {
+      background: rgba(17, 26, 46, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 24px;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .brand { display: flex; align-items: center; gap: 14px; }
+    .brand-logo {
+      background: linear-gradient(135deg, #0d9488, #06b6d4);
+      color: white;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      font-size: 20px;
+      padding: 6px 14px;
+      border-radius: 10px;
+      letter-spacing: 1px;
+      box-shadow: 0 0 15px rgba(20, 184, 166, 0.35);
+    }
+    .brand h1 { margin: 0; font-family: 'Outfit', sans-serif; font-size: 17px; font-weight: 700; color: #fff; }
+    .brand small { display: block; color: var(--text-muted); font-size: 11px; }
+    .header-pills { display: flex; align-items: center; gap: 10px; }
+    .status-pill {
+      background: rgba(20, 184, 166, 0.12);
+      border: 1px solid rgba(20, 184, 166, 0.3);
+      color: #5eead4;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .status-pill::before {
+      content: ''; display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: #14b8a6;
+      box-shadow: 0 0 6px #14b8a6;
+    }
+    .top-nav {
+      display: flex;
+      gap: 6px;
+      background: rgba(11, 17, 32, 0.6);
+      padding: 4px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+    }
+    .nav-btn {
+      background: transparent;
+      border: 0;
+      color: var(--text-muted);
+      padding: 6px 14px;
+      border-radius: 7px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all .2s;
+    }
+    .nav-btn.active, .nav-btn:hover { background: var(--bg-card); color: #fff; }
+    .nav-btn.active { color: #5eead4; border: 1px solid rgba(20, 184, 166, 0.3); }
+
+    .layout {
+      max-width: 1540px;
+      margin: 0 auto;
+      padding: 20px;
+      display: grid;
+      grid-template-columns: 310px minmax(0, 1fr);
+      gap: 20px;
+    }
+    aside {
+      background: var(--bg-glass);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+      height: calc(100vh - 105px);
+      overflow-y: auto;
+      position: sticky;
+      top: 85px;
+    }
+    .panel {
+      background: var(--bg-glass);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow);
+    }
+    .panel:hover { border-color: rgba(148, 163, 184, 0.25); }
+
+    .eyebrow {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--teal-glow);
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    h2 { font-family: 'Outfit', sans-serif; font-size: 18px; font-weight: 700; margin: 0 0 12px; color: #fff; }
+    h3 { font-family: 'Outfit', sans-serif; font-size: 15px; font-weight: 600; margin: 0 0 8px; color: #e2e8f0; }
+    p { margin: 0 0 10px; color: var(--text-muted); }
+    .help { font-size: 12px; color: var(--text-dim); }
+
+    /* Domain List */
+    .domain-filter {
+      display: flex;
+      gap: 4px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+    .df-btn {
+      background: rgba(15, 23, 42, 0.5);
+      border: 1px solid var(--border);
+      color: var(--text-dim);
+      font-size: 11px;
+      padding: 3px 8px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .df-btn.active { background: var(--teal-dark); color: #fff; border-color: var(--teal-glow); }
+
+    .domain-item {
+      width: 100%;
+      text-align: left;
+      padding: 10px 12px;
+      border-radius: 8px;
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--text-main);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      margin-bottom: 4px;
+      transition: all .15s;
+    }
+    .domain-item:hover { background: rgba(255, 255, 255, 0.04); }
+    .domain-item.active { background: rgba(20, 184, 166, 0.12); border-color: var(--border-accent); color: #5eead4; }
+    .domain-info b { display: block; font-size: 13px; font-weight: 600; }
+    .domain-info small { color: var(--text-dim); font-size: 11px; }
+    .badge {
+      background: rgba(148, 163, 184, 0.15);
+      color: var(--text-muted);
+      font-size: 11px;
+      padding: 2px 7px;
+      border-radius: 12px;
+      font-weight: 600;
+    }
+
+    /* Metrics Grid */
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+    .metric-card {
+      background: linear-gradient(135deg, rgba(23, 35, 61, 0.7), rgba(17, 26, 46, 0.8));
+      border: 1px solid var(--border);
+      padding: 16px;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+    .metric-card::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, transparent, var(--teal-glow), transparent);
+    }
+    .metric-num { font-family: 'Outfit', sans-serif; font-size: 26px; font-weight: 800; color: #fff; margin: 2px 0; }
+    .metric-card small { color: var(--text-muted); font-size: 12px; }
+
+    /* Work Area Grid */
+    .grid-2 { display: grid; grid-template-columns: 360px minmax(0, 1fr); gap: 20px; }
+
+    /* Forms & Inputs */
+    label { display: block; font-size: 12px; font-weight: 600; color: #cbd5e1; margin-bottom: 5px; }
+    input:not([type="checkbox"]), select, textarea {
+      width: 100%;
+      background: #0f172a;
+      border: 1px solid rgba(148, 163, 184, 0.2);
+      border-radius: 8px;
+      padding: 8px 12px;
+      color: #f8fafc;
+      font-family: inherit;
+      font-size: 13px;
+      transition: border-color .2s;
+    }
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: var(--teal-glow);
+      box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.2);
+    }
+    textarea { min-height: 70px; resize: vertical; }
+    .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all .2s;
+      border: 0;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #0d9488, #0891b2);
+      color: white;
+      box-shadow: 0 4px 12px rgba(13, 148, 136, 0.3);
+    }
+    .btn-primary:hover { opacity: 0.92; transform: translateY(-1px); }
+    .btn-secondary {
+      background: rgba(30, 41, 59, 0.7);
+      border: 1px solid var(--border);
+      color: #e2e8f0;
+    }
+    .btn-secondary:hover { background: rgba(51, 65, 85, 0.8); border-color: rgba(148, 163, 184, 0.3); }
+    .btn-gold {
+      background: linear-gradient(135deg, #d97706, #b45309);
+      color: white;
+    }
+    .btn-sm { font-size: 11px; padding: 4px 10px; border-radius: 6px; }
+
+    /* Tags & Statuses */
+    .tag {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .tag.supported, .tag.ready, .tag.approved { background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }
+    .tag.unverified, .tag.concept, .tag.draft { background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); }
+    .tag.disputed, .tag.error { background: rgba(244, 63, 94, 0.15); color: #fb7185; border: 1px solid rgba(244, 63, 94, 0.3); }
+    .tag.research, .tag.review { background: rgba(6, 182, 212, 0.15); color: #38bdf8; border: 1px solid rgba(6, 182, 212, 0.3); }
+
+    /* Project Cards */
+    .project-card {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      padding: 12px 14px;
+      margin-bottom: 8px;
+      cursor: pointer;
+      text-align: left;
+      width: 100%;
+      color: var(--text-main);
+      transition: all .15s;
+    }
+    .project-card:hover { border-color: rgba(20, 184, 166, 0.4); background: rgba(20, 184, 166, 0.05); }
+    .project-card.active { border-color: var(--teal-glow); background: rgba(20, 184, 166, 0.12); }
+    .project-card b { display: block; font-size: 13px; margin-bottom: 3px; color: #fff; }
+    .project-card small { color: var(--text-muted); font-size: 11px; }
+
+    /* Dossier Records */
+    .record-card {
+      background: rgba(15, 23, 42, 0.5);
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      padding: 14px;
+      margin-bottom: 10px;
+    }
+    .record-card:hover { border-color: rgba(148, 163, 184, 0.25); }
+    .record-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; margin-bottom: 6px; }
+
+    /* Live Data Card */
+    .data-pill {
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px;
+      text-align: center;
+    }
+    .data-pill small { color: var(--text-dim); display: block; font-size: 10px; text-transform: uppercase; }
+    .data-pill b { font-family: 'Outfit', sans-serif; font-size: 16px; color: #38bdf8; display: block; margin-top: 2px; }
+
+    /* SVG Chart */
+    .chart-container {
+      background: #090d16;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px;
+      margin: 14px 0;
+    }
+    svg.chart { width: 100%; height: 210px; overflow: visible; }
+    .chart-legend { display: flex; gap: 15px; font-size: 11px; margin-top: 8px; justify-content: center; }
+    .legend-item { display: flex; align-items: center; gap: 5px; color: var(--text-muted); }
+    .legend-color { width: 10px; height: 10px; border-radius: 2px; }
+
+    /* Notification message */
+    #notification {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      max-width: 420px;
+      z-index: 100;
+      padding: 12px 18px;
+      border-radius: 10px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+      font-size: 13px;
+      font-weight: 500;
+      display: none;
+      animation: slideIn .2s ease;
+    }
+    #notification.success { background: #064e3b; border: 1px solid #059669; color: #a7f3d0; }
+    #notification.error { background: #881337; border: 1px solid #be123c; color: #fecdd3; }
+    @keyframes slideIn { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+    /* Responsive */
+    @media (max-width: 1080px) {
+      .layout { grid-template-columns: 1fr; }
+      aside { height: auto; position: static; }
+      .grid-2 { grid-template-columns: 1fr; }
+      .metrics { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="brand">
+    <div class="brand-logo">GGISP</div>
+    <div>
+      <h1>Global Governance, Innovation & Solutions Platform</h1>
+      <small>Platform v0.2 • Independent Research • Official Multilateral Data • Human Authority</small>
+    </div>
+  </div>
+  <div class="header-pills">
+    <span class="status-pill">13 Specialist Divisions Active</span>
+    <div class="top-nav">
+      <button class="nav-btn active" data-tab="workspace">Research Workspace</button>
+      <button class="nav-btn" data-tab="models">Policy Modelling Lab</button>
+      <button class="nav-btn" data-tab="official-data">Official Data Hub</button>
+    </div>
+  </div>
+</header>
+
+<div class="layout">
+  <!-- Sidebar: 13 Divisions -->
+  <aside>
+    <div class="eyebrow">RESEARCH DIVISIONS</div>
+    <div class="domain-filter">
+      <button class="df-btn active" data-family="all">All</button>
+      <button class="df-btn" data-family="economic">Economic</button>
+      <button class="df-btn" data-family="high">Security</button>
+      <button class="df-btn" data-family="policy">Policy</button>
+      <button class="df-btn" data-family="environment">Environment</button>
+    </div>
+    <div id="domainList">Loading divisions…</div>
+    <div style="margin-top: 16px; padding-top: 12px; border-top: 1px solid var(--border);" class="help">
+      All 13 divisions share verified evidence, cryptographic source hashes, and founder-reviewed advisory workflows.
+    </div>
+  </aside>
+
+  <!-- Main View -->
+  <main>
+    <div class="metrics" id="metricsBar">
+      <div class="metric-card"><small>Specialist Divisions</small><div class="metric-num">13</div><small>Multilateral domains</small></div>
+      <div class="metric-card"><small>Active Research Projects</small><div class="metric-num" id="metricProjects">0</div><small>Across all divisions</small></div>
+      <div class="metric-card"><small>Evidence Sources & Claims</small><div class="metric-num" id="metricEvidence">0</div><small>SHA-256 attested records</small></div>
+      <div class="metric-card"><small>Founder-Approved Guidance</small><div class="metric-num" id="metricApproved">0</div><small>Human authority principle</small></div>
+    </div>
+
+    <!-- TAB 1: WORKSPACE -->
+    <div id="tab-workspace" class="tab-content">
+      <div class="grid-2">
+        <div>
+          <!-- Projects List -->
+          <div class="panel">
+            <div class="eyebrow">PROJECT REGISTRY</div>
+            <h2>Research Projects</h2>
+            <div id="projectList">Loading projects…</div>
+          </div>
+
+          <!-- Create Project -->
+          <div class="panel">
+            <div class="eyebrow">NEW ENQUIRY</div>
+            <h2>Create Research Project</h2>
+            <form id="createProjectForm">
+              <div style="margin-bottom: 10px;">
+                <label>Division</label>
+                <select id="projDomain" name="domain_slug" required></select>
+              </div>
+              <div class="row-2" style="margin-bottom: 10px;">
+                <div>
+                  <label>Project Title</label>
+                  <input name="title" minlength="4" maxlength="180" placeholder="e.g. Sovereign Debt & Tariff Shocks" required>
+                </div>
+                <div>
+                  <label>Country Code (ISO-3)</label>
+                  <input name="country_code" value="KEN" maxlength="5" required>
+                </div>
+              </div>
+              <div style="margin-bottom: 12px;">
+                <label>Specific Research Question / Problem</label>
+                <textarea name="problem" minlength="15" placeholder="State a precise, empirically falsifiable policy question..." required></textarea>
+              </div>
+              <button class="btn btn-primary" type="submit" style="width:100%;">+ Initialize Research Dossier</button>
+            </form>
+          </div>
+        </div>
+
+        <!-- Project Dossier Workspace -->
+        <div id="dossierWorkspace">
+          <div class="panel">
+            <p>Select a project from the left or create a new one to open the research workspace.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 2: MODELLING LAB -->
+    <div id="tab-models" class="tab-content" style="display:none;">
+      <div class="panel">
+        <div class="eyebrow">QUANTITATIVE SIMULATION LAB</div>
+        <h2>Validated Mathematical Policy Models</h2>
+        <p>Transparent, peer-checkable stock-flow equations and cross-domain simulations calibrated with official data.</p>
+        
+        <div class="top-nav" style="margin-bottom: 16px; width: fit-content;">
+          <button class="nav-btn active" data-model="debt">Dynamic Sovereign Debt Model</button>
+          <button class="nav-btn" data-model="devfin">Development Finance Allocation</button>
+          <button class="nav-btn" data-model="cross">Cross-Domain Macro-Fiscal Simulator</button>
+        </div>
+
+        <!-- Model 1: Dynamic Sovereign Debt -->
+        <div id="model-pane-debt">
+          <form id="debtModelForm">
+            <div class="row-3" style="margin-bottom: 10px;">
+              <div><label>Initial Debt / GDP (%)</label><input type="number" step="0.1" name="initial_debt_percent_gdp" value="70.8" required></div>
+              <div><label>Effective Nominal Interest Rate (%)</label><input type="number" step="0.1" name="interest_rate_percent" value="7.2" required></div>
+              <div><label>Nominal GDP Growth (%)</label><input type="number" step="0.1" name="nominal_gdp_growth_percent" value="6.5" required></div>
+            </div>
+            <div class="row-3" style="margin-bottom: 10px;">
+              <div><label>Primary Budget Surplus / GDP (%)</label><input type="number" step="0.1" name="primary_surplus_percent_gdp" value="-0.8" required></div>
+              <div><label>Foreign Currency Debt Share (%)</label><input type="number" step="1" name="foreign_debt_share_percent" value="55" required></div>
+              <div><label>Year-1 Currency Depreciation (%)</label><input type="number" step="0.5" name="currency_depreciation_percent" value="10" required></div>
+            </div>
+            <div class="row-2" style="margin-bottom: 14px;">
+              <div><label>Contingent Liabilities Shock (% GDP)</label><input type="number" step="0.5" name="contingent_liabilities_percent_gdp" value="0.0"></div>
+              <div><label>Simulation Horizon (Years)</label><input type="number" min="1" max="25" name="years" value="5" required></div>
+            </div>
+            <div style="display:flex; gap:10px;">
+              <button class="btn btn-primary" type="submit">Run Debt Scenarios</button>
+              <button class="btn btn-secondary" type="button" id="saveDebtSimBtn">Save Result to Selected Project</button>
+            </div>
+          </form>
+          <div id="debtModelOutput" style="margin-top: 16px;"></div>
+        </div>
+
+        <!-- Model 2: Development Finance -->
+        <div id="model-pane-devfin" style="display:none;">
+          <form id="devfinModelForm">
+            <div class="row-3" style="margin-bottom: 10px;">
+              <div><label>Financing Pool (Million USD)</label><input type="number" step="10" name="total_financing_pool_million_usd" value="2500" required></div>
+              <div><label>National GDP (Million USD)</label><input type="number" step="100" name="country_gdp_million_usd" value="110000" required></div>
+              <div><label>Annual Govt Revenue (Million USD)</label><input type="number" step="100" name="annual_govt_revenue_million_usd" value="19500" required></div>
+            </div>
+            <div class="row-3" style="margin-bottom: 10px;">
+              <div><label>Existing Debt Service (Million USD)</label><input type="number" step="10" name="current_annual_debt_service_million_usd" value="4800" required></div>
+              <div><label>Concessional Interest (%)</label><input type="number" step="0.1" name="concessional_interest_rate_percent" value="1.8" required></div>
+              <div><label>Grant Share (%)</label><input type="number" step="1" name="grant_element_share_percent" value="35" required></div>
+            </div>
+            <div class="row-2" style="margin-bottom: 14px;">
+              <div><label>Sector Weights: Infra / Health / Edu / Climate (%)</label>
+                <div class="row-2">
+                  <input type="number" name="infrastructure_weight" value="35" title="Infrastructure">
+                  <input type="number" name="healthcare_weight" value="25" title="Healthcare">
+                  <input type="number" name="education_weight" value="20" title="Education">
+                  <input type="number" name="climate_adaptation_weight" value="20" title="Climate">
+                </div>
+              </div>
+              <div><label>Loan Maturity (Years)</label><input type="number" name="loan_maturity_years" value="25" required></div>
+            </div>
+            <button class="btn btn-primary" type="submit">Optimize Capital Allocation</button>
+          </form>
+          <div id="devfinModelOutput" style="margin-top: 16px;"></div>
+        </div>
+
+        <!-- Model 3: Cross Domain Macro-Fiscal -->
+        <div id="model-pane-cross" style="display:none;">
+          <form id="crossModelForm">
+            <div class="row-3" style="margin-bottom: 10px;">
+              <div><label>Country Code</label><input name="country_code" value="KEN" required></div>
+              <div><label>Initial Debt / GDP (%)</label><input type="number" step="0.1" name="initial_debt_percent_gdp" value="70.8" required></div>
+              <div><label>Baseline GDP Growth (%)</label><input type="number" step="0.1" name="baseline_gdp_growth_percent" value="5.2" required></div>
+            </div>
+            <div class="row-3" style="margin-bottom: 10px;">
+              <div><label>Annual Exports (Million USD)</label><input type="number" step="10" name="annual_exports_million_usd" value="7430" required></div>
+              <div><label>Trade Openness / GDP (%)</label><input type="number" step="0.5" name="trade_openness_percent_gdp" value="34.5" required></div>
+              <div><label>Partner Tariff Shock (Delta pp)</label><input type="number" step="0.5" name="partner_tariff_shock_delta_pp" value="5.0" required></div>
+            </div>
+            <div class="row-2" style="margin-bottom: 14px;">
+              <div><label>Concessional MDB Financing (Million USD/yr)</label><input type="number" step="10" name="annual_concessional_finance_million_usd" value="1200" required></div>
+              <div><label>Simulation Horizon (Years)</label><input type="number" min="1" max="15" name="years" value="5" required></div>
+            </div>
+            <button class="btn btn-primary" type="submit">Simulate Cross-Domain Policy Paths</button>
+          </form>
+          <div id="crossModelOutput" style="margin-top: 16px;"></div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- TAB 3: OFFICIAL DATA HUB -->
+    <div id="tab-official-data" class="tab-content" style="display:none;">
+      <div class="panel">
+        <div class="eyebrow">MULTILATERAL DATA INTEGRATION</div>
+        <h2>World Bank • IMF • WTO Official Data Hub</h2>
+        <p>Live queries with authenticated fallback datasets and cryptographic provenance snapshots.</p>
+
+        <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 16px;">
+          <label style="margin:0; font-size:13px;">Select Benchmark Sovereign:</label>
+          <select id="countrySelect" style="max-width: 250px;">
+            <option value="KEN">Kenya (KEN) — Sub-Saharan Africa</option>
+            <option value="GHA">Ghana (GHA) — West Africa</option>
+            <option value="LKA">Sri Lanka (LKA) — South Asia</option>
+            <option value="ARG">Argentina (ARG) — Latin America</option>
+            <option value="ZMB">Zambia (ZMB) — Southern Africa</option>
+            <option value="VNM">Vietnam (VNM) — East Asia</option>
+            <option value="IND">India (IND) — South Asia</option>
+          </select>
+          <button class="btn btn-primary" id="fetchOfficialBtn">Query Multilateral Hub</button>
+          <button class="btn btn-gold" id="applyToModelsBtn">Apply to Simulation Lab →</button>
+        </div>
+
+        <div id="officialDataDisplay">Click "Query Multilateral Hub" to inspect harmonized World Bank, IMF, and WTO data.</div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- Global Notification Toast -->
+<div id="notification"></div>
+
+<script>
+const state = {
+  domains: [],
+  projects: [],
+  selectedProjectId: null,
+  activeTab: 'workspace',
+  familyFilter: 'all',
+  currentDetail: null,
+  cachedMacro: null,
+  lastSimResult: null
+};
+
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const tag = (type, text) => `<span class="tag ${type}">${esc(text)}</span>`;
+
+async function api(url, options = {}) {
+  const resp = await fetch(url, {
+    ...options,
+    headers: { 'Content-Type': 'application/json', ...(options.headers || {}) }
+  });
+  if (!resp.ok) {
+    let err = await resp.json().catch(() => ({}));
+    let msg = err.detail || `HTTP ${resp.status}`;
+    if (Array.isArray(msg)) msg = msg.map(m => m.msg).join('; ');
+    throw new Error(msg);
+  }
+  return resp.json();
+}
+
+function notify(text, type = 'success') {
+  const el = $('notification');
+  el.textContent = text;
+  el.className = type;
+  el.style.display = 'block';
+  setTimeout(() => { el.style.display = 'none'; }, 4500);
+}
+
+// ---------------- Navigation & Tabs ----------------
+document.querySelectorAll('.nav-btn[data-tab]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.nav-btn[data-tab]').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.tab-content').forEach(tc => tc.style.display = 'none');
+    $('tab-' + btn.dataset.tab).style.display = 'block';
+    state.activeTab = btn.dataset.tab;
+  });
+});
+
+document.querySelectorAll('.nav-btn[data-model]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.nav-btn[data-model]').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    ['debt', 'devfin', 'cross'].forEach(m => $('model-pane-' + m).style.display = 'none');
+    $('model-pane-' + btn.dataset.model).style.display = 'block';
+  });
+});
+
+document.querySelectorAll('.df-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.df-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    state.familyFilter = btn.dataset.family;
+    renderDomains();
+  });
+});
+
+// ---------------- Initial Load ----------------
+async function init() {
+  try {
+    const [domains, projects] = await Promise.all([
+      api('/api/domains'),
+      api('/api/projects')
+    ]);
+    state.domains = domains;
+    state.projects = projects;
+
+    renderDomains();
+    renderProjects();
+
+    if (projects.length > 0) {
+      selectProject(projects[0].id);
+    }
+    loadOfficialData('KEN');
+  } catch (err) {
+    notify('Failed to initialize: ' + err.message, 'error');
+  }
+}
+
+function renderDomains() {
+  const filtered = state.domains.filter(d => state.familyFilter === 'all' || d.family === state.familyFilter);
+  $('domainList').innerHTML = filtered.map(d => `
+    <button class="domain-item" data-domain="${d.slug}">
+      <div class="domain-info">
+        <b>${esc(d.name)}</b>
+        <small>${esc(d.lead_institution || d.family)}</small>
+      </div>
+      <span class="badge">${d.project_count}</span>
+    </button>
+  `).join('');
+
+  $('projDomain').innerHTML = state.domains.map(d => `<option value="${d.slug}">${esc(d.name)}</option>`).join('');
+}
+
+function renderProjects() {
+  const el = $('projectList');
+  if (!state.projects.length) {
+    el.innerHTML = '<p class="help">No projects yet. Create one below.</p>';
+    return;
+  }
+  el.innerHTML = state.projects.map(p => `
+    <button class="project-card ${p.id === state.selectedProjectId ? 'active' : ''}" data-project-id="${p.id}">
+      <b>${esc(p.title)}</b>
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-top:4px;">
+        <small>${esc(p.domain_name || p.domain_slug)} • ${p.country_code || 'GLOBAL'}</small>
+        ${tag(p.status, p.status)}
+      </div>
+    </button>
+  `).join('');
+
+  // Update top metrics
+  $('metricProjects').textContent = state.projects.length;
+  $('metricApproved').textContent = state.projects.filter(p => p.status === 'ready').length;
+}
+
+// ---------------- Project Selection & Dossier ----------------
+async function selectProject(id) {
+  state.selectedProjectId = id;
+  renderProjects();
+  try {
+    const detail = await api(`/api/projects/${id}`);
+    state.currentDetail = detail;
+    renderDossier(detail);
+  } catch (e) {
+    notify('Error loading project: ' + e.message, 'error');
+  }
+}
+
+function renderDossier(p) {
+  const el = $('dossierWorkspace');
+  const srcOptions = '<option value="">No linked source</option>' + p.sources.map(s => `<option value="${s.id}">S${s.id} · ${esc(s.title)}</option>`).join('');
+
+  $('metricEvidence').textContent = (p.sources.length + p.claims.length);
+
+  el.innerHTML = `
+    <div class="panel">
+      <div class="record-header">
+        <div>
+          <div class="eyebrow">${esc(p.domain_meta?.name || p.domain_slug)} • ${p.country_code || 'GLOBAL'}</div>
+          <h2>${esc(p.title)}</h2>
+        </div>
+        ${tag(p.status, p.status)}
+      </div>
+      <p style="color:#e2e8f0; font-size:14px; margin-bottom:14px;">${esc(p.problem)}</p>
+      <div style="display:flex; gap:10px; flex-wrap:wrap;">
+        <a href="/api/projects/${p.id}/brief.md" download class="btn btn-secondary">↓ Export Markdown Brief</a>
+        <button class="btn btn-gold" id="openAiDrawerBtn">⚡ AI Research Assistant</button>
+      </div>
+    </div>
+
+    <!-- AI Drawer -->
+    <div id="aiDrawer" class="panel" style="display:none; border-color: rgba(245, 158, 11, 0.4); background: rgba(30, 27, 20, 0.7);">
+      <div class="record-header">
+        <div>
+          <div class="eyebrow" style="color:var(--gold);">AI RESEARCH ASSISTANT</div>
+          <h2>Preliminary Working Notes</h2>
+        </div>
+        ${tag('unverified', 'UNVERIFIED / NOT APPROVED')}
+      </div>
+      <p class="help">AI drafts are strictly segregated from founder advice. Explicit consent is required to trigger external AI assistance.</p>
+      <div style="margin-bottom:12px;">
+        <button class="btn btn-gold" id="triggerAiBtn">Generate Preliminary AI Working Synthesis</button>
+      </div>
+      <div id="aiOutputDisplay">
+        ${p.ai_drafts?.length ? p.ai_drafts.map(a => `
+          <div class="record-card">
+            <small style="color:var(--gold);">Model: ${esc(a.model)} • ${esc(a.created_at)}</small>
+            <pre style="white-space:pre-wrap; background:#0b1120; padding:12px; border-radius:8px; font-size:12px; color:#cbd5e1; max-height:350px; overflow-y:auto;">${esc(a.output_text)}</pre>
+          </div>
+        `).join('') : '<p class="help">No AI drafts recorded yet.</p>'}
+      </div>
+    </div>
+
+    <!-- Section 1: Evidence Library -->
+    <div class="panel">
+      <div class="eyebrow">SECTION 1 • EVIDENCE LIBRARY</div>
+      <h2>Primary Sources (${p.sources.length})</h2>
+      <div>
+        ${p.sources.length ? p.sources.map(s => `
+          <div class="record-card">
+            <div class="record-header">
+              <b>S${s.id} · ${esc(s.title)}</b>
+              ${s.manually_reviewed ? tag('supported', 'EXAMINED BY FOUNDER') : tag('unverified', 'UNREVIEWED')}
+            </div>
+            <small style="color:var(--text-muted);">${esc(s.publisher)} (${s.publication_year || 'N/A'}) • Quality: ${esc(s.quality_rating || 'standard')}</small>
+            <div style="margin: 4px 0;"><a href="${esc(s.url)}" target="_blank" rel="noopener noreferrer" style="color:#38bdf8; font-size:12px;">Open Source Link ↗</a></div>
+            ${s.content_hash ? `<div style="font-family:monospace; font-size:10px; color:var(--text-dim);">SHA-256: ${s.content_hash.slice(0, 24)}...</div>` : ''}
+            ${s.notes ? `<p style="margin-top:6px; font-size:12px;">${esc(s.notes)}</p>` : ''}
+          </div>
+        `).join('') : '<p class="help">No sources cataloged. Add verified international organization reports below.</p>'}
+      </div>
+
+      <hr style="border:0; border-top:1px solid var(--border); margin:16px 0;">
+      <h3>+ Add Evidence Source</h3>
+      <form id="addSourceForm">
+        <div style="margin-bottom:8px;"><label>Source Title</label><input name="title" required minlength="3"></div>
+        <div class="row-3" style="margin-bottom:8px;">
+          <div><label>Publisher / Organization</label><input name="publisher" required></div>
+          <div><label>Publication Year</label><input type="number" name="publication_year" value="2024"></div>
+          <div><label>Quality Rating</label><select name="quality_rating"><option value="high">High (Official MDB / Peer-reviewed)</option><option value="medium">Medium</option><option value="low">Low</option><option value="unrated">Unrated</option></select></div>
+        </div>
+        <div style="margin-bottom:8px;"><label>HTTPS URL</label><input name="url" type="url" placeholder="https://..." required></div>
+        <div style="margin-bottom:8px;"><label>Analyst Notes & Citation Findings</label><textarea name="notes" placeholder="Key paragraph, data points, caveats"></textarea></div>
+        <label style="display:flex; align-items:center; gap:8px; font-weight:normal; margin-bottom:10px;">
+          <input type="checkbox" name="manually_reviewed" style="width:auto;"> I have personally examined this publication (Human Attestation)
+        </label>
+        <button class="btn btn-secondary" type="submit">+ Record Evidence Source</button>
+      </form>
+    </div>
+
+    <!-- Section 2: Empirical Claims -->
+    <div class="panel">
+      <div class="eyebrow">SECTION 2 • CLAIMS & EPISTEMIC LIMITS</div>
+      <h2>Empirical Claims (${p.claims.length})</h2>
+      <div>
+        ${p.claims.length ? p.claims.map(c => `
+          <div class="record-card">
+            <div class="record-header">
+              <b>C${c.id} · ${esc(c.statement)}</b>
+              ${tag(c.evidence_status, c.evidence_status)}
+            </div>
+            <small style="color:var(--text-dim);">Linked Source: ${c.source_id ? 'S' + c.source_id : 'None'} • Confidence: ${c.confidence_score || 3}/5</small>
+            ${c.limitations ? `<p style="font-size:12px; margin-top:4px; color:#fca5a5;"><b>Limitations:</b> ${esc(c.limitations)}</p>` : ''}
+            ${c.contrary_evidence ? `<p style="font-size:12px; color:#fde68a;"><b>Contrary Evidence:</b> ${esc(c.contrary_evidence)}</p>` : ''}
+          </div>
+        `).join('') : '<p class="help">No claims recorded yet.</p>'}
+      </div>
+
+      <hr style="border:0; border-top:1px solid var(--border); margin:16px 0;">
+      <h3>+ Record Empirical Claim</h3>
+      <form id="addClaimForm">
+        <div style="margin-bottom:8px;"><label>Statement</label><textarea name="statement" minlength="8" required placeholder="State a verifiable factual assertion..."></textarea></div>
+        <div class="row-3" style="margin-bottom:8px;">
+          <div><label>Evidence Status</label><select name="evidence_status"><option value="unverified">Unverified</option><option value="supported">Supported by examined source</option><option value="disputed">Disputed / Contested</option></select></div>
+          <div><label>Linked Source</label><select name="source_id">${srcOptions}</select></div>
+          <div><label>Confidence (1-5)</label><input type="number" name="confidence_score" min="1" max="5" value="4"></div>
+        </div>
+        <div class="row-2" style="margin-bottom:10px;">
+          <div><label>Known Limitations</label><input name="limitations" placeholder="Data gaps, sample bias..."></div>
+          <div><label>Contrary Evidence</label><input name="contrary_evidence" placeholder="Competing viewpoints..."></div>
+        </div>
+        <button class="btn btn-secondary" type="submit">+ Record Claim</button>
+      </form>
+    </div>
+
+    <!-- Section 3: Competing Proposals -->
+    <div class="panel">
+      <div class="eyebrow">SECTION 3 • POLICY DELIBERATION</div>
+      <h2>Competing Policy Proposals (${p.competing_proposals?.length || 0})</h2>
+      <div>
+        ${p.competing_proposals?.length ? p.competing_proposals.map(cp => `
+          <div class="record-card">
+            <b>${esc(cp.proposal_title)}</b>
+            <p style="font-size:12px; margin:4px 0;"><b>Summary:</b> ${esc(cp.proponent_summary)}</p>
+            <p style="font-size:12px; color:#f59e0b;"><b>Trade-offs:</b> ${esc(cp.trade_offs)}</p>
+          </div>
+        `).join('') : '<p class="help">No competing proposals registered. Compare multiple options before finalizing guidance.</p>'}
+      </div>
+
+      <hr style="border:0; border-top:1px solid var(--border); margin:16px 0;">
+      <h3>+ Add Competing Policy Proposal</h3>
+      <form id="addProposalForm">
+        <div style="margin-bottom:8px;"><label>Proposal Title</label><input name="proposal_title" required placeholder="e.g. Rapid Orthodox Fiscal Consolidation"></div>
+        <div style="margin-bottom:8px;"><label>Proponent Summary</label><textarea name="proponent_summary" required placeholder="What does this alternative propose?"></textarea></div>
+        <div style="margin-bottom:8px;"><label>Structural Trade-offs & Costs</label><textarea name="trade_offs" required placeholder="What are the severe drawbacks or unintended consequences?"></textarea></div>
+        <button class="btn btn-secondary" type="submit">+ Register Competing Option</button>
+      </form>
+    </div>
+
+    <!-- Section 4: Founder's Advisory Centre -->
+    <div class="panel" style="border-color: rgba(20, 184, 166, 0.4);">
+      <div class="eyebrow">SECTION 4 • FOUNDER'S ADVISORY CENTRE</div>
+      <h2>Personally Authored Policy Guidance (${p.recommendations.length})</h2>
+      <p class="help">All recommendations are human-authored. The Human Authority gate blocks approval until at least one reviewed, supported claim exists.</p>
+
+      <div>
+        ${p.recommendations.length ? p.recommendations.map(r => `
+          <div class="record-card" style="border-left: 3px solid ${r.approval_status === 'approved' ? '#10b981' : '#f59e0b'};">
+            <div class="record-header">
+              <b>R${r.id} · By ${esc(r.author)}</b>
+              ${tag(r.approval_status, r.approval_status)}
+            </div>
+            <p style="font-size:14px; color:#fff; font-weight:600; margin:6px 0;">${esc(r.recommendation)}</p>
+            <p style="font-size:12px; margin:4px 0;"><b>Rationale & Mechanism:</b> ${esc(r.rationale)}</p>
+            <p style="font-size:12px; color:#fca5a5; margin:4px 0;"><b>Risks & Uncertainty:</b> ${esc(r.risks)}</p>
+            <div style="margin-top:8px;">
+              ${r.approval_status === 'draft' ? `<button class="btn btn-sm btn-primary" data-approve-rec="${r.id}">Approve After Personal Review</button>` : `<small style="color:#34d399;">Approved at ${esc(r.approved_at)}</small>`}
+            </div>
+          </div>
+        `).join('') : '<p class="help">No founder recommendations written yet.</p>'}
+      </div>
+
+      <hr style="border:0; border-top:1px solid var(--border); margin:16px 0;">
+      <h3>+ Write Policy Recommendation</h3>
+      <form id="addRecForm">
+        <div style="margin-bottom:8px;"><label>Author Label</label><input name="author" value="Founder" required></div>
+        <div style="margin-bottom:8px;"><label>Actionable Policy Recommendation</label><textarea name="recommendation" minlength="10" required placeholder="State your specific policy advice..."></textarea></div>
+        <div style="margin-bottom:8px;"><label>Mechanism & Economic Rationale</label><textarea name="rationale" minlength="10" required placeholder="Why does this mechanism work?"></textarea></div>
+        <div style="margin-bottom:10px;"><label>Risks, Implementation Trade-offs & Mitigations</label><textarea name="risks" minlength="10" required placeholder="What could go wrong?"></textarea></div>
+        <button class="btn btn-primary" type="submit">Save as Draft Recommendation</button>
+      </form>
+    </div>
+  `;
+}
+
+// ---------------- Official Data Hub ----------------
+async function loadOfficialData(countryCode) {
+  const display = $('officialDataDisplay');
+  display.innerHTML = '<p class="help">Fetching World Bank, IMF, and WTO data…</p>';
+  try {
+    const data = await api(`/api/external-data/profile/${countryCode}`);
+    state.cachedMacro = data;
+    const wb = data.world_bank;
+    const imf = data.imf;
+    const wto = data.wto;
+
+    display.innerHTML = `
+      <div style="margin-bottom: 14px;">
+        <h3>${esc(data.country_name)} (${esc(data.country_code)}) — Multilateral Economic Profile</h3>
+        <small style="color:var(--text-dim);">${esc(data.provenance.world_bank_source)} • ${esc(data.provenance.imf_source)}</small>
+      </div>
+
+      <div class="row-3" style="margin-bottom: 14px;">
+        <div class="data-pill"><small>World Bank GDP Growth</small><b>${wb.gdp_growth_percent}%</b></div>
+        <div class="data-pill"><small>IMF Gross Public Debt</small><b>${imf.gross_debt_percent_gdp}% GDP</b></div>
+        <div class="data-pill"><small>IMF DSA Risk Rating</small><b style="font-size:12px; color:#f59e0b;">${esc(imf.dsa_risk_rating)}</b></div>
+      </div>
+
+      <div class="row-3" style="margin-bottom: 14px;">
+        <div class="data-pill"><small>WTO Merchandise Exports</small><b>$${(wto.merchandise_exports_million_usd/1000).toFixed(1)}B</b></div>
+        <div class="data-pill"><small>WTO Simple Average Tariff</small><b>${wto.simple_average_mfn_tariff_percent}%</b></div>
+        <div class="data-pill"><small>External Debt Service / Exports</small><b>${wb.debt_service_exports_percent}%</b></div>
+      </div>
+
+      <div class="record-card" style="font-size:12px;">
+        <b>Multilateral Policy Details:</b>
+        <div style="margin-top:4px;"><b>IMF Program:</b> ${esc(imf.imf_program_status)}</div>
+        <div><b>Top Export Sectors (WTO):</b> ${wto.top_export_categories?.join(', ') || 'N/A'}</div>
+      </div>
+    `;
+  } catch (err) {
+    display.innerHTML = `<p class="help" style="color:#fb7185;">Failed to load official data: ${esc(err.message)}</p>`;
+  }
+}
+
+// ---------------- Chart Renderer ----------------
+function renderSvgChart(scenarios, years) {
+  const colors = {
+    baseline: '#38bdf8',
+    fiscal_consolidation: '#34d399',
+    adverse_shock: '#f43f5e',
+    restructuring_reform: '#f59e0b'
+  };
+
+  const width = 640;
+  const height = 180;
+  const pad = 35;
+
+  let allVals = [];
+  Object.values(scenarios).forEach(arr => arr.forEach(pt => allVals.push(pt.debt_percent_gdp)));
+  const minVal = Math.min(...allVals) * 0.9;
+  const maxVal = Math.max(...allVals) * 1.1;
+
+  const getX = y => pad + (y / years) * (width - 2 * pad);
+  const getY = v => height - pad - ((v - minVal) / (maxVal - minVal || 1)) * (height - 2 * pad);
+
+  let paths = '';
+  Object.entries(scenarios).forEach(([name, data]) => {
+    let dStr = '';
+    data.forEach((pt, i) => {
+      const x = getX(pt.year);
+      const y = getY(pt.debt_percent_gdp);
+      dStr += (i === 0 ? `M ${x} ${y}` : ` L ${x} ${y}`);
+    });
+    paths += `<path d="${dStr}" fill="none" stroke="${colors[name]}" stroke-width="2.5" />`;
+  });
+
+  return `
+    <div class="chart-container">
+      <svg class="chart" viewBox="0 0 ${width} ${height}">
+        <line x1="${pad}" y1="${height - pad}" x2="${width - pad}" y2="${height - pad}" stroke="#334155" stroke-width="1" />
+        <line x1="${pad}" y1="${pad}" x2="${pad}" y2="${height - pad}" stroke="#334155" stroke-width="1" />
+        <text x="${pad}" y="${height - 10}" fill="#94a3b8" font-size="10">Year 0</text>
+        <text x="${width - pad}" y="${height - 10}" fill="#94a3b8" font-size="10">Year ${years}</text>
+        <text x="5" y="${pad + 10}" fill="#94a3b8" font-size="10">${maxVal.toFixed(0)}%</text>
+        <text x="5" y="${height - pad}" fill="#94a3b8" font-size="10">${minVal.toFixed(0)}%</text>
+        ${paths}
+      </svg>
+      <div class="chart-legend">
+        <div class="legend-item"><span class="legend-color" style="background:#38bdf8;"></span> Baseline</div>
+        <div class="legend-item"><span class="legend-color" style="background:#34d399;"></span> Fiscal Reform</div>
+        <div class="legend-item"><span class="legend-color" style="background:#f43f5e;"></span> Adverse Shock</div>
+        <div class="legend-item"><span class="legend-color" style="background:#f59e0b;"></span> Restructuring</div>
+      </div>
+    </div>
+  `;
+}
+
+// ---------------- Event Listeners ----------------
+document.addEventListener('click', async e => {
+  const prCard = e.target.closest('[data-project-id]');
+  if (prCard) {
+    selectProject(Number(prCard.dataset.projectId));
+    return;
+  }
+
+  const domBtn = e.target.closest('[data-domain]');
+  if (domBtn) {
+    const slug = domBtn.dataset.domain;
+    const match = state.projects.find(p => p.domain_slug === slug);
+    if (match) selectProject(match.id);
+    else notify(`No active project in ${slug}. Create one in the form below.`, 'error');
+    return;
+  }
+
+  if (e.target.id === 'fetchOfficialBtn') {
+    loadOfficialData($('countrySelect').value);
+    return;
+  }
+
+  if (e.target.id === 'applyToModelsBtn') {
+    if (!state.cachedMacro) return;
+    const def = state.cachedMacro.calibrated_model_defaults;
+    const df = $('debtModelForm');
+    if (df) {
+      df.elements.initial_debt_percent_gdp.value = def.initial_debt_percent_gdp;
+      df.elements.interest_rate_percent.value = def.interest_rate_percent;
+      df.elements.nominal_gdp_growth_percent.value = def.nominal_gdp_growth_percent;
+      df.elements.primary_surplus_percent_gdp.value = def.primary_surplus_percent_gdp;
+      df.elements.foreign_debt_share_percent.value = def.foreign_debt_share_percent;
+    }
+    const cf = $('crossModelForm');
+    if (cf) {
+      cf.elements.country_code.value = state.cachedMacro.country_code;
+      cf.elements.initial_debt_percent_gdp.value = def.initial_debt_percent_gdp;
+      cf.elements.annual_exports_million_usd.value = def.base_exports_million_usd;
+    }
+    notify(`Calibrated official data for ${state.cachedMacro.country_name} loaded into Simulation Lab!`);
+    document.querySelector('.nav-btn[data-tab="models"]').click();
+    return;
+  }
+
+  if (e.target.id === 'openAiDrawerBtn') {
+    const dr = $('aiDrawer');
+    dr.style.display = dr.style.display === 'none' ? 'block' : 'none';
+    return;
+  }
+
+  if (e.target.id === 'triggerAiBtn') {
+    if (!confirm('Explicit Consent Confirmation:\n\nTrigger preliminary AI research drafting for this project? Project sources, claims, and problem statement will be synthesized.')) return;
+    const b = $('triggerAiBtn');
+    b.disabled = true;
+    b.textContent = 'Synthesizing…';
+    try {
+      const res = await api(`/api/projects/${state.selectedProjectId}/ai-draft`, {
+        method: 'POST',
+        body: JSON.stringify({ confirmed_external_ai_transfer: true })
+      });
+      notify('AI preliminary working note generated and segregated.');
+      selectProject(state.selectedProjectId);
+    } catch (err) {
+      notify(err.message, 'error');
+    } finally {
+      b.disabled = false;
+      b.textContent = 'Generate Preliminary AI Working Synthesis';
+    }
+    return;
+  }
+
+  const appBtn = e.target.closest('[data-approve-rec]');
+  if (appBtn) {
+    if (!confirm('Confirm Personal Human Authority:\n\nHave you personally evaluated the empirical sources and uncertainties for this recommendation? This records founder approval only, not institutional endorsement.')) return;
+    try {
+      await api(`/api/recommendations/${appBtn.dataset.approveRec}/approve`, {
+        method: 'POST',
+        body: JSON.stringify({ confirmed_human_review: true })
+      });
+      notify('Founder approval recorded in audit log.');
+      selectProject(state.selectedProjectId);
+    } catch (err) {
+      notify(err.message, 'error');
+    }
+    return;
+  }
+
+  if (e.target.id === 'saveDebtSimBtn') {
+    if (!state.selectedProjectId || !state.lastSimResult) {
+      notify('Run a simulation and ensure a project is selected first.', 'error');
+      return;
+    }
+    try {
+      await api(`/api/projects/${state.selectedProjectId}/save-simulation`, {
+        method: 'POST',
+        body: JSON.stringify({
+          model_type: 'debt_sustainability',
+          scenario_name: 'Dynamic Sovereign Debt Simulation',
+          parameters: state.lastSimResult.assumptions,
+          results: state.lastSimResult
+        })
+      });
+      notify('Simulation results logged to project dossier!');
+    } catch (err) {
+      notify(err.message, 'error');
+    }
+  }
+});
+
+// ---------------- Form Submissions ----------------
+document.addEventListener('submit', async e => {
+  const f = e.target;
+  const id = f.id;
+  e.preventDefault();
+
+  try {
+    if (id === 'createProjectForm') {
+      const fd = new FormData(f);
+      const res = await api('/api/projects', {
+        method: 'POST',
+        body: JSON.stringify(Object.fromEntries(fd))
+      });
+      notify('Research project initialized!');
+      f.reset();
+      const updated = await api('/api/projects');
+      state.projects = updated;
+      selectProject(res.id);
+    }
+
+    if (id === 'addSourceForm') {
+      const fd = new FormData(f);
+      const d = Object.fromEntries(fd);
+      d.manually_reviewed = Boolean(f.elements.manually_reviewed.checked);
+      if (d.publication_year) d.publication_year = Number(d.publication_year);
+      await api(`/api/projects/${state.selectedProjectId}/sources`, {
+        method: 'POST',
+        body: JSON.stringify(d)
+      });
+      notify('Source logged with SHA-256 provenance hash.');
+      selectProject(state.selectedProjectId);
+    }
+
+    if (id === 'addClaimForm') {
+      const fd = new FormData(f);
+      const d = Object.fromEntries(fd);
+      d.source_id = d.source_id ? Number(d.source_id) : null;
+      d.confidence_score = Number(d.confidence_score || 3);
+      await api(`/api/projects/${state.selectedProjectId}/claims`, {
+        method: 'POST',
+        body: JSON.stringify(d)
+      });
+      notify('Empirical claim cataloged.');
+      selectProject(state.selectedProjectId);
+    }
+
+    if (id === 'addProposalForm') {
+      const fd = new FormData(f);
+      await api(`/api/projects/${state.selectedProjectId}/competing-proposals`, {
+        method: 'POST',
+        body: JSON.stringify(Object.fromEntries(fd))
+      });
+      notify('Competing policy option logged.');
+      selectProject(state.selectedProjectId);
+    }
+
+    if (id === 'addRecForm') {
+      const fd = new FormData(f);
+      await api(`/api/projects/${state.selectedProjectId}/recommendations`, {
+        method: 'POST',
+        body: JSON.stringify(Object.fromEntries(fd))
+      });
+      notify('Authored recommendation saved in draft.');
+      selectProject(state.selectedProjectId);
+    }
+
+    if (id === 'debtModelForm') {
+      const fd = new FormData(f);
+      const d = {};
+      for (const [k, v] of fd.entries()) d[k] = Number(v);
+      const res = await api('/api/modelling/debt/simulate', {
+        method: 'POST',
+        body: JSON.stringify(d)
+      });
+      state.lastSimResult = res;
+
+      $('debtModelOutput').innerHTML = `
+        ${renderSvgChart(res.scenarios, d.years)}
+        <div class="row-2" style="margin-top:10px;">
+          <div class="data-pill"><small>Stabilizing Primary Balance</small><b>${res.debt_stabilizing_primary_balance_percent_gdp}% GDP</b></div>
+          <div class="data-pill"><small>Interest-Growth Diff (r - g)</small><b>${res.interest_growth_differential}%</b></div>
+        </div>
+        <p class="help" style="margin-top:10px;">${esc(res.disclaimer)}</p>
+      `;
+      notify('Dynamic debt scenarios computed.');
+    }
+
+    if (id === 'devfinModelForm') {
+      const fd = new FormData(f);
+      const d = {};
+      for (const [k, v] of fd.entries()) d[k] = Number(v);
+      const res = await api('/api/modelling/development-finance/simulate', {
+        method: 'POST',
+        body: JSON.stringify(d)
+      });
+      $('devfinModelOutput').innerHTML = `
+        <div class="row-3" style="margin-bottom:12px;">
+          <div class="data-pill"><small>SDG Impact Multiplier</small><b>${res.composite_weighted_multiplier}x</b></div>
+          <div class="data-pill"><small>SDG Composite Score</small><b>${res.composite_sdg_impact_score_100}/100</b></div>
+          <div class="data-pill"><small>Debt Service / Revenue</small><b>${res.debt_service_to_revenue_percent}%</b></div>
+        </div>
+        <div class="record-card">
+          <b>Sustainability Assessment:</b> ${esc(res.sustainability_rating)}
+        </div>
+      `;
+      notify('Development finance allocation optimized.');
+    }
+
+    if (id === 'crossModelForm') {
+      const fd = new FormData(f);
+      const d = {};
+      for (const [k, v] of fd.entries()) {
+        d[k] = k === 'country_code' ? v : Number(v);
+      }
+      const res = await api('/api/modelling/cross-domain/simulate', {
+        method: 'POST',
+        body: JSON.stringify(d)
+      });
+      const p1 = res.policy_paths.path_1_austerity_status_quo;
+      const p2 = res.policy_paths.path_2_uncoordinated_haircut;
+      const p3 = res.policy_paths.path_3_ggisp_multilateral_accord;
+
+      $('crossModelOutput').innerHTML = `
+        <div class="row-3" style="margin-bottom:12px;">
+          <div class="data-pill"><small>Path 1 (Austerity)</small><b style="color:#f43f5e;">${p1.final_debt_percent_gdp}% Debt</b><small>Health -35%</small></div>
+          <div class="data-pill"><small>Path 2 (Haircut only)</small><b style="color:#f59e0b;">${p2.final_debt_percent_gdp}% Debt</b><small>Market access risk</small></div>
+          <div class="data-pill"><small>Path 3 (GGISP Accord)</small><b style="color:#34d399;">${p3.final_debt_percent_gdp}% Debt</b><small>Health/Climate +16%</small></div>
+        </div>
+        <div class="record-card">
+          <b>Policy Conclusion:</b> ${esc(res.policy_implication)}
+        </div>
+      `;
+      notify('Cross-domain simulation completed.');
+    }
+
+  } catch (err) {
+    notify(err.message, 'error');
+  }
+});
+
+init();
+</script>
+</body>
+</html>

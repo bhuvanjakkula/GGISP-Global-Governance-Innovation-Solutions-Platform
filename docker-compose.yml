@@ -1,0 +1,17 @@
+services:
+  ggisp-platform:
+    build: .
+    container_name: ggisp-platform
+    ports:
+      - "8000:8000"
+    environment:
+      - GGISP_DB_PATH=/app/data/ggisp.db
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+      - GGISP_AI_MODEL=${GGISP_AI_MODEL:-gpt-4o-mini}
+      - WTO_API_KEY=${WTO_API_KEY:-}
+    volumes:
+      - ggisp_data:/app/data
+    restart: unless-stopped
+
+volumes:
+  ggisp_data:

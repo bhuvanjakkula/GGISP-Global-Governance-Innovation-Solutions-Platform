@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GGISP • Research & Advisory Workspace</title>
+  <style>
+    :root{--navy:#12243b;--dark:#172a3c;--teal:#087f78;--light:#f4f7f9;--border:#dce5ec;--text:#213445;--muted:#5d6d7b;--orange:#925c19;--red:#8d3b3b}
+    *{box-sizing:border-box}body{margin:0;background:var(--light);color:var(--text);font:15px/1.55 system-ui,-apple-system,Segoe UI,sans-serif}
+    a{color:#076e70}button,input,textarea,select{font:inherit}button{cursor:pointer}button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:3px solid #61cfc9;outline-offset:2px}
+    header{background:var(--navy);color:white;padding:17px max(22px,calc((100vw - 1340px)/2));display:flex;align-items:center;justify-content:space-between;gap:15px}
+    .brand{display:flex;align-items:center;gap:13px}.logo{font-weight:800;font-size:20px;letter-spacing:.5px;color:#b6f0dc;border:2px solid #4cc5b8;border-radius:10px;padding:5px 10px}.brand small{display:block;color:#bfccd9;font-size:12px}
+    .pill{font-size:12px;background:#29445e;color:#e9f0f6;padding:5px 9px;border-radius:100px}
+    .layout{max-width:1380px;margin:auto;padding:22px;display:grid;grid-template-columns:265px minmax(0,1fr);gap:22px}
+    aside,.panel{background:white;border:1px solid var(--border);border-radius:14px;box-shadow:0 2px 8px #1d2d3c08}
+    aside{padding:17px;align-self:start;position:sticky;top:18px}h1{font-size:24px;line-height:1.2;margin:0 0 8px}h2{font-size:17px;line-height:1.3;margin:0 0 12px}h3{font-size:15px;margin:0 0 7px}p{margin:0 0 10px}.muted,.help{color:var(--muted)}.help{font-size:12px}.eyebrow{text-transform:uppercase;letter-spacing:1px;font-size:11px;color:var(--teal);font-weight:800}
+    .section-title{font-weight:700;margin:4px 0 9px;font-size:13px;color:#425569}.domain{padding:10px 11px;border:0;border-radius:9px;width:100%;background:transparent;text-align:left;color:var(--text);display:flex;justify-content:space-between;gap:7px}.domain:hover,.domain.active{background:#e6f4f2}.domain.active{color:#056c67;font-weight:750}.count{font-size:11px;color:#6b7b88;background:#edf1f4;border-radius:30px;padding:2px 7px;align-self:start}.all{margin-bottom:8px}
+    main{min-width:0}.intro{display:flex;justify-content:space-between;align-items:start;gap:12px;margin-bottom:18px}.sub{color:var(--muted);max-width:830px}
+    .metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:17px}.metric{background:white;border:1px solid var(--border);padding:13px 17px;border-radius:12px}.metric b{font-size:23px;display:block}.metric small{color:var(--muted)}
+    .panel{padding:18px;margin-bottom:16px}.split{display:grid;grid-template-columns:minmax(260px,.85fr) minmax(340px,1.15fr);gap:16px}.box{background:#f8fafb;border:1px solid var(--border);padding:13px;border-radius:10px;margin-bottom:9px}.box:last-child{margin-bottom:0}
+    .project{width:100%;border:1px solid var(--border);background:white;text-align:left;border-radius:9px;padding:11px 12px;margin:0 0 9px}.project:hover,.project.active{border-color:#369e97;background:#effaf8}.project b{display:block;margin-bottom:3px}.project small{color:var(--muted)}
+    form{display:grid;gap:10px}label{font-weight:650;font-size:13px;display:block;margin-bottom:4px}input:not([type="checkbox"]),textarea,select{padding:9px 10px;border:1px solid #cbd9e2;border-radius:8px;background:#fff;width:100%;color:var(--text)}textarea{min-height:75px;resize:vertical}input[type="checkbox"]{accent-color:var(--teal)}
+    button.primary{background:var(--teal);color:#fff;padding:10px 15px;border:0;border-radius:8px;font-weight:700}button.primary:hover{background:#056b65}button.secondary{background:#edf6f5;color:#066e68;padding:8px 12px;border:1px solid #b2d9d5;border-radius:8px;font-weight:600}button.small{font-size:12px;padding:5px 9px}.actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .note{padding:11px 13px;border-left:4px solid var(--teal);background:#eff8f7;border-radius:7px;font-size:13px;margin:10px 0}.warning{border-left-color:#cf9642;background:#fff7e9}.error{color:#852b2b;background:#fff0f0;border:1px solid #e8b6b6;padding:9px 11px;border-radius:8px;margin-bottom:12px}.success{color:#096b50;background:#eaf7f0;border:1px solid #a1d9c0;padding:9px 11px;border-radius:8px;margin-bottom:12px}
+    .tag{display:inline-block;background:#ecf2f6;color:#516475;font-size:11px;font-weight:700;padding:2px 7px;border-radius:15px;vertical-align:middle}.tag.supported,.tag.approved{background:#dff3e8;color:#21694d}.tag.unverified,.tag.draft{background:#fff1d8;color:#825d20}.tag.disputed{background:#fde6e6;color:#942f37}
+    .record{border:1px solid var(--border);padding:11px;border-radius:9px;margin:9px 0}.record p{margin:4px 0}.record small{color:var(--muted)}.record a{overflow-wrap:anywhere}.empty{color:#6d7b87;font-size:13px;font-style:italic;padding:12px;background:#f5f8fa;border-radius:9px}
+    .column{display:grid;gap:14px}.rowtop{display:flex;align-items:center;justify-content:space-between;gap:15px}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#f1f5f8;border-radius:9px;padding:13px;font-size:13px;max-height:420px;overflow-y:auto}
+    .result{margin-top:10px}.result table{width:100%;border-collapse:collapse;font-size:13px}.result th,.result td{border-bottom:1px solid var(--border);text-align:left;padding:6px}.result th{color:#607080}
+    .footer{color:var(--muted);text-align:center;font-size:12px;margin:20px 0 8px}.hidden{display:none}hr{border:0;border-top:1px solid var(--border);margin:14px 0}#message:empty{display:none}
+    @media(max-width:990px){.layout{grid-template-columns:1fr}aside{position:static}.domains{display:grid;grid-template-columns:repeat(2,1fr);gap:3px}.split{grid-template-columns:1fr}}@media(max-width:600px){header{flex-wrap:wrap}.layout{padding:13px}.domains{grid-template-columns:1fr}.metrics{grid-template-columns:1fr 1fr}.two{grid-template-columns:1fr}.intro{display:block}}
+  </style>
+</head>
+<body>
+<header><div class="brand"><span class="logo">GGISP</span><div><b>Global Governance, Innovation & Solutions</b><small>Independent research · Evidence · Human judgment</small></div></div><span class="pill">LOCAL RESEARCH PROTOTYPE · v0.1</span></header>
+<div class="layout">
+  <aside>
+    <div class="section-title">RESEARCH DIVISIONS</div>
+    <div id="domains" class="domains"><div class="muted">Loading divisions…</div></div>
+    <hr>
+    <div class="help">13 areas share one evidence library and human-reviewed advisory process.</div>
+  </aside>
+  <main>
+    <div class="intro"><div><div class="eyebrow">Founder's Research Workspace</div><h1>International Policy Innovation Lab</h1><p class="sub">Develop defensible research, test quantitative scenarios, and create your own policy proposals. No project claims institutional endorsement.</p></div></div>
+    <div class="metrics" id="metrics"></div>
+    <div id="message" role="status" aria-live="polite"></div>
+    <div class="split">
+      <section class="column">
+        <div class="panel"><h2>Research projects</h2><div id="projectList"></div></div>
+        <div class="panel"><h2>Create a research project</h2>
+          <form id="createProject"><div><label for="newDomain">Division</label><select id="newDomain" name="domain_slug" required></select></div>
+            <div><label for="newTitle">Project title</label><input id="newTitle" name="title" minlength="4" maxlength="150" required placeholder="e.g. Fair international debt restructuring"></div>
+            <div><label for="newProblem">Research problem</label><textarea id="newProblem" name="problem" minlength="15" required placeholder="State a specific, testable policy question"></textarea></div>
+            <button class="primary" type="submit">+ Create project</button></form></div>
+        <div class="panel"><h2>Debt policy modelling laboratory</h2><p class="help">Illustrative educational equation, not a country forecast. Values below are sample assumptions, not reported statistics.</p>
+          <form id="debtForm">
+            <div class="two"><div><label>Starting debt / GDP (%)</label><input name="initial_debt_percent_gdp" type="number" step="0.1" value="80" required></div>
+            <div><label>Interest rate (%)</label><input name="interest_rate_percent" type="number" step="0.1" value="6" required></div>
+            <div><label>Nominal GDP growth (%)</label><input name="nominal_gdp_growth_percent" type="number" step="0.1" value="5" required></div>
+            <div><label>Primary surplus / GDP (%)</label><input name="primary_surplus_percent_gdp" type="number" step="0.1" value="1" required></div>
+            <div><label>Years</label><input name="years" type="number" min="1" max="30" value="5" required></div></div>
+            <button class="primary" type="submit">Run illustrative scenario</button>
+          </form><div id="debtResult" class="result"></div></div>
+      </section>
+      <section class="column" id="workspace"><div class="panel"><h2>Research workspace</h2><p class="muted">Select or create a project to begin.</p></div></section>
+    </div>
+    <div class="footer">For local individual research only. No user authentication, external fact-checking or public deployment security is included.</div>
+  </main>
+</div>
+<script>
+const state={domains:[],projects:[],selected:null,filter:'all',detail:null};
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const status=s=>`<span class="tag ${esc(s)}">${esc(s)}</span>`;
+const api=async(url,opt={})=>{let response=await fetch(url,{...opt,headers:{'Content-Type':'application/json',...(opt.headers||{})}});if(!response.ok){let body=await response.json().catch(()=>({}));let error=body.detail||`HTTP ${response.status}`;if(Array.isArray(error))error=error.map(e=>e.msg).join('; ');throw Error(error)}return response.json()};
+function message(text,type='success'){ $('message').innerHTML=`<div class="${type}">${esc(text)}</div>`;window.scrollTo({top:0,behavior:'smooth'}); }
+function renderDomains(){ $('domains').innerHTML=`<button class="domain ${state.filter==='all'?'active':''} all" data-filter="all">All divisions <span class="count">${state.projects.length}</span></button>`+state.domains.map(d=>`<button class="domain ${state.filter===d.slug?'active':''}" data-filter="${esc(d.slug)}">${esc(d.name)} <span class="count">${d.project_count}</span></button>`).join('');
+ $('newDomain').innerHTML=state.domains.map(d=>`<option value="${esc(d.slug)}">${esc(d.name)}</option>`).join(''); if(state.filter!=='all')$('newDomain').value=state.filter; }
+function renderProjects(){let filtered=state.projects.filter(p=>state.filter==='all'||p.domain_slug===state.filter);$('projectList').innerHTML=filtered.length?filtered.map(p=>`<button class="project ${p.id===state.selected?'active':''}" data-project="${p.id}"><b>${esc(p.title)}</b><small>${esc(state.domains.find(d=>d.slug===p.domain_slug)?.name)} · ${esc(p.status)}</small></button>`).join(''):'<p class="empty">No projects in this division. Create one below.</p>';
+ $('metrics').innerHTML=`<div class="metric"><b>13</b><small>Specialist divisions</small></div><div class="metric"><b>${state.projects.length}</b><small>Research projects</small></div><div class="metric"><b>${state.projects.filter(p=>p.status==='ready').length}</b><small>With founder-approved advice</small></div>`;
+}
+async function reload(selectId){let [d,p]=await Promise.all([api('/api/domains'),api('/api/projects')]);state.domains=d;state.projects=p;if(selectId)state.selected=selectId;else if(!p.some(x=>x.id===state.selected))state.selected=p[0]?.id||null;
+ renderDomains();renderProjects();await renderWorkspace();}
+async function renderWorkspace(){if(!state.selected){$('workspace').innerHTML='<div class="panel">Select a project.</div>';return}state.detail=await api(`/api/projects/${state.selected}`);let p=state.detail;
+ let srcOptions='<option value="">No linked source</option>'+p.sources.map(s=>`<option value="${s.id}">S${s.id} · ${esc(s.title)}</option>`).join('');
+ $('workspace').innerHTML=`
+ <div class="panel"><div class="eyebrow">${esc(state.domains.find(d=>d.slug===p.domain_slug)?.name||p.domain_slug)}</div><div class="rowtop"><h2>${esc(p.title)}</h2>${status(p.status)}</div><p>${esc(p.problem)}</p><div class="actions"><a class="button" href="/api/projects/${p.id}/brief.md" download><button class="secondary" type="button">↓ Export Markdown policy brief</button></a></div>
+ <div class="note warning">This is an internal research workspace. Source-review checkboxes are personal attestations, not independent verification.</div></div>
+ <div class="panel"><h2>1 · Evidence library</h2><div>${p.sources.length?p.sources.map(s=>`<div class="record"><b>S${s.id} · ${esc(s.title)}</b> ${s.manually_reviewed?status('supported'):status('unverified')}<p class="help">${esc(s.publisher)} · ${s.manually_reviewed?'Personally examined':'Not reviewed'}</p><a href="${esc(s.url)}" target="_blank" rel="noopener noreferrer">Open recorded source ↗</a>${s.notes?`<p>${esc(s.notes)}</p>`:''}</div>`).join(''):'<div class="empty">No sources yet. Add primary sources before substantive conclusions.</div>'}</div>
+ <hr><h3>Add a source</h3><form id="sourceForm"><div><label>Source title</label><input name="title" required minlength="3"></div><div class="two"><div><label>Publisher</label><input name="publisher" required></div><div><label>HTTPS source URL</label><input name="url" type="url" placeholder="https://..." required></div></div><div><label>Research notes</label><textarea name="notes" placeholder="Publication date, relevant page, caveats"></textarea></div><label class="help"><input type="checkbox" name="manually_reviewed"> I personally examined this source (not independent validation)</label><button class="secondary" type="submit">Add evidence source</button></form></div>
+ <div class="panel"><h2>2 · Claims and uncertainties</h2><div>${p.claims.length?p.claims.map(c=>`<div class="record">${status(c.evidence_status)} <b>C${c.id} · ${esc(c.statement)}</b><p class="help">Linked source: ${c.source_id?'S'+c.source_id:'none'} · Limitations: ${esc(c.limitations||'Not specified')}</p></div>`).join(''):'<div class="empty">No claims recorded. Every important assertion needs a source and limitations.</div>'}</div>
+ <hr><h3>Record a research claim</h3><form id="claimForm"><div><label>Claim</label><textarea name="statement" minlength="8" required></textarea></div><div class="two"><div><label>Evidence status</label><select name="evidence_status"><option value="unverified">Unverified</option><option value="supported">Supported by examined source</option><option value="disputed">Disputed / contested</option></select></div><div><label>Linked source</label><select name="source_id">${srcOptions}</select></div></div><div><label>Limitations or competing interpretation</label><textarea name="limitations"></textarea></div><button class="secondary" type="submit">Record claim</button></form></div>
+ <div class="panel"><h2>3 · Your personal policy guidance</h2><p class="help">Recommendations entered here are human-authored. Approval requires at least one reviewed, supported claim, and is not institutional endorsement.</p>
+ <div>${p.recommendations.length?p.recommendations.map(r=>`<div class="record"><div class="rowtop"><b>${esc(r.author)} · R${r.id}</b>${status(r.approval_status)}</div><p>${esc(r.recommendation)}</p><small>Rationale: ${esc(r.rationale)}</small><p class="help">Risks: ${esc(r.risks)}</p>${r.approval_status==='draft'?`<button class="secondary small" data-approve="${r.id}">Approve after personal review</button>`:''}</div>`).join(''):'<div class="empty">No human-authored recommendations entered.</div>'}</div>
+ <hr><h3>Write a recommendation</h3><form id="recForm"><div><label>Author label</label><input name="author" value="Founder" required></div><div><label>Your recommendation</label><textarea name="recommendation" minlength="10" required></textarea></div><div><label>Your reasoning and proposed mechanism</label><textarea name="rationale" minlength="10" required></textarea></div><div><label>Risks, alternatives and limitations</label><textarea name="risks" minlength="10" required></textarea></div><button class="primary" type="submit">Save as unapproved founder draft</button></form></div>
+ <div class="panel"><h2>4 · Optional AI research assistant</h2><p class="help">AI drafts are unverified working notes. They never become founder-authored advice automatically. Enabling AI requires your own API credentials; project information will be sent to that external service only after confirmation.</p>
+ <div class="actions"><button class="secondary" id="aiButton">Generate preliminary AI analysis</button></div><div class="note warning">Do not include confidential diplomatic, military, medical, personal or classified information.</div>
+ <div>${p.ai_drafts.map(a=>`<div class="record"><b>AI-generated · unverified · ${esc(a.model)}</b><pre>${esc(a.output_text)}</pre></div>`).join('')}</div></div>`;
+}
+const payload=form=>Object.fromEntries(new FormData(form).entries());
+document.addEventListener('click',async e=>{const f=e.target.closest('[data-filter]'),pr=e.target.closest('[data-project]'),ap=e.target.closest('[data-approve]');try{
+ if(f){state.filter=f.dataset.filter;renderDomains();renderProjects();return}
+ if(pr){state.selected=Number(pr.dataset.project);renderProjects();await renderWorkspace();return}
+ if(ap){if(!confirm('Have you personally reviewed the evidence, uncertainties and risks? This records founder approval only, not independent verification.'))return;await api(`/api/recommendations/${ap.dataset.approve}/approve`,{method:'POST',body:JSON.stringify({confirmed_human_review:true})});message('Founder approval recorded. This does not imply independent verification.');await reload();return}
+ if(e.target.closest('#aiButton')){if(!confirm('Send this project’s source notes, claims and problem statement to your configured external AI service? Do not send sensitive or confidential information.'))return;const b=$('aiButton');b.disabled=true;b.textContent='Generating…';try{await api(`/api/projects/${state.selected}/ai-draft`,{method:'POST',body:JSON.stringify({confirmed_external_ai_transfer:true})});message('Unverified AI working draft created.');await renderWorkspace()}finally{if(document.contains(b)){b.disabled=false;b.textContent='Generate preliminary AI analysis'}}}
+ }catch(err){message(err.message,'error')}});
+document.addEventListener('submit',async e=>{if(!['createProject','sourceForm','claimForm','recForm','debtForm'].includes(e.target.id))return;e.preventDefault();const f=e.target,id=f.id,d=payload(f);try{
+ if(id==='createProject'){const result=await api('/api/projects',{method:'POST',body:JSON.stringify(d)});state.filter='all';await reload(result.id);message('Research project created. Begin by recording the evidence.');f.reset()}
+ if(id==='sourceForm'){d.manually_reviewed=Boolean(f.elements.manually_reviewed.checked);await api(`/api/projects/${state.selected}/sources`,{method:'POST',body:JSON.stringify(d)});await reload();message('Source recorded. Remember: manual review is not external verification.')}
+ if(id==='claimForm'){d.source_id=d.source_id?Number(d.source_id):null;await api(`/api/projects/${state.selected}/claims`,{method:'POST',body:JSON.stringify(d)});await renderWorkspace();message('Claim recorded with evidence status.')}
+ if(id==='recForm'){await api(`/api/projects/${state.selected}/recommendations`,{method:'POST',body:JSON.stringify(d)});await reload();message('Your policy recommendation was saved as a draft.')}
+ if(id==='debtForm'){for(const k in d)d[k]=Number(d[k]);const r=await api('/api/debt/simulate',{method:'POST',body:JSON.stringify(d)});$('debtResult').innerHTML=`<div class="note">${esc(r.disclaimer)}</div><table><tr><th>Year</th><th>Modelled debt / GDP</th></tr>${r.values.map(row=>`<tr><td>${row.year}</td><td>${row.debt_percent_gdp.toFixed(2)}%</td></tr>`).join('')}</table><p class="help">${esc(r.equation)}</p>`}
+ }catch(err){message(err.message,'error')}});
+reload().catch(err=>message('Could not initialize app: '+err.message,'error'));
+</script>
+</body>
+</html>

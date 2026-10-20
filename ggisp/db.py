@@ -1,0 +1,286 @@
+"""SQLite schema, persistence, catalog and seeding for GGISP Platform v0.2."""
+from __future__ import annotations
+
+import hashlib
+import json
+import os
+import sqlite3
+from contextlib import contextmanager
+from pathlib import Path
+from typing import Any, Dict, List, Optional
+
+ROOT = Path(__file__).resolve().parent.parent
+
+DOMAINS = [
+    ("nuclear-security", "Nuclear security", "Peaceful safeguards, non-proliferation verification, risk reduction and civil safety research", "high", "IAEA / UN-ODA", "shield-alert"),
+    ("un-security-council", "UN Security Council", "Institutional reform mechanisms, veto policy modeling and multilateral peace governance", "policy", "UN General Assembly", "landmark"),
+    ("wto-trade", "WTO and global trade", "Tariff dynamics, market access, supply chain resilience, and trade dispute analysis", "policy", "WTO / UNCTAD", "scale"),
+    ("sovereign-debt", "Global sovereign debt", "Transparent debt sustainability frameworks, restructuring mechanisms and growth protection", "economic", "IMF / World Bank / Paris Club", "coins"),
+    ("ai-governance", "AI governance", "Algorithmic accountability, cross-border frontier AI safety standards and institutional interoperability", "technology", "NIST / ITU / OECD", "cpu"),
+    ("cybersecurity", "Cybersecurity", "Defensive cyber resilience, critical infrastructure protection and multilateral incident cooperation", "high", "ITU / UN OEWG", "lock"),
+    ("global-health", "Global health", "Epidemiological preparedness, equitable medical supply chains and global pathogen surveillance", "high", "WHO / CEPI", "activity"),
+    ("space-security", "Space security", "Orbital debris mitigation, civil satellite collision safety and peaceful outer space treaties", "high", "UNOOSA / COPUOS", "satellite"),
+    ("critical-minerals", "Critical minerals", "Strategic supply chain transparency, ethical extraction traceability and fair value allocation", "economic", "IEA / UNIDO", "gem"),
+    ("ocean-governance", "Ocean governance", "Marine biodiversity conservation, sustainable fisheries governance and High Seas Treaty compliance", "environment", "UNCLOS / ISA", "waves"),
+    ("international-tax", "International taxation", "Cross-border tax evasion countermeasures, digital economy taxation and minimum tax harmonization", "economic", "OECD / UN Tax Comm.", "file-spreadsheet"),
+    ("development-finance", "Global development finance", "Concessional capital allocation, multilateral development bank reform and SDG impact optimization", "economic", "UNDP / MDBs", "trending-up"),
+    ("climate-finance", "Climate and environmental finance", "Loss and damage financing, adaptation fund allocation and emissions mitigation capital", "environment", "UNFCCC / GCF", "leaf"),
+]
+
+
+def database_path() -> Path:
+    env_path = os.getenv("GGISP_DB_PATH")
+    if env_path:
+        return Path(env_path)
+    return ROOT / "data" / "ggisp.db"
+
+
+@contextmanager
+def db():
+    path = database_path()
+    path.parent.mkdir(parents=True, exist_ok=True)
+    con = sqlite3.connect(str(path), timeout=15)
+    con.row_factory = sqlite3.Row
+    con.execute("PRAGMA foreign_keys = ON")
+    try:
+        yield con
+        con.commit()
+    except Exception:
+        con.rollback()
+        raise
+    finally:
+        con.close()
+
+
+def calculate_hash(text: str) -> str:
+    """Generate SHA-256 hash for cryptographic provenance and snapshot auditing."""
+    return hashlib.sha256(text.encode("utf-8")).hexdigest()
+
+
+def init_db() -> None:
+    with db() as con:
+        con.executescript("""
+        CREATE TABLE IF NOT EXISTS domains (
+            slug TEXT PRIMARY KEY,
+            name TEXT NOT NULL,
+            description TEXT NOT NULL,
+            family TEXT NOT NULL,
+            lead_institution TEXT NOT NULL DEFAULT '',
+            icon TEXT NOT NULL DEFAULT 'circle'
+        );
+
+        CREATE TABLE IF NOT EXISTS projects (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            domain_slug TEXT NOT NULL REFERENCES domains(slug),
+            title TEXT NOT NULL,
+            problem TEXT NOT NULL,
+            country_code TEXT DEFAULT 'KEN',
+            status TEXT NOT NULL DEFAULT 'concept',
+            created_at TEXT NOT NULL DEFAULT (datetime('now')),
+            updated_at TEXT NOT NULL DEFAULT (datetime('now'))
+        );
+
+        CREATE TABLE IF NOT EXISTS sources (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            project_id INTEGER NOT NULL REFERENCES projects(id) ON DELETE CASCADE,
+            title TEXT NOT NULL,
+            url TEXT NOT NULL,
+            publisher TEXT NOT NULL,
+            publication_year INTEGER,
+            doi TEXT DEFAULT '',
+            content_hash TEXT NOT NULL DEFAULT '',
+            notes TEXT NOT NULL DEFAULT '',
+            manually_reviewed INTEGER NOT NULL DEFAULT 0,
+            quality_rating TEXT NOT NULL DEFAULT 'unrated',
+            accessed_at TEXT NOT NULL DEFAULT (datetime('now'))
+        );
+
+        CREATE TABLE IF NOT EXISTS claims (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            project_id INTEGER NOT NULL REFERENCES projects(id) ON DELETE CASCADE,
+            statement TEXT NOT NULL,
+            evidence_status TEXT NOT NULL DEFAULT 'unverified',
+            source_id INTEGER REFERENCES sources(id) ON DELETE SET NULL,
+            limitations TEXT NOT NULL DEFAULT '',
+            confidence_score INTEGER DEFAULT 3,
+            contrary_evidence TEXT NOT NULL DEFAULT '',
+            created_at TEXT NOT NULL DEFAULT (datetime('now'))
+        );
+
+        CREATE TABLE IF NOT EXISTS recommendations (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            project_id INTEGER NOT NULL REFERENCES projects(id) ON DELETE CASCADE,
+            recommendation TEXT NOT NULL,
+            rationale TEXT NOT NULL,
+            risks TEXT NOT NULL,
+            author TEXT NOT NULL DEFAULT 'Founder',
+            approval_status TEXT NOT NULL DEFAULT 'draft',
+            created_at TEXT NOT NULL DEFAULT (datetime('now')),
+            approved_at TEXT
+        );
+
+        CREATE TABLE IF NOT EXISTS competing_proposals (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            project_id INTEGER NOT NULL REFERENCES projects(id) ON DELETE CASCADE,
+            proposal_title TEXT NOT NULL,
+            proponent_summary TEXT NOT NULL,
+            trade_offs TEXT NOT NULL,
+            fiscal_impact TEXT NOT NULL DEFAULT '',
+            legal_feasibility TEXT NOT NULL DEFAULT '',
+            created_at TEXT NOT NULL DEFAULT (datetime('now'))
+        );
+
+        CREATE TABLE IF NOT EXISTS simulations (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            project_id INTEGER REFERENCES projects(id) ON DELETE CASCADE,
+            model_type TEXT NOT NULL,
+            scenario_name TEXT NOT NULL,
+            parameters_json TEXT NOT NULL,
+            results_json TEXT NOT NULL,
+            run_at TEXT NOT NULL DEFAULT (datetime('now'))
+        );
+
+        CREATE TABLE IF NOT EXISTS external_indicators_cache (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            provider TEXT NOT NULL,
+            country_code TEXT NOT NULL,
+            indicator_code TEXT NOT NULL,
+            indicator_name TEXT NOT NULL,
+            year INTEGER NOT NULL,
+            value REAL,
+            unit TEXT DEFAULT '',
+            fetched_at TEXT NOT NULL DEFAULT (datetime('now')),
+            UNIQUE(provider, country_code, indicator_code, year)
+        );
+
+        CREATE TABLE IF NOT EXISTS ai_drafts (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            project_id INTEGER NOT NULL REFERENCES projects(id) ON DELETE CASCADE,
+            output_text TEXT NOT NULL,
+            model TEXT NOT NULL,
+            disclaimer_accepted INTEGER NOT NULL DEFAULT 1,
+            created_at TEXT NOT NULL DEFAULT (datetime('now'))
+        );
+
+        CREATE TABLE IF NOT EXISTS audit_log (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            project_id INTEGER,
+            action TEXT NOT NULL,
+            record_type TEXT NOT NULL,
+            record_id INTEGER,
+            details TEXT DEFAULT '',
+            happened_at TEXT NOT NULL DEFAULT (datetime('now'))
+        );
+        """)
+
+        # Insert or update 13 domains
+        for d in DOMAINS:
+            con.execute("""
+                INSERT INTO domains (slug, name, description, family, lead_institution, icon)
+                VALUES (?, ?, ?, ?, ?, ?)
+                ON CONFLICT(slug) DO UPDATE SET
+                    name=excluded.name,
+                    description=excluded.description,
+                    family=excluded.family,
+                    lead_institution=excluded.lead_institution,
+                    icon=excluded.icon
+            """, d)
+
+        # Seed initial projects if empty
+        count = con.execute("SELECT COUNT(*) FROM projects").fetchone()[0]
+        if count == 0:
+            # 1. Sovereign Debt Project
+            cur = con.execute("""
+                INSERT INTO projects (domain_slug, title, problem, country_code, status)
+                VALUES (?, ?, ?, ?, ?)
+            """, (
+                "sovereign-debt",
+                "International Sovereign Debt and Development Finance Reform",
+                "How can transparent debt restructuring models improve fiscal sustainability while protecting development expenditure, public health, and essential investment under external trade shocks?",
+                "KEN",
+                "research"
+            ))
+            debt_pid = cur.lastrowid
+
+            # Seed a reviewed official source for debt
+            hash_val = calculate_hash("World Bank International Debt Statistics and Indicators API Specification")
+            cur_src = con.execute("""
+                INSERT INTO sources (project_id, title, url, publisher, publication_year, doi, content_hash, notes, manually_reviewed, quality_rating)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """, (
+                debt_pid,
+                "World Bank Open Data & Indicators Database",
+                "https://datahelpdesk.worldbank.org/knowledgebase/articles/889392-about-the-indicators-api",
+                "World Bank Group",
+                2024,
+                "10.1596/978-1-4648-1902-5",
+                hash_val,
+                "Official statistical indicators API documenting external debt stocks, GDP growth rates, and debt service ratios.",
+                1,
+                "high"
+            ))
+            src_id = cur_src.lastrowid
+
+            # Seed a supported claim linked to this source
+            con.execute("""
+                INSERT INTO claims (project_id, statement, evidence_status, source_id, limitations, confidence_score, contrary_evidence)
+                VALUES (?, ?, ?, ?, ?, ?, ?)
+            """, (
+                debt_pid,
+                "Debt service-to-export ratios exceeding 20% severely constrain sovereign capacity to fund domestic healthcare and infrastructure during global monetary tightening.",
+                "supported",
+                src_id,
+                "Empirical relationship varies based on domestic currency debt composition, bilateral swap lines, and reserve asset depth.",
+                4,
+                "Some upper-middle-income sovereigns maintain market access above 20% through local-currency debt markets."
+            ))
+
+            # Seed a draft founder recommendation
+            con.execute("""
+                INSERT INTO recommendations (project_id, recommendation, rationale, risks, author, approval_status)
+                VALUES (?, ?, ?, ?, ?, ?)
+            """, (
+                debt_pid,
+                "Establish a Multilateral Contingent Restructuring Mechanism linking sovereign debt repayments directly to terms-of-trade indexation and concessional development finance floors.",
+                "Linking debt service to exogenous export price shocks prevents balance-of-payments collapses, preserves critical social spending, and eliminates repeated costly renegotiations.",
+                "Holdout private creditors may litigate in foreign jurisdictions; requires standardized collective action clauses in sovereign bond contracts.",
+                "Founder",
+                "draft"
+            ))
+
+            # Seed competing policy proposal
+            con.execute("""
+                INSERT INTO competing_proposals (project_id, proposal_title, proponent_summary, trade_offs, fiscal_impact, legal_feasibility)
+                VALUES (?, ?, ?, ?, ?, ?)
+            """, (
+                debt_pid,
+                "Orthodox Rapid Fiscal Consolidation (Austerity)",
+                "Immediate reduction of primary fiscal deficit through rapid public spending cuts and subsidy removal.",
+                "High political instability risk, contraction in domestic demand, deterioration in public health and education indicators.",
+                "Rapid reduction in borrowing need; high risk of economic hysteresis.",
+                "High immediate legal feasibility under existing loan covenants."
+            ))
+
+            # 2. WTO Trade Project
+            con.execute("""
+                INSERT INTO projects (domain_slug, title, problem, country_code, status)
+                VALUES (?, ?, ?, ?, ?)
+            """, (
+                "wto-trade",
+                "Multilateral Trade Openness and Tariff Shock Resilience",
+                "How do fluctuating agricultural tariffs and non-tariff supply chain barriers impact the export revenues of developing economies facing multilateral debt obligations?",
+                "GHA",
+                "concept"
+            ))
+
+            # 3. Development Finance Project
+            con.execute("""
+                INSERT INTO projects (domain_slug, title, problem, country_code, status)
+                VALUES (?, ?, ?, ?, ?)
+            """, (
+                "development-finance",
+                "Optimal Concessional Capital Allocation for Climate-Resilient Infrastructure",
+                "What mathematical allocation framework maximizes domestic economic multipliers while ensuring sovereign debt service absorbs less than 15% of annual government revenue?",
+                "LKA",
+                "concept"
+            ))

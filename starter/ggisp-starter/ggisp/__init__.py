@@ -1,0 +1,1 @@
+"""GGISP local research prototype."""
