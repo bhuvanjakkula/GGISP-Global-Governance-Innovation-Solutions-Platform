@@ -229,10 +229,18 @@ def test_blended_finance_simulation():
     res = execute_specialist_engine("development-finance", {
         "project_total_capex_million_usd": 400.0,
         "concessional_first_loss_grant_million_usd": 40.0,
-        "target_commercial_senior_debt_million_usd": 240.0
+        "target_commercial_senior_debt_million_usd": 240.0,
+        "enable_credit_guarantee_mechanism": True,
+        "guarantee_coverage_ratio_percent": 50.0,
+        "country_political_risk_z_score": 1.2
     })
     assert "private_capital_mobilization_ratio" in res
     assert res["blended_weighted_average_cost_of_capital_percent"] < res["unblended_commercial_borrowing_cost_percent"]
+    assert "guarantee_mechanism_evaluation" in res
+    assert res["guarantee_mechanism_evaluation"]["enabled"] is True
+    assert res["guarantee_mechanism_evaluation"]["remuneration_savings_induced_percent"] > 0
+    assert res["guarantee_mechanism_evaluation"]["flammer_concessionality_subsidy_percent"] > 15.0
+    assert len(res["guarantee_mechanism_evaluation"]["allocation_skew_matrix"]) == 4
 
 
 def test_climate_parametric_simulation():
