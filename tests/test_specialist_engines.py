@@ -140,7 +140,10 @@ def test_global_health_simulation():
     res = execute_specialist_engine("global-health", {
         "reproduction_number_r0": 2.5,
         "variant_immune_evasion_percent": 30.0,
-        "simulation_days": 60
+        "simulation_days": 60,
+        "enable_regional_icu_network": True,
+        "baseline_trauma_icu_occupancy_percent": 75.0,
+        "inter_facility_transit_risk_percent": 8.9
     })
     assert res["effective_reproduction_number_r_eff"] > 2.5
     assert res["estimated_critical_care_icu_demand"] > 0
@@ -149,6 +152,10 @@ def test_global_health_simulation():
     assert "dynamic_resource_allocation" in res
     assert "surge_capacity_load_balancing" in res
     assert res["surge_capacity_load_balancing"]["surge_bed_day_reduction_percent"] > 80.0
+    assert "regional_icu_network_integration" in res
+    assert res["regional_icu_network_integration"]["enabled"] is True
+    assert res["regional_icu_network_integration"]["baseline_trauma_icu_occupancy_percent"] == 75.0
+    assert res["regional_icu_network_integration"]["inter_facility_transit_risk"]["adverse_clinical_event_rate_percent"] == 8.9
 
 
 
@@ -156,10 +163,23 @@ def test_global_health_simulation():
 def test_space_orbital_debris_simulation():
     res = execute_specialist_engine("space-security", {
         "satellite_altitude_km": 550.0,
-        "conjunction_miss_distance_meters": 45.0
+        "conjunction_miss_distance_meters": 45.0,
+        "threat_dimension": "kinetic_asat_testing",
+        "space_situational_awareness_catalog": "open_multilateral_catalog",
+        "active_debris_removal_protocol": "registered_state_bilateral_consent"
     })
     assert "collision_probability_p_c" in res
     assert res["collision_avoidance_maneuver_required"] is True
+    assert "debris_catalog_context" in res
+    assert "satellite_safety_challenge" in res
+    assert "Kinetic Anti-Satellite" in res["satellite_safety_challenge"]["threat_dimension"]
+    assert "international_space_law_evaluation" in res
+    assert "Article IV" in res["international_space_law_evaluation"]["article_iv_regulatory_void"]
+    assert "COMPLIANT" in res["international_space_law_evaluation"]["active_debris_removal_authorization"]
+    assert "spaceport_state_control_system" in res
+    assert "LAUNCH AUTHORIZATION GRANTED" in res["spaceport_state_control_system"]["pre_launch_licensing"]
+    assert "Strict Environmental Liability" in res["spaceport_state_control_system"]["liability_allocation"]["regime"]
+    assert len(res["spaceport_state_control_system"]["comparative_maritime_matrix"]) == 5
 
 
 def test_critical_minerals_simulation():

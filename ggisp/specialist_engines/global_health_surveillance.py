@@ -32,6 +32,24 @@ class GlobalHealthInput(BaseModel):
         description="Multilateral framework: who_pandemic_agreement_pabs, nationalist_hoarding_baseline, universal_solidarity_stockpile"
     )
 
+    # Regional ICU Surge Capacity & Network Coordination (Duggal et al. 2021; Pett et al. 2020; Del Prete et al. 2026; Acharya et al. 2026)
+    enable_regional_icu_network: bool = Field(
+        default=True,
+        description="Integrate regional ICU surge network via MOCC transfer hubs, real-time bed tracking, and tele-ICU command centers (Mitchell et al. 2022; Leung & Semczuk 2026)"
+    )
+    baseline_trauma_icu_occupancy_percent: float = Field(
+        default=75.0,
+        ge=30.0,
+        le=99.0,
+        description="Baseline occupancy in Level I/II trauma centers prior to surge shock (Acharya et al. 2026)"
+    )
+    inter_facility_transit_risk_percent: float = Field(
+        default=8.9,
+        ge=0.0,
+        le=30.0,
+        description="Clinical adverse event rate during unstable inter-hospital transit conditions (Pett et al. 2020; Anesi 2020)"
+    )
+
 
 def simulate_global_health(inp: GlobalHealthInput) -> Dict[str, Any]:
     """Run discrete SEIR epidemic projection with genomic evasion, AI surveillance, and surge capacity load-balancing."""
@@ -146,6 +164,45 @@ def simulate_global_health(inp: GlobalHealthInput) -> Dict[str, Any]:
             "solidarity_alignment": "SEVERE FAILURE: Replicates mid-2021 crisis where high-income states secured 14x more doses per capita than low-income nations."
         }
 
+    # Regional ICU Network Integration & Coordination (Duggal et al. 2021; Pett et al. 2020; Berkeveld et al. 2025; Mitchell et al. 2022; Acharya et al. 2026; Del Prete et al. 2026):
+    baseline_occ = inp.baseline_trauma_icu_occupancy_percent
+    days_to_exhaustion = max(round(45.0 + (100.0 - baseline_occ) * 1.8), 20) if baseline_occ > 70.0 else 90
+    expected_transit_adverse_events = round((transfers * (inp.inter_facility_transit_risk_percent / 100.0)), 1)
+
+    if inp.enable_regional_icu_network:
+        regional_icu_eval = {
+            "enabled": True,
+            "operational_coordination_framework": "Centralized Medical Operations Coordination Center (MOCC) & Trauma Network Hub",
+            "empirical_benchmarks": {
+                "north_west_london_hub": "223 critical transfers over 50 days serving 2.4M people; zero rationed critical care (Pett et al. 2020)",
+                "amsterdam_trauma_network": "1,213 transfers across 11 hospitals reduced >100% saturation in 8 facilities to sustainable thresholds (Berkeveld et al. 2025)",
+                "us_statewide_moccs": ">15,000 load-balancing transfers across WA, MN, AZ via real-time bed tracking & executive orders (Mitchell et al. 2022)"
+            },
+            "baseline_trauma_icu_occupancy_percent": baseline_occ,
+            "projected_time_to_bed_exhaustion_days": days_to_exhaustion,
+            "inter_facility_transit_risk": {
+                "adverse_clinical_event_rate_percent": inp.inter_facility_transit_risk_percent,
+                "projected_adverse_transit_events": expected_transit_adverse_events,
+                "mitigation": "Mobile intensive care units with specialized transport physicians and continuous telemetry (Pett et al. 2020; Anesi 2020)"
+            },
+            "system_operational_models": [
+                {"name": "Regional Bed Reservation (Litvak et al. 2008)", "mechanism": "Joint allocation of reserved critical care beds preventing elective surgical cancellation"},
+                {"name": "Tiered Surge Staffing (Harris et al. 2020)", "mechanism": "Tele-ICU supervision linking quaternary hubs with 40 community hospitals"},
+                {"name": "Central Supply Coordination (Del Prete et al. 2026)", "mechanism": "Shared emergency stock of ECMO, dialysis circuits, and sedative medications"},
+                {"name": "Process Flow Queueing Simulation (Alban et al. 2020)", "mechanism": "Stochastic queueing models projecting bed blocking thresholds to tertiary referral centers"},
+                {"name": "Category Hospital Partitioning (Nocci et al. 2022)", "mechanism": "Specialized routing separating pandemic and ordinary acute facilities (Category-4 >106% capacity)"}
+            ],
+            "low_resource_disparity_warning": "In low-income settings, <10% of facilities possess CRRT, mechanical ventilation, or advanced hemodynamic monitoring (Belachew et al. 2026)."
+        }
+    else:
+        regional_icu_eval = {
+            "enabled": False,
+            "operational_coordination_framework": "Decentralized Hospital Silos",
+            "baseline_trauma_icu_occupancy_percent": baseline_occ,
+            "projected_time_to_bed_exhaustion_days": round(days_to_exhaustion * 0.5),
+            "vulnerability": "Uncoordinated networks experience localized facility collapse despite empty beds in adjacent regional districts."
+        }
+
     return {
         "engine": "Epidemiological SEIR Early-Warning & Surge Allocator",
         "domain": "global-health",
@@ -175,6 +232,7 @@ def simulate_global_health(inp: GlobalHealthInput) -> Dict[str, Any]:
             "triage_governance": "INDEPENDENT TRIAGE TEAMS: Separating bedside clinicians from allocation decisions preserves ethical objectivity and prevents provider burnout (Maves et al. 2020; Petanidis et al. 2025).",
             "4S2_capacity_framework": "Encompasses Staff, Stuff, Structure, and Systems (Horn et al. 2025; Duggal et al. 2021)."
         },
+        "regional_icu_network_integration": regional_icu_eval,
         "multilateral_governance_equity": equity_eval,
         "containment_readiness_assessment": (
             "CRITICAL SURGE CAPACITY EXCEEDED: Immediate international COVAX/CEPI vaccine reallocation and PABS triggering required."
@@ -182,14 +240,17 @@ def simulate_global_health(inp: GlobalHealthInput) -> Dict[str, Any]:
             else "MANAGEABLE HEALTH SYSTEM LOAD: Early AI diagnostic sequencing and dynamic regional sharing contain clinical bottlenecks."
         ),
         "literature_citations": [
+            "Duggal, A. et al. (2021). Surge capacity and capability across a large healthcare system. Am. J. Disaster Med., 10.5055/ajdm.2021.0400",
+            "Pett, E. et al. (2020). Critical care transfers and COVID-19. J. Intensive Care Soc., 10.1177/1751143720980270",
+            "Berkeveld, E. et al. (2025). Patient coordination during pandemic in Amsterdam region. BMC Health Serv. Res., 10.1186/s12913-025-12311-w",
+            "Mitchell, S. et al. (2022). Regional Transfer Coordination and Hospital Load Balancing. JAMA Health Forum, 10.1001/jamahealthforum.2021.5048",
+            "Acharya, P. et al. (2026). Bed Capacity and Utilization at Hospitals With Trauma Centers. JAMA Surg., 10.1001/jamasurg.2025.6406",
+            "Del Prete, C. et al. (2026). When supply chains fail: rethinking resilience in intensive care. Crit. Care, 10.1186/s13054-026-06257-6",
+            "Belachew, F. et al. (2026). Critical care capacity in Africa: postpandemic ICU capacity across public/private hospitals. BMJ Glob. Health, 10.1136/bmjgh-2025-021281",
             "Parker, F. et al. (2024). Optimal hospital capacity management. Health Care Manag. Sci., 10.1007/s10729-026-09764-8",
-            "Parker, F. et al. (2020). Optimal Resource and Demand Redistribution. ArXiv, 10.48550/arxiv.2011.03528",
             "Pan, J. et al. (2023). Location-allocation modelling for rational health planning. Soc. Sci. Med., 10.1016/j.socscimed.2023.116296",
-            "Fattahi, M. et al. (2022). Resource planning strategies for healthcare systems. Eur. J. Oper. Res., 10.1016/j.ejor.2022.01.023",
-            "Chu, J. et al. (2022). Emergency medical resource allocation. Comput. Ind. Eng., 10.1016/j.cie.2022.108491",
-            "Maves, R. et al. (2020). Triage of Scarce Critical Care Resources in COVID-19. Chest, 10.1016/j.chest.2020.03.063",
-            "Horn, Z. B. et al. (2025). The SHARE-HRS 4S2 Model of Surge Capacity. Prehospital & Disaster Med., 10.1017/s1049023x25101210",
-            "Wang, H.-Y. et al. (2026). Emergency Medical Resource Exhaustion Under Outbreaks. Risk Manag. Healthc. Policy, 10.2147/rmhp.s593287"
+            "Alban, A. et al. (2020). ICU capacity management using process simulation. Intensive Care Med., 10.1007/s00134-020-06066-7",
+            "Nocci, M. et al. (2022). Dynamic assessment of Surge Capacity in hospital network. Minerva Anestesiol., 10.23736/s0375-9393.22.16460-6"
         ]
     }
 
