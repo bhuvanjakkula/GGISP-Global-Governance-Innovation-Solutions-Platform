@@ -211,10 +211,18 @@ def test_ocean_governance_simulation():
 def test_international_tax_simulation():
     res = execute_specialist_engine("international-tax", {
         "local_constituent_entity_profit_million_usd": 150.0,
-        "covered_taxes_paid_million_usd": 12.0
+        "covered_taxes_paid_million_usd": 12.0,
+        "transparency_disclosure_regime": "mandatory_cbcr_and_aeoi",
+        "tax_competition_pivot_strategy": "regulatory_structural_incentives",
+        "foreign_parent_tax_hike_intensity_percent": 4.5
     })
     assert res["effective_tax_rate_etr_percent"] < 15.0
     assert res["projected_top_up_tax_revenue_million_usd"] > 0
+    assert "tax_transparency_framework_evaluation" in res
+    assert res["tax_transparency_framework_evaluation"]["audit_detection_probability_percent"] == 78.0
+    assert "SMART REGULATION" in res["tax_transparency_framework_evaluation"]["tax_competition_dynamic"]
+    assert res["tax_transparency_framework_evaluation"]["subsidiary_investment_spillover_percent"] < 0
+    assert len(res["tax_transparency_framework_evaluation"]["mne_investment_reallocation_matrix"]) == 4
 
 
 def test_blended_finance_simulation():
