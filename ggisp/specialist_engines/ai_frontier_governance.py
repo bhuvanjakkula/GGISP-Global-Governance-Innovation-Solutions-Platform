@@ -17,18 +17,23 @@ class AIGovernanceInput(BaseModel):
     cbrn_biosecurity_eval_score_percent: float = Field(default=18.0, ge=0.0, le=100.0, description="Autonomous biological synthesis capability score %")
     cyber_offensive_eval_score_percent: float = Field(default=24.0, ge=0.0, le=100.0, description="Autonomous zero-day exploit capability score %")
 
-    # Safety Auditing & International Standards Harmonization (Falco et al. 2021; Brundage et al. 2026; Agarwal & Nene 2025)
+    # Safety Auditing & Technical Conformity Verification (Levy & Perl 2026; Dalrymple et al. 2024; Ugarte et al. 2026)
     audit_framework: str = Field(
-        default="aaa_governance_audit",
+        default="eu_ai_act_conformity",
         description="Audit framework: aaa_governance_audit, frontier_assurance_levels, eu_ai_act_conformity, sociotechnical_supply_chain"
     )
-    independent_third_party_audit: bool = Field(default=True, description="Independent verification by accredited AI audit standards board")
+    independent_third_party_audit: bool = Field(default=True, description="Independent verification by accredited AI notified body / audit board")
     iso_iec_42001_certified: bool = Field(default=True, description="ISO/IEC 42001 AI Management System certification")
     continuous_post_market_monitoring: bool = Field(default=True, description="Automated event logging and drift detection in production")
+    statistical_robustness_bound: str = Field(
+        default="gRoMA_perturbation_bound",
+        description="Technical verification: gRoMA_perturbation_bound, guaranteed_safe_formal_proof, xai_feature_attribution, compliance_as_code_oscal"
+    )
+    machine_readable_compliance_pipeline: bool = Field(default=True, description="Compliance-as-Code pipeline with OSCAL extensions in CI/CD")
 
 
 def simulate_ai_frontier_governance(inp: AIGovernanceInput) -> Dict[str, Any]:
-    """Calculate cumulative training compute (FLOPs), EU AI Act systemic threshold, auditing standards, and 5-layer governance."""
+    """Calculate cumulative training compute (FLOPs), EU AI Act systemic threshold, technical conformity, and 5-layer governance."""
     # Compute: FLOPs ~= 6 * Parameters * Tokens
     n_params = inp.parameter_count_billions * 1e9
     d_tokens = inp.training_dataset_tokens_trillions * 1e12
@@ -70,9 +75,9 @@ def simulate_ai_frontier_governance(inp: AIGovernanceInput) -> Dict[str, Any]:
         }
     elif framework == "eu_ai_act_conformity":
         audit_details = {
-            "paradigm": "EU AI Act Harmonized Conformity Assessment (Mökander et al. 2021; Díaz Rodríguez et al. 2023)",
-            "focus": "Article 51 systemic risk classification, pre-market technical documentation, and continuous post-market surveillance",
-            "compliance_status": "Conformity assessment passed for high-risk CE-marking readiness."
+            "paradigm": "EU AI Act Harmonized Conformity Assessment (Mökander et al. 2021; Díaz Rodríguez et al. 2023; Gornet & Maxwell 2024)",
+            "focus": "Article 51 systemic risk classification, pre-market technical documentation, and CE-marking eligibility",
+            "compliance_status": "Third-party notified body assessment validated; overcomes self-certification vulnerability." if inp.independent_third_party_audit else "CAUTION: Internal self-certification lacks external notified body guarantee."
         }
     else:
         audit_details = {
@@ -80,6 +85,15 @@ def simulate_ai_frontier_governance(inp: AIGovernanceInput) -> Dict[str, Any]:
             "focus": "Supply chain equity, data annotator labor conditions, and carbon emissions footprint",
             "compliance_status": "Comprehensive sociotechnical lifecycle evaluation completed."
         }
+
+    # Technical Assurance & Verification Methodology (Levy & Perl 2026; Dalrymple et al. 2024; Ugarte et al. 2026):
+    tech_verification = {
+        "methodology": inp.statistical_robustness_bound,
+        "statistical_failure_upper_bound_guarantee": "Auditable mathematical bound on failure probability without disclosing proprietary internal weights (Levy & Perl 2026).",
+        "compliance_as_code": "ACTIVE: Automated machine-readable OSCAL evidence generation embedded in CI/CD pipeline (Ugarte et al. 2026)." if inp.machine_readable_compliance_pipeline else "INACTIVE: Manual static documentation subject to drift.",
+        "post_market_drift_monitoring": "CONTINUOUS: Production telemetry detects distribution shifts and pipeline data leakage (Schweighofer et al. 2025)." if inp.continuous_post_market_monitoring else "STATIC EX-ANTE ONLY",
+        "technical_limit_caveat": "ISO/IEC 42001 certifies management policies but does not prove absence of technical defects; empirical statistical bounds required (Schweighofer et al. 2025; Parlov et al. 2026)."
+    }
 
     # Five-Layer International Harmonization Architecture (Agarwal & Nene 2025):
     five_layer_stack = {
@@ -103,17 +117,20 @@ def simulate_ai_frontier_governance(inp: AIGovernanceInput) -> Dict[str, Any]:
         "cyber_offensive_risk_index_percent": inp.cyber_offensive_eval_score_percent,
         "governance_classification": assurance_tier,
         "safety_auditing_evaluation": audit_details,
+        "technical_conformity_verification": tech_verification,
         "iso_iec_42001_certification": "CERTIFIED: Formal AI management system certified against ISO/IEC 42001." if inp.iso_iec_42001_certified else "UNCERTIFIED",
         "five_layer_governance_stack": five_layer_stack,
         "international_treaty_benchmark": "OECD Principles on Artificial Intelligence & NIST AI Risk Management Framework 1.0 (Dual-Use Containment).",
         "literature_citations": [
-            "Falco, G. J. et al. (2021). Governing AI safety through independent audits. Nat. Mach. Intell., 10.1038/s42256-021-00370-7",
-            "Brundage, M. et al. (2026). Frontier AI Auditing. ArXiv, 10.48550/arxiv.2601.11699",
+            "Levy, N., & Perl, G. (2026). Bounding the Black Box: Statistical Certification. ArXiv, 10.48550/arxiv.2604.21854",
+            "Mökander, J. et al. (2021). Conformity Assessments and Post-market Monitoring. Minds & Machines, 10.1007/s11023-021-09577-4",
+            "Schweighofer, K. et al. (2025). Safe and Certifiable AI Systems. ArXiv, 10.48550/arxiv.2509.08852",
+            "Dalrymple, D. et al. (2024). Towards Guaranteed Safe AI. ArXiv, 10.48550/arxiv.2405.06624",
+            "Ugarte, R. C. et al. (2026). Making AI Compliance Evidence Machine-Readable. ArXiv, 10.48550/arxiv.2604.13767",
+            "Gornet, M., & Maxwell, W. (2024). Regulating AI through technical standards. Internet Policy Rev., 10.14763/2024.3.1784",
             "Agarwal, A., & Nene, M. (2025). A five-layer framework for AI governance. ArXiv, 10.1108/tg-03-2025-0065",
-            "Díaz Rodríguez, N. et al. (2023). Trustworthy Artificial Intelligence. Inf. Fusion, 10.48550/arxiv.2305.02231",
-            "Manheim, D. et al. (2024). The necessity of AI audit standards boards. AI & SOCIETY, 10.1007/s00146-025-02320-y",
-            "Truby, J. (2026). Global Governance of Transboundary Risks from Agentic AI. SSRN, 10.2139/ssrn.6714599",
-            "Trager, R. et al. (2023). International Governance of Civilian AI. ArXiv, 10.48550/arxiv.2308.15514"
+            "Falco, G. J. et al. (2021). Governing AI safety through independent audits. Nat. Mach. Intell., 10.1038/s42256-021-00370-7"
         ]
     }
+
 
