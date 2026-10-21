@@ -47,6 +47,18 @@ def test_unsc_veto_simulation():
     assert res["meets_procedural_9_vote_rule"] is True
     assert res["probability_of_veto_blockage_percent"] > 50.0
     assert "shapley_shubik_power_distribution" in res
+    assert "article_108_amendment_feasibility" in res
+
+
+def test_unsc_reform_models():
+    res = execute_specialist_engine("un-security-council", {
+        "reform_model": "double_veto_rule",
+        "ru_veto_prob": 0.80,
+        "cn_veto_prob": 0.40
+    })
+    assert "Double Veto" in res["council_composition"]["veto_rule"]
+    assert res["article_108_amendment_feasibility"]["ga_two_thirds_majority_secured"] is False
+
 
 
 def test_wto_gravity_trade_simulation():
