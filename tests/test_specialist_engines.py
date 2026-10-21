@@ -87,6 +87,9 @@ def test_debt_bargaining_game_simulation():
     assert res["imf_hjb_liquidity_yield_compression_bps"] > 0
     assert res["political_economy_forecast_correction"]["systemic_forecast_error_bias_pp"] > 5.0
     assert res["gdp_indexed_bonds"]["enabled"] is True
+    assert "legal_framework_evaluation" in res
+    assert res["legal_framework_evaluation"]["holdout_litigation_risk_percent"] < 10.0
+
 
 
 
