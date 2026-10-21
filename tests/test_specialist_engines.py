@@ -147,6 +147,9 @@ def test_global_health_simulation():
     assert "zoonotic_early_warning" in res
     assert res["zoonotic_early_warning"]["lead_time_compression_percent"] == 65
     assert "dynamic_resource_allocation" in res
+    assert "surge_capacity_load_balancing" in res
+    assert res["surge_capacity_load_balancing"]["surge_bed_day_reduction_percent"] > 80.0
+
 
 
 

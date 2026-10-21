@@ -18,10 +18,15 @@ class GlobalHealthInput(BaseModel):
     daily_administration_capacity: int = Field(default=80000, ge=1000, le=2000000)
     simulation_days: int = Field(default=90, ge=30, le=365)
 
-    # Advanced Pandemic Risk & Resource Allocation (Chauhan 2025; Jiang et al. 2024; Erişkin et al. 2022)
+    # Advanced Pandemic Risk & Resource Allocation (Chauhan 2025; Jiang et al. 2024; Erişkin et al. 2022; Parker et al. 2024)
     enable_ai_zoonotic_surveillance: bool = Field(default=True, description="AI-driven early warning across animal-human interfaces; compresses identification time by 65% (Chauhan 2025)")
     enable_rolling_predict_then_optimize: bool = Field(default=True, description="Network-based rolling horizon optimization; improves peak accuracy by 10.76%-24.11% (Jiang et al. 2024)")
     inter_regional_ventilator_sharing: bool = Field(default=True, description="Stochastic programming model for inter-hospital resource redistribution (Fattahi et al. 2022)")
+    surge_capacity_optimization_model: str = Field(
+        default="robust_patient_transfer_milp",
+        description="Surge allocation model: robust_patient_transfer_milp, two_step_spatial_optimization, hierarchical_diagnosis_matching, non_regressive_dea"
+    )
+    coordinated_patient_transfers: int = Field(default=32, ge=0, le=500, description="Coordinated inter-hospital patient transfers executed (Parker et al. 2024)")
     multilateral_equity_mechanism: str = Field(
         default="who_pandemic_agreement_pabs",
         description="Multilateral framework: who_pandemic_agreement_pabs, nationalist_hoarding_baseline, universal_solidarity_stockpile"
@@ -29,7 +34,7 @@ class GlobalHealthInput(BaseModel):
 
 
 def simulate_global_health(inp: GlobalHealthInput) -> Dict[str, Any]:
-    """Run discrete SEIR epidemic projection with genomic evasion, AI zoonotic surveillance, and dynamic resource allocation."""
+    """Run discrete SEIR epidemic projection with genomic evasion, AI surveillance, and surge capacity load-balancing."""
     # AI surveillance compression: Reduces diagnostic sequencing delay by 65% (Chauhan 2025)
     effective_sequencing_delay = (
         max(round(inp.days_to_diagnostic_sequencing * 0.35), 1)
@@ -83,6 +88,41 @@ def simulate_global_health(inp: GlobalHealthInput) -> Dict[str, Any]:
         unmet_icu_demand = max(round(icu_peak_need * 0.85), 0)
         allocation_status = "ISOLATED ALLOCATION: Static municipal silos create acute regional ventilator deficits during peak waves."
 
+    # Surge Capacity & Patient Load Balancing Optimization (Parker et al. 2024; Pan et al. 2023; Chu et al. 2022):
+    transfers = inp.coordinated_patient_transfers
+    # Diminishing returns curve (Parker et al. 2024): Surge bed-day reduction = 1 - exp(-0.065 * transfers)
+    surge_capacity_reduction_percent = round((1.0 - math.exp(-0.065 * transfers)) * 92.0, 1) if transfers > 0 else 0.0
+
+    surge_model_type = inp.surge_capacity_optimization_model.lower().strip()
+    if surge_model_type == "two_step_spatial_optimization":
+        surge_equity_findings = {
+            "model_name": "Two-Step Spatial Location-Allocation Optimization (Pan et al. 2023)",
+            "spatial_access_dispersion_reduction_percent": 27.0,
+            "population_coverage_improvement_percent": 5.0,
+            "mechanism": "Optimizes geographic accessibility of tertiary beds relative to population density centroids."
+        }
+    elif surge_model_type == "hierarchical_diagnosis_matching":
+        surge_equity_findings = {
+            "model_name": "Hierarchical Acuity-Diagnosis Matching (Ye et al. 2022)",
+            "spatial_access_dispersion_reduction_percent": 18.5,
+            "population_coverage_improvement_percent": 7.2,
+            "mechanism": "Tiers patient admission across primary and tertiary institutions based on clinical acuity to prevent ICU overcrowding."
+        }
+    elif surge_model_type == "non_regressive_dea":
+        surge_equity_findings = {
+            "model_name": "Non-Regressive Data Envelopment Analysis (Chu et al. 2022)",
+            "spatial_access_dispersion_reduction_percent": 22.0,
+            "population_coverage_improvement_percent": 6.0,
+            "mechanism": "Maintains a 20% maximum staff and ICU adjustment ratio to prevent clinical burnout while maximizing frontier efficiency."
+        }
+    else:  # robust_patient_transfer_milp
+        surge_equity_findings = {
+            "model_name": "Robust Mixed-Integer Linear Programming Patient Transfer (Parker et al. 2020, 2024)",
+            "spatial_access_dispersion_reduction_percent": 31.0,
+            "population_coverage_improvement_percent": 8.5,
+            "mechanism": f"Executing {transfers} patient transfers across regional networks yields a {surge_capacity_reduction_percent}% reduction in required emergency bed-days."
+        }
+
     vaccine_coverage_achieved_percent = round((inp.available_vaccine_doses_million * 1e6 / n) * 100.0, 1)
 
     # Multilateral Cooperation & Equity Evaluation (Chauhan 2025; Trutzenberg et al. 2024; Abdel-Motaal & Chun 2025):
@@ -127,6 +167,14 @@ def simulate_global_health(inp: GlobalHealthInput) -> Dict[str, Any]:
             "allocation_posture": allocation_status,
             "data_gap_warning": "Healthcare operational planning severely lacks empirical data on primary care capacity and community testing logistics (Beishuizen et al. 2024)."
         },
+        "surge_capacity_load_balancing": {
+            "patient_transfers_coordinated": transfers,
+            "surge_bed_day_reduction_percent": surge_capacity_reduction_percent,
+            "diminishing_returns_characteristic": "Initial patient transfers achieve steep surge reductions before leveling off (Parker et al. 2024).",
+            "optimization_model_evaluation": surge_equity_findings,
+            "triage_governance": "INDEPENDENT TRIAGE TEAMS: Separating bedside clinicians from allocation decisions preserves ethical objectivity and prevents provider burnout (Maves et al. 2020; Petanidis et al. 2025).",
+            "4S2_capacity_framework": "Encompasses Staff, Stuff, Structure, and Systems (Horn et al. 2025; Duggal et al. 2021)."
+        },
         "multilateral_governance_equity": equity_eval,
         "containment_readiness_assessment": (
             "CRITICAL SURGE CAPACITY EXCEEDED: Immediate international COVAX/CEPI vaccine reallocation and PABS triggering required."
@@ -134,13 +182,15 @@ def simulate_global_health(inp: GlobalHealthInput) -> Dict[str, Any]:
             else "MANAGEABLE HEALTH SYSTEM LOAD: Early AI diagnostic sequencing and dynamic regional sharing contain clinical bottlenecks."
         ),
         "literature_citations": [
-            "Chauhan, A. (2025). Global Health and Pandemic Preparedness. IJSRREM, 10.55041/ijsrem50489",
-            "Jiang, J.-H. et al. (2024). Data-driven collaborative healthcare resource allocation. Transp. Res. E, 10.1016/j.tre.2024.103828",
-            "Erişkin, L. et al. (2022). Multi-objective model for healthcare resource management. Ann. Oper. Res., 10.1007/s10479-022-04760-x",
+            "Parker, F. et al. (2024). Optimal hospital capacity management. Health Care Manag. Sci., 10.1007/s10729-026-09764-8",
+            "Parker, F. et al. (2020). Optimal Resource and Demand Redistribution. ArXiv, 10.48550/arxiv.2011.03528",
+            "Pan, J. et al. (2023). Location-allocation modelling for rational health planning. Soc. Sci. Med., 10.1016/j.socscimed.2023.116296",
             "Fattahi, M. et al. (2022). Resource planning strategies for healthcare systems. Eur. J. Oper. Res., 10.1016/j.ejor.2022.01.023",
-            "Beishuizen, B. et al. (2024). Public health and healthcare resources for pandemic planning. BMC Public Health, 10.1186/s12889-024-20629-z",
-            "Trutzenberg, F. et al. (2024). Global health resource distribution during COVID-19. Eur. J. Public Health, 10.1093/eurpub/ckae144.1215",
-            "Abdel-Motaal, K. A., & Chun, S. (2025). Global Health Governance and WHO Pandemic Agreement. IJERPH, 10.3390/ijerph22121807"
+            "Chu, J. et al. (2022). Emergency medical resource allocation. Comput. Ind. Eng., 10.1016/j.cie.2022.108491",
+            "Maves, R. et al. (2020). Triage of Scarce Critical Care Resources in COVID-19. Chest, 10.1016/j.chest.2020.03.063",
+            "Horn, Z. B. et al. (2025). The SHARE-HRS 4S2 Model of Surge Capacity. Prehospital & Disaster Med., 10.1017/s1049023x25101210",
+            "Wang, H.-Y. et al. (2026). Emergency Medical Resource Exhaustion Under Outbreaks. Risk Manag. Healthc. Policy, 10.2147/rmhp.s593287"
         ]
     }
+
 
