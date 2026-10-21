@@ -185,10 +185,18 @@ def test_space_orbital_debris_simulation():
 def test_critical_minerals_simulation():
     res = execute_specialist_engine("critical-minerals", {
         "mineral_type": "lithium",
-        "top_country_market_share_percent": 70.0
+        "top_country_market_share_percent": 70.0,
+        "hyperspectral_sensor_platform": "enmap_hyperspectral",
+        "prospectivity_ml_model": "gan_positive_unlabeled_bagging",
+        "enable_geoscience_text_mining": True
     })
     assert res["herfindahl_hirschman_index_hhi"] > 2500
     assert "Highly Concentrated" in res["market_concentration_tier"]
+    assert "geographic_resource_mapping" in res
+    assert "EnMAP" in res["geographic_resource_mapping"]["spectral_detection"]["platform"]
+    assert "Generative Adversarial Network" in res["geographic_resource_mapping"]["prospectivity_ml_model"]["model_architecture"]
+    assert res["geographic_resource_mapping"]["target_footprint_reduction_percent"] == 87.0
+    assert len(res["geographic_resource_mapping"]["core_exploration_layers"]) == 5
 
 
 def test_ocean_governance_simulation():
