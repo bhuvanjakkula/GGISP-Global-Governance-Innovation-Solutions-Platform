@@ -721,7 +721,14 @@
                   <option value="cybersecurity">Cybersecurity • OASIS STIX 2.1 Threat Indicator & D3FEND Playbook</option>
                   <option value="critical-minerals">Critical Minerals • OGC GeoJSON High-Prospectivity Drill Targets</option>
                   <option value="climate-finance">Climate Finance • EVM Solidity Parametric Payout Smart Contract</option>
-                  <option value="sovereign-debt">Sovereign Debt • Enhanced Single-Limb CAC Voting Script</option>
+                  <option value="sovereign-debt">Sovereign Debt • ICMA Enhanced Single-Limb CAC Voting Script</option>
+                  <option value="nuclear-security">Nuclear Security • IAEA Safeguards Zero-Knowledge Inspection Manifest</option>
+                  <option value="un-security-council">UN Security Council • UNSC Resolution Voting & Article 108 Ledger</option>
+                  <option value="wto-trade">WTO & Global Trade • WTO Tariff Harmonized Schedule & Chokepoint Reroute</option>
+                  <option value="ai-governance">AI Governance • NIST OSCAL Machine-Readable Security Assessment</option>
+                  <option value="ocean-governance">Ocean Governance • FAO Port State Measures Agreement IUU Notice</option>
+                  <option value="international-tax">International Taxation • OECD Pillar Two GloBE XML CbCR Return</option>
+                  <option value="development-finance">Development Finance • MDB Risk-Participation Guarantee Term Sheet</option>
                 </select>
                 <button id="btnGeneratePlaybook" class="btn btn-gold">Generate Payload</button>
               </div>
@@ -808,6 +815,9 @@ document.querySelectorAll('.nav-btn[data-tab]').forEach(btn => {
     document.querySelectorAll('.tab-content').forEach(tc => tc.style.display = 'none');
     $('tab-' + btn.dataset.tab).style.display = 'block';
     state.activeTab = btn.dataset.tab;
+    if (btn.dataset.tab === 'specialist' && (!state.specialistCatalog || !state.specialistCatalog.length)) {
+      loadSpecialistCatalog();
+    }
   });
 });
 
@@ -846,6 +856,7 @@ async function init() {
       selectProject(projects[0].id);
     }
     loadOfficialData('KEN');
+    await loadSpecialistCatalog();
   } catch (err) {
     notify('Failed to initialize: ' + err.message, 'error');
   }
@@ -917,6 +928,8 @@ function renderDossier(p) {
       </div>
       <p style="color:#e2e8f0; font-size:14px; margin-bottom:14px;">${esc(p.problem)}</p>
       <div style="display:flex; gap:10px; flex-wrap:wrap;">
+        <button class="btn btn-primary" onclick="launchSpecialistForDomain('${p.domain_slug}')">⚙️ Run Specialist Engine</button>
+        <button class="btn btn-secondary" style="border-color:#38bdf8; color:#38bdf8;" onclick="launchPlaybookForDomain('${p.domain_slug}')">📜 Operational Playbook</button>
         <a href="/api/projects/${p.id}/brief.md" download class="btn btn-secondary">↓ Export Markdown Brief</a>
         <button class="btn btn-gold" id="openAiDrawerBtn">⚡ AI Research Assistant</button>
       </div>
@@ -1181,9 +1194,29 @@ document.addEventListener('click', async e => {
   const domBtn = e.target.closest('[data-domain]');
   if (domBtn) {
     const slug = domBtn.dataset.domain;
+    document.querySelectorAll('.domain-item').forEach(b => b.classList.remove('active'));
+    domBtn.classList.add('active');
+
     const match = state.projects.find(p => p.domain_slug === slug);
-    if (match) selectProject(match.id);
-    else notify(`No active project in ${slug}. Create one in the form below.`, 'error');
+    if (match) {
+      selectProject(match.id);
+      document.querySelector('.nav-btn[data-tab="workspace"]')?.click();
+      notify(`Active research project loaded for ${slug}.`, 'success');
+    } else {
+      const pDom = $('projDomain');
+      if (pDom) pDom.value = slug;
+      document.querySelector('.nav-btn[data-tab="workspace"]')?.click();
+      notify(`Domain selected: ${slug}. Complete the enquiry form below.`, 'info');
+    }
+
+    // Synchronize specialist console and engineering solvers
+    const engSelect = $('specialistEngineSelect');
+    if (engSelect) {
+      engSelect.value = slug;
+      selectSpecialistEngine(slug);
+    }
+    const pbSelect = $('playbookDomainSelect');
+    if (pbSelect) pbSelect.value = slug;
     return;
   }
 
@@ -1536,6 +1569,24 @@ $('loadEngineSpecBtn')?.addEventListener('click', () => {
 $('specialistEngineSelect')?.addEventListener('change', () => {
   selectSpecialistEngine($('specialistEngineSelect').value);
 });
+
+window.launchSpecialistForDomain = function(slug) {
+  document.querySelector('.nav-btn[data-tab="specialist"]')?.click();
+  const sel = $('specialistEngineSelect');
+  if (sel) {
+    sel.value = slug;
+    selectSpecialistEngine(slug);
+  }
+};
+
+window.launchPlaybookForDomain = function(slug) {
+  document.querySelector('.nav-btn[data-tab="engineering"]')?.click();
+  const sel = $('playbookDomainSelect');
+  if (sel) {
+    sel.value = slug;
+    $('btnGeneratePlaybook')?.click();
+  }
+};
 
 // ---------------- Engineering Subsystem Event Handlers ----------------
 $('rngCyclone')?.addEventListener('input', e => $('lblCyclone').textContent = e.target.value + ' kts');

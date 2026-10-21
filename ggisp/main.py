@@ -522,7 +522,7 @@ class MerkleVerifyRequest(BaseModel):
 
 @app.get("/api/engineering/playbooks/{domain_slug}")
 def get_operational_playbook(domain_slug: str):
-    """Generate machine-executable operational payloads (CCSDS CDM, FHIR R4, STIX 2.1, GeoJSON, Smart Contracts)."""
+    """Generate machine-executable operational payloads (CCSDS CDM, FHIR R4, STIX 2.1, GeoJSON, Smart Contracts, OSCAL, PSMA, GloBE, ZKP)."""
     from ggisp.engineering.playbooks import (
         generate_space_conjunction_cdm,
         generate_mocc_health_fhir_dispatch,
@@ -530,6 +530,13 @@ def get_operational_playbook(domain_slug: str):
         generate_critical_minerals_geojson,
         generate_parametric_climate_smart_contract,
         generate_sovereign_cac_voting_script,
+        generate_nuclear_safeguards_manifest,
+        generate_unsc_resolution_ledger,
+        generate_wto_tariff_and_chokepoint_manifest,
+        generate_ai_oscal_governance_assessment,
+        generate_ocean_psma_iuu_notice,
+        generate_pillar2_globe_tax_return,
+        generate_development_guarantee_rpa,
     )
     slug = domain_slug.strip().lower()
     if slug == "space-security":
@@ -544,8 +551,21 @@ def get_operational_playbook(domain_slug: str):
         return generate_parametric_climate_smart_contract()
     elif slug == "sovereign-debt":
         return generate_sovereign_cac_voting_script()
+    elif slug == "nuclear-security":
+        return generate_nuclear_safeguards_manifest()
+    elif slug == "un-security-council":
+        return generate_unsc_resolution_ledger()
+    elif slug == "wto-trade":
+        return generate_wto_tariff_and_chokepoint_manifest()
+    elif slug == "ai-governance":
+        return generate_ai_oscal_governance_assessment()
+    elif slug == "ocean-governance":
+        return generate_ocean_psma_iuu_notice()
+    elif slug == "international-tax":
+        return generate_pillar2_globe_tax_return()
+    elif slug == "development-finance":
+        return generate_development_guarantee_rpa()
     else:
-        # Generic operational blueprint wrapper
         return {
             "domain": slug,
             "operational_status": "READY_FOR_DISPATCH",

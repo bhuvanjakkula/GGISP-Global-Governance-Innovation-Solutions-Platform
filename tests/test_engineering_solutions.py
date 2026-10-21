@@ -93,14 +93,27 @@ def test_engineering_playbook_generators():
 
 
 def test_api_engineering_endpoints(client):
-    # Test playbook retrieval
-    r_space = client.get("/api/engineering/playbooks/space-security")
-    assert r_space.status_code == 200
-    assert r_space.json()["standard"] == "CCSDS 508.0-B-1 (Conjunction Data Message)"
-
-    r_health = client.get("/api/engineering/playbooks/global-health")
-    assert r_health.status_code == 200
-    assert r_health.json()["resourceType"] == "Bundle"
+    # Test all 13 domain playbook endpoints
+    DOMAINS_13 = [
+        "space-security",
+        "global-health",
+        "cybersecurity",
+        "critical-minerals",
+        "climate-finance",
+        "sovereign-debt",
+        "nuclear-security",
+        "un-security-council",
+        "wto-trade",
+        "ai-governance",
+        "ocean-governance",
+        "international-tax",
+        "development-finance",
+    ]
+    for domain in DOMAINS_13:
+        res = client.get(f"/api/engineering/playbooks/{domain}")
+        assert res.status_code == 200, f"Failed for {domain}: {res.text}"
+        data = res.json()
+        assert "standard" in data or "resourceType" in data or "type" in data
 
     # Test Merkle audit
     r_audit = client.get("/api/engineering/merkle/audit-tree")
