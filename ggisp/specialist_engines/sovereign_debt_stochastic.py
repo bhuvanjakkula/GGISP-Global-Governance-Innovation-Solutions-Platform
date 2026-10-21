@@ -9,6 +9,9 @@ from typing import Any, Dict, List
 from pydantic import BaseModel, Field
 
 
+from ggisp.specialist_engines.debt_bargaining_game import DebtBargainingInput, simulate_debt_bargaining
+
+
 class StochasticDSAInput(BaseModel):
     initial_debt_percent_gdp: float = Field(default=82.0, ge=10.0, le=300.0)
     baseline_interest_percent: float = Field(default=6.8, ge=-5.0, le=30.0)
@@ -19,6 +22,14 @@ class StochasticDSAInput(BaseModel):
     target_sustainable_debt_percent_gdp: float = Field(default=60.0, ge=30.0, le=90.0)
     years: int = Field(default=5, ge=3, le=10)
     monte_carlo_draws: int = Field(default=500, ge=100, le=2000)
+
+    # Advanced Game-Theoretic & Political Economy Parameters (Perera 2026, Flores et al. 2023)
+    enable_game_theoretic_bargaining: bool = Field(default=True, description="Continuous-time Nash bargaining between sovereign and creditors (Perera 2026)")
+    debtor_bargaining_power_theta: float = Field(default=0.45, ge=0.1, le=0.9, description="Nash bargaining power of sovereign theta in (0, 1)")
+    imf_program_liquidity_support_percent_gdp: float = Field(default=6.5, ge=0.0, le=30.0)
+    is_preemptive_restructuring: bool = Field(default=True, description="Restructuring executed prior to payment default (Asonuma & Trebesch 2015)")
+    incorporate_gdp_indexed_bonds: bool = Field(default=True, description="Link debt service to GDP growth thresholds (Dvorkin et al. 2022)")
+    is_election_year: bool = Field(default=True, description="Election cycle proximity introducing upward forecast error (Flores et al. 2023)")
 
 
 def simulate_stochastic_dsa(inp: StochasticDSAInput) -> Dict[str, Any]:
@@ -64,6 +75,20 @@ def simulate_stochastic_dsa(inp: StochasticDSAInput) -> Dict[str, Any]:
     required_haircut_percent = max(((final_median - target_d) / final_median) * 100.0, 0.0) if final_median > target_d else 0.0
     prob_exceeding_70_percent = sum(1 for s in sims if s[-1] > 70.0) / len(sims) * 100.0
 
+    bargaining_result = None
+    if inp.enable_game_theoretic_bargaining:
+        bargaining_inp = DebtBargainingInput(
+            country_code="SOV",
+            outstanding_debt_percent_gdp=inp.initial_debt_percent_gdp,
+            debtor_bargaining_power_theta=inp.debtor_bargaining_power_theta,
+            imf_program_liquidity_support_percent_gdp=inp.imf_program_liquidity_support_percent_gdp,
+            is_preemptive_restructuring=inp.is_preemptive_restructuring,
+            incorporate_gdp_indexed_bonds=inp.incorporate_gdp_indexed_bonds,
+            is_election_year=inp.is_election_year,
+            official_projected_5yr_debt_percent_gdp=final_median,
+        )
+        bargaining_result = simulate_debt_bargaining(bargaining_inp)
+
     return {
         "engine": "Stochastic Sovereign DSA Fan Chart & Haircut Optimization Engine",
         "domain": "sovereign-debt",
@@ -73,8 +98,16 @@ def simulate_stochastic_dsa(inp: StochasticDSAInput) -> Dict[str, Any]:
         "probability_of_exceeding_70_percent_gdp": round(prob_exceeding_70_percent, 1),
         "required_npv_haircut_percent_to_reach_target": round(required_haircut_percent, 1),
         "target_sustainable_threshold_percent": target_d,
+        "game_theoretic_bargaining": bargaining_result,
         "policy_implication": (
             f"Under current market volatility, the sovereign faces a {round(prob_exceeding_70_percent, 1)}% probability of exceeding critical distress levels. "
             f"A negotiated face-value or coupon-reprofiling debt relief package of {round(required_haircut_percent, 1)}% is mathematically required to anchor debt below {target_d}%."
         ),
+        "literature_citations": [
+            "Perera, R. S. (2026). Debt, Power, and Play: Modeling Sovereign Restructuring with Creditors and the IMF. Int. J. Financial Engineering, 10.1142/s2424786326500179",
+            "Asonuma, T., & Trebesch, C. (2015). Sovereign Debt Restructurings: Preemptive or Post-Default. J. Eur. Econ. Assoc., 10.1111/jeea.12156",
+            "Dvorkin, M., Sanchez, J., Sapriza, H., & Yurdagul, E. (2022). Improving Sovereign Debt Restructurings. J. Econ. Dyn. Control, 10.1016/j.jedc.2022.104435",
+            "Flores, J., Furceri, D., Kothari, S., & Ostry, J. (2023). Worse than you think: Public debt forecast errors in 174 countries. J. Forecasting, 10.1002/for.2942"
+        ]
     }
+

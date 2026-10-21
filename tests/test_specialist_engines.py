@@ -1,4 +1,11 @@
-from ggisp.specialist_engines import ENGINE_CATALOG, execute_specialist_engine, list_specialist_engines
+from ggisp.specialist_engines import (
+    ENGINE_CATALOG,
+    DebtBargainingInput,
+    execute_specialist_engine,
+    list_specialist_engines,
+    simulate_debt_bargaining,
+)
+
 
 
 def test_engines_catalog_coverage():
@@ -61,6 +68,26 @@ def test_sovereign_debt_stochastic_simulation():
     })
     assert len(res["fan_chart_percentiles"]) == 6
     assert res["required_npv_haircut_percent_to_reach_target"] > 0
+    assert "game_theoretic_bargaining" in res
+    assert res["game_theoretic_bargaining"]["endogenous_nash_haircut_percent"] > 0
+
+
+def test_debt_bargaining_game_simulation():
+    res = simulate_debt_bargaining(DebtBargainingInput(
+        country_code="KEN",
+        outstanding_debt_percent_gdp=78.0,
+        debtor_bargaining_power_theta=0.5,
+        imf_program_liquidity_support_percent_gdp=7.0,
+        is_preemptive_restructuring=True,
+        incorporate_gdp_indexed_bonds=True,
+        is_election_year=True,
+        official_projected_5yr_debt_percent_gdp=69.0
+    ))
+    assert res["endogenous_nash_haircut_percent"] > 0
+    assert res["imf_hjb_liquidity_yield_compression_bps"] > 0
+    assert res["political_economy_forecast_correction"]["systemic_forecast_error_bias_pp"] > 5.0
+    assert res["gdp_indexed_bonds"]["enabled"] is True
+
 
 
 def test_ai_frontier_governance_simulation():
