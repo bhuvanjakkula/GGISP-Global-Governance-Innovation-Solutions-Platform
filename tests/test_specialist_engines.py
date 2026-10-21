@@ -32,6 +32,9 @@ def test_nuclear_safeguards_simulation():
     assert res["swu_required_per_significant_quantity"] > 0
     assert res["estimated_breakout_time_days"] > 0
     assert "safeguards_verification_protocol" in res
+    assert res["zero_knowledge_warhead_verification"]["enabled"] is True
+    assert "frontier_ai_escalation_benchmark" in res
+
 
 
 def test_unsc_veto_simulation():
