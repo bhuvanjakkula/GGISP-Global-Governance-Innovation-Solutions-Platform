@@ -116,6 +116,10 @@ def test_ai_frontier_governance_simulation():
     })
     assert res["exceeds_10_26_frontier_covenant_threshold"] is True
     assert "Systemic" in res["governance_classification"]
+    assert "safety_auditing_evaluation" in res
+    assert "five_layer_governance_stack" in res
+    assert "CERTIFIED" in res["iso_iec_42001_certification"]
+
 
 
 def test_cyber_defensive_simulation():
