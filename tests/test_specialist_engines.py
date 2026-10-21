@@ -247,7 +247,17 @@ def test_climate_parametric_simulation():
     res = execute_specialist_engine("climate-finance", {
         "maximum_parametric_coverage_million_usd": 100.0,
         "parametric_trigger_threshold_knots": 95.0,
-        "recorded_event_intensity_knots": 120.0
+        "recorded_event_intensity_knots": 120.0,
+        "adaptation_finance_accounting_modality": "grant_equivalent_strict_additionality",
+        "reported_adaptation_commitment_million_usd": 60.0,
+        "loan_concessionality_grant_element_percent": 42.0,
+        "oda_additionality_recycling_percent": 78.0,
+        "nlp_overreporting_discount_percent": 32.03
     })
     assert res["parametric_trigger_breached"] is True
     assert res["emergency_disaster_liquidity_payout_million_usd"] > 0
+    assert "adaptation_finance_accounting_audit" in res
+    assert res["adaptation_finance_accounting_audit"]["reported_headline_commitment_million_usd"] == 60.0
+    assert res["adaptation_finance_accounting_audit"]["genuine_grant_equivalent_additionality_million_usd"] < 30.0
+    assert res["adaptation_finance_accounting_audit"]["overreporting_inflation_gap_percent"] > 50.0
+    assert len(res["adaptation_finance_accounting_audit"]["comparability_dimensions_matrix"]) == 4
