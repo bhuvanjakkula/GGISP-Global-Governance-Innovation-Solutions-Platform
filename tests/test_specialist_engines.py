@@ -144,6 +144,10 @@ def test_global_health_simulation():
     })
     assert res["effective_reproduction_number_r_eff"] > 2.5
     assert res["estimated_critical_care_icu_demand"] > 0
+    assert "zoonotic_early_warning" in res
+    assert res["zoonotic_early_warning"]["lead_time_compression_percent"] == 65
+    assert "dynamic_resource_allocation" in res
+
 
 
 def test_space_orbital_debris_simulation():
