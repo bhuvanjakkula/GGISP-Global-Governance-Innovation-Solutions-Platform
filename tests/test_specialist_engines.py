@@ -131,6 +131,9 @@ def test_cyber_defensive_simulation():
     })
     assert res["national_cyber_resilience_index_100"] > 0
     assert res["mosca_quantum_theorem_evaluation"]["harvest_now_decrypt_later_vulnerability"] is True
+    assert "collective_cyber_defense" in res
+    assert "CRUSOE" in res["collective_cyber_defense"]["operational_framework"]["framework_name"]
+
 
 
 def test_global_health_simulation():
