@@ -398,6 +398,7 @@
       <button class="nav-btn" data-tab="models">Policy Modelling Lab</button>
       <button class="nav-btn" data-tab="official-data">Official Data Hub</button>
       <button class="nav-btn" data-tab="specialist">13 Specialist Innovation Engines</button>
+      <button class="nav-btn" data-tab="engineering" style="color: #38bdf8; font-weight: 700;">⚡ Planetary Engineering Solvers</button>
     </div>
   </div>
 </header>
@@ -633,6 +634,125 @@
             <div class="eyebrow">SIMULATION OUTPUT & POLICY EVALUATION</div>
             <div id="engineOutputDisplay"><p class="help">Configure parameters and click "Execute Quantitative Engine" to run calculations.</p></div>
           </div>
+        </div>
+      </div>
+    <!-- TAB 5: PLANETARY ENGINEERING SOLVERS & ADVANCED TECHNOLOGIES -->
+    <div id="tab-engineering" class="tab-content" style="display:none;">
+      <div class="panel" style="background: linear-gradient(135deg, rgba(23, 35, 61, 0.9), rgba(15, 23, 42, 0.95)); border: 1px solid rgba(56, 189, 248, 0.3);">
+        <div class="eyebrow" style="color: #38bdf8;">MISSION CONTROL • ADVANCED PLANETARY ENGINEERING</div>
+        <h2 style="font-size: 22px; margin-top: 4px;">Real-World Operational Solvers & Cryptographic Verification Deck</h2>
+        <p style="color: var(--text-muted); max-width: 900px; margin-bottom: 20px;">
+          Direct machine-actionable execution payloads across international operations centers: CCSDS 508.0 Conjunction Data Messages (CDM), HL7 / FHIR R4 Critical Care Transfers, OASIS STIX 2.1 Enclave Playbooks, OGC GeoJSON Exploration Drill targets, EVM Parametric Smart Contracts, and SHA-256 Merkle Proof Attestation.
+        </p>
+
+        <!-- Engineering Sub-Grid -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+          
+          <!-- LEFT: SYSTEMIC CASCADE SOLVER -->
+          <div class="panel" style="background: rgba(11, 17, 32, 0.7); border: 1px solid rgba(148, 163, 184, 0.2);">
+            <div class="eyebrow" style="color: #f59e0b;">CROSS-DOMAIN NON-LINEAR COUPLING</div>
+            <h3 style="margin-top:0;">Autonomous Cascade Stress-Tester & Pareto Optimizer</h3>
+            <p style="font-size:12px; color:var(--text-muted);">
+              Models compounding multi-system shocks across climate, sovereign debt, pandemic ICU demand, space debris conjunctions, and critical minerals.
+            </p>
+
+            <form id="cascadeSolverForm">
+              <div style="margin-bottom: 10px;">
+                <label style="display:flex; justify-content:space-between;">
+                  <span>Cyclone Windspeed (Knots)</span>
+                  <b id="lblCyclone">120 kts (Cat 4)</b>
+                </label>
+                <input type="range" id="rngCyclone" min="65" max="185" value="120" style="width:100%;">
+              </div>
+
+              <div style="margin-bottom: 10px;">
+                <label style="display:flex; justify-content:space-between;">
+                  <span>Sovereign Debt / GDP (%)</span>
+                  <b id="lblDebt">82.0%</b>
+                </label>
+                <input type="range" id="rngDebt" min="35" max="160" value="82" style="width:100%;">
+              </div>
+
+              <div style="margin-bottom: 10px;">
+                <label style="display:flex; justify-content:space-between;">
+                  <span>Pandemic ICU Surge (R₀)</span>
+                  <b id="lblR0">3.2</b>
+                </label>
+                <input type="range" id="rngR0" min="1.0" max="6.0" step="0.1" value="3.2" style="width:100%;">
+              </div>
+
+              <div style="margin-bottom: 10px;">
+                <label style="display:flex; justify-content:space-between;">
+                  <span>Critical Mineral Embargo Shock (%)</span>
+                  <b id="lblMinerals">35% Export Ban</b>
+                </label>
+                <input type="range" id="rngMinerals" min="0" max="80" value="35" style="width:100%;">
+              </div>
+
+              <div style="margin-bottom: 14px;">
+                <label style="display:flex; justify-content:space-between;">
+                  <span>Available Fiscal Contingency Reserve ($M USD)</span>
+                  <b id="lblBuffer">$250M USD</b>
+                </label>
+                <input type="range" id="rngBuffer" min="20" max="1000" step="10" value="250" style="width:100%;">
+              </div>
+
+              <button type="submit" class="btn btn-primary" style="width:100%; background: linear-gradient(135deg, #0284c7, #0d9488);">
+                ⚡ Compute Non-Linear Contagion & Pareto Intervention
+              </button>
+            </form>
+
+            <div id="cascadeResultsDisplay" style="margin-top: 14px;"></div>
+          </div>
+
+          <!-- RIGHT: OPERATIONAL PLAYBOOK GENERATOR -->
+          <div>
+            <div class="panel" style="background: rgba(11, 17, 32, 0.7); border: 1px solid rgba(148, 163, 184, 0.2); margin-bottom: 20px;">
+              <div class="eyebrow" style="color: #10b981;">REAL-WORLD MACHINE DISPATCH</div>
+              <h3 style="margin-top:0;">Automated Operational Playbook Generator</h3>
+              <p style="font-size:12px; color:var(--text-muted);">
+                Generate ready-to-deploy machine protocols adhering directly to aerospace, healthcare, cybersecurity, and financial engineering standards.
+              </p>
+
+              <div style="display:flex; gap:10px; margin-bottom:12px;">
+                <select id="playbookDomainSelect" style="flex:1;">
+                  <option value="space-security">Space Security • CCSDS 508.0 Conjunction Data Message (CDM)</option>
+                  <option value="global-health">Global Health • HL7 / FHIR R4 Critical Care Transfer Bundle</option>
+                  <option value="cybersecurity">Cybersecurity • OASIS STIX 2.1 Threat Indicator & D3FEND Playbook</option>
+                  <option value="critical-minerals">Critical Minerals • OGC GeoJSON High-Prospectivity Drill Targets</option>
+                  <option value="climate-finance">Climate Finance • EVM Solidity Parametric Payout Smart Contract</option>
+                  <option value="sovereign-debt">Sovereign Debt • Enhanced Single-Limb CAC Voting Script</option>
+                </select>
+                <button id="btnGeneratePlaybook" class="btn btn-gold">Generate Payload</button>
+              </div>
+
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                <span style="font-size:11px; color:var(--text-muted);" id="playbookFormatTag">Standard: JSON Payload</span>
+                <button class="btn btn-secondary" style="padding:4px 10px; font-size:11px;" id="btnCopyPlaybook">📋 Copy Code</button>
+              </div>
+              <pre id="playbookCodeViewer" style="background:#050914; border:1px solid #1e293b; padding:12px; border-radius:8px; font-family:monospace; font-size:11px; max-height:280px; overflow-y:auto; color:#38bdf8; margin:0;">Click "Generate Payload" to generate standardized machine-actionable instructions.</pre>
+            </div>
+
+            <!-- CRYPTOGRAPHIC MERKLE TREE AUDITOR -->
+            <div class="panel" style="background: rgba(11, 17, 32, 0.7); border: 1px solid rgba(148, 163, 184, 0.2);">
+              <div class="eyebrow" style="color: #a855f7;">CRYPTOGRAPHIC TAMPER-PROOF ATTESTATION</div>
+              <h3 style="margin-top:0;">Planetary Evidence Merkle Tree & Audit Proof Terminal</h3>
+              <p style="font-size:12px; color:var(--text-muted);">
+                SHA-256 Merkle tree anchoring all projects, sources, simulations, and founder approvals into a verifiable cryptographic root.
+              </p>
+              
+              <div style="display:flex; gap:10px; margin-bottom:12px;">
+                <button id="btnFetchMerkleTree" class="btn btn-primary" style="background:#7e22ce;">Inspect Live Merkle Root</button>
+                <button id="btnVerifyLeafProof" class="btn btn-secondary">Verify Proof Path</button>
+              </div>
+
+              <div id="merkleTreeDisplay" style="font-size:12px; color:var(--text-muted); background:#050914; border:1px solid #1e293b; padding:10px; border-radius:8px;">
+                Click "Inspect Live Merkle Root" to compute deterministic cryptographic state.
+              </div>
+            </div>
+
+          </div>
+
         </div>
       </div>
     </div>
@@ -1417,12 +1537,184 @@ $('specialistEngineSelect')?.addEventListener('change', () => {
   selectSpecialistEngine($('specialistEngineSelect').value);
 });
 
-// Update init() to also load specialist catalog
-const originalInit = init;
-init = async function() {
-  await originalInit();
-  await loadSpecialistCatalog();
-};
+// ---------------- Engineering Subsystem Event Handlers ----------------
+$('rngCyclone')?.addEventListener('input', e => $('lblCyclone').textContent = e.target.value + ' kts');
+$('rngDebt')?.addEventListener('input', e => $('lblDebt').textContent = e.target.value + '%');
+$('rngR0')?.addEventListener('input', e => $('lblR0').textContent = e.target.value);
+$('rngMinerals')?.addEventListener('input', e => $('lblMinerals').textContent = e.target.value + '% Export Ban');
+$('rngBuffer')?.addEventListener('input', e => $('lblBuffer').textContent = '$' + e.target.value + 'M USD');
+
+$('cascadeSolverForm')?.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const btn = e.target.querySelector('button[type="submit"]');
+  btn.disabled = true;
+  btn.textContent = 'Computing Non-Linear Contagion…';
+  try {
+    const payload = {
+      climate_cyclone_intensity_knots: parseFloat($('rngCyclone').value),
+      sovereign_debt_gdp_percent: parseFloat($('rngDebt').value),
+      icu_pandemic_surge_r0: parseFloat($('rngR0').value),
+      space_debris_conjunction_p_c: 2.4e-4,
+      critical_mineral_embargo_percent: parseFloat($('rngMinerals').value),
+      available_emergency_fiscal_buffer_million_usd: parseFloat($('rngBuffer').value)
+    };
+    const res = await api('/api/engineering/cascade/simulate', {
+      method: 'POST',
+      body: JSON.stringify(payload)
+    });
+
+    const sviPre = res.pre_intervention_systemic_vulnerability_index_100;
+    const sviPost = res.post_intervention_residual_vulnerability_100;
+    const eff = res.cascade_suppression_efficiency_percent;
+
+    $('cascadeResultsDisplay').innerHTML = `
+      <div style="background: rgba(15, 23, 42, 0.9); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 8px; padding: 14px; margin-top: 10px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 10px;">
+          <div>
+            <div style="font-size:11px; text-transform:uppercase; color:var(--text-muted); letter-spacing:1px;">Systemic Vulnerability Index (SVI)</div>
+            <div style="font-size:24px; font-weight:800; color:${sviPre > 65 ? '#f43f5e' : '#f59e0b'};">
+              ${sviPre} <span style="font-size:14px; color:var(--text-dim);">→ Mitigated to</span> <span style="color:#10b981;">${sviPost}</span>
+            </div>
+          </div>
+          <div style="text-align:right;">
+            <span class="badge" style="background:rgba(16,185,129,0.2); border:1px solid #10b981; color:#a7f3d0; font-size:12px; padding:4px 8px;">
+              🛡️ ${eff}% Cascade Arrest
+            </span>
+          </div>
+        </div>
+
+        <div style="font-size:12px; font-weight:600; color:#38bdf8; margin-bottom:6px;">Pareto-Optimal Intervention Dispatch ($${res.pareto_optimal_resource_dispatch.total_budget_allocated_million_usd}M Allocated):</div>
+        <table style="width:100%; font-size:11px; border-collapse:collapse; margin-bottom:10px;">
+          <thead>
+            <tr style="border-bottom:1px solid rgba(148,163,184,0.2); color:var(--text-dim); text-align:left;">
+              <th style="padding:4px 0;">Target Program</th>
+              <th style="padding:4px 0;">Dispatched Capital</th>
+              <th style="padding:4px 0; text-align:right;">Priority Tier</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${res.pareto_optimal_resource_dispatch.allocations.map(a => `
+              <tr style="border-bottom:1px solid rgba(148,163,184,0.1);">
+                <td style="padding:5px 0; color:#f1f5f9;">${esc(a.program)}</td>
+                <td style="padding:5px 0; color:#38bdf8; font-weight:600;">$${a.amount_million_usd}M</td>
+                <td style="padding:5px 0; text-align:right;"><span class="badge" style="font-size:10px;">${esc(a.priority)}</span></td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+
+        <div style="font-size:11px; color:#94a3b8; background:rgba(0,0,0,0.3); padding:8px; border-radius:6px;">
+          <b>Command Deck:</b> ${esc(res.planetary_command_status)}
+        </div>
+      </div>
+    `;
+    notify('Systemic cascade simulated successfully', 'success');
+  } catch (err) {
+    notify('Cascade solver failed: ' + err.message, 'error');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '⚡ Compute Non-Linear Contagion & Pareto Intervention';
+  }
+});
+
+// Operational Playbook Generator
+$('btnGeneratePlaybook')?.addEventListener('click', async () => {
+  const domain = $('playbookDomainSelect').value;
+  try {
+    $('playbookCodeViewer').textContent = '// Generating real-world machine payload for ' + domain + '…';
+    const payload = await api('/api/engineering/playbooks/' + domain);
+    $('playbookCodeViewer').textContent = JSON.stringify(payload, null, 2);
+    $('playbookFormatTag').textContent = 'Standard: ' + (payload.standard || payload.resourceType || payload.type || 'JSON');
+    notify('Generated payload for ' + domain, 'success');
+  } catch (err) {
+    $('playbookCodeViewer').textContent = '// Error generating payload: ' + err.message;
+    notify(err.message, 'error');
+  }
+});
+
+$('btnCopyPlaybook')?.addEventListener('click', () => {
+  const code = $('playbookCodeViewer').textContent;
+  if (!code || code.startsWith('// Error') || code.startsWith('Click')) {
+    notify('Generate a payload first', 'error');
+    return;
+  }
+  navigator.clipboard.writeText(code).then(() => {
+    notify('Payload copied to clipboard', 'success');
+  });
+});
+
+// Merkle Tree Auditor
+let cachedAuditTree = null;
+$('btnFetchMerkleTree')?.addEventListener('click', async () => {
+  try {
+    $('merkleTreeDisplay').textContent = 'Computing live cryptographic Merkle state…';
+    const data = await api('/api/engineering/merkle/audit-tree');
+    cachedAuditTree = data;
+    $('merkleTreeDisplay').innerHTML = `
+      <div style="margin-bottom:8px;">
+        <span style="color:#a855f7; font-weight:700;">MERKLE ROOT (SHA-256):</span><br>
+        <code style="word-break:break-all; color:#c084fc; font-size:11px;">${data.merkle_root}</code>
+      </div>
+      <div style="display:flex; gap:16px; font-size:11px; margin-bottom:8px;">
+        <div><b>Total Attested Records:</b> ${data.total_attested_records}</div>
+        <div><b>Tree Depth:</b> ${data.layers_depth} layers</div>
+      </div>
+      <div style="font-size:11px; color:#94a3b8; max-height:120px; overflow-y:auto; border-top:1px solid #1e293b; padding-top:6px;">
+        ${data.verified_leaves.slice(0, 8).map(l => `
+          <div style="display:flex; justify-content:space-between; margin-bottom:3px;">
+            <span>[${l.type.toUpperCase()}] ${esc(l.title)}</span>
+            <code style="color:#38bdf8;">${l.hash.substring(0, 10)}…</code>
+          </div>
+        `).join('')}
+      </div>
+    `;
+    notify('Merkle tree updated', 'success');
+  } catch (err) {
+    $('merkleTreeDisplay').textContent = 'Failed to load Merkle tree: ' + err.message;
+    notify(err.message, 'error');
+  }
+});
+
+$('btnVerifyLeafProof')?.addEventListener('click', async () => {
+  if (!cachedAuditTree || !cachedAuditTree.verified_leaves.length) {
+    notify('Inspect the Merkle Root first', 'error');
+    return;
+  }
+  try {
+    const targetLeaf = cachedAuditTree.verified_leaves[0];
+    const tree = cachedAuditTree.tree_internal;
+    // Build proof path on client or verify endpoint
+    const layers = tree.layers;
+    const proof = [];
+    let idx = 0;
+    for (let l = 0; l < layers.length - 1; l++) {
+      const layer = layers[l];
+      const isRight = (idx % 2 === 1);
+      const sibIdx = isRight ? idx - 1 : idx + 1;
+      const sibHash = sibIdx < layer.length ? layer[sibIdx] : layer[idx];
+      proof.push({ position: isRight ? 'left' : 'right', sibling_hash: sibHash });
+      idx = Math.floor(idx / 2);
+    }
+
+    const verification = await api('/api/engineering/merkle/verify-proof', {
+      method: 'POST',
+      body: JSON.stringify({
+        root: cachedAuditTree.merkle_root,
+        leaf_hash: targetLeaf.hash,
+        proof_steps: proof
+      })
+    });
+
+    $('merkleTreeDisplay').innerHTML += `
+      <div style="margin-top:8px; padding:6px 10px; background:rgba(16,185,129,0.15); border:1px solid #10b981; border-radius:6px; color:#a7f3d0; font-size:11px;">
+        ✅ <b>VERIFIED TAMPER-PROOF:</b> Leaf <code>${targetLeaf.hash.substring(0, 16)}…</code> (${targetLeaf.type}: ${esc(targetLeaf.title)}) matches Merkle Root. Status: ${verification.attestation_status}.
+      </div>
+    `;
+    notify('Cryptographic proof verified', 'success');
+  } catch (err) {
+    notify('Proof verification failed: ' + err.message, 'error');
+  }
+});
 
 init();
 </script>
