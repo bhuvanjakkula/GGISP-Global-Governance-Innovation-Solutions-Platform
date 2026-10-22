@@ -192,6 +192,8 @@ def _load_html_asset(filename: str) -> str:
 
 @app.get("/", include_in_schema=False)
 @app.get("/index.html", include_in_schema=False)
+@app.get("/api/index", include_in_schema=False)
+@app.get("/api", include_in_schema=False)
 def index():
     content = _load_html_asset("index.html")
     if not content:
