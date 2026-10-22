@@ -158,13 +158,24 @@ class SaveSimulationRequest(BaseModel):
 # ---------------------------------------------------------
 
 @app.get("/", include_in_schema=False)
-@app.get("/pricing", include_in_schema=False)
-@app.get("/enquiries", include_in_schema=False)
 def index():
     html_file = ROOT / "ggisp" / "index.html"
     if not html_file.exists():
         html_file = ROOT / "index.html"
     return FileResponse(html_file)
+
+
+@app.get("/pricing", include_in_schema=False)
+@app.get("/stripe", include_in_schema=False)
+@app.get("/plans", include_in_schema=False)
+@app.get("/enquiries", include_in_schema=False)
+def pricing_page():
+    pricing_file = ROOT / "ggisp" / "pricing.html"
+    if not pricing_file.exists():
+        pricing_file = ROOT / "pricing.html"
+    if not pricing_file.exists():
+        pricing_file = ROOT / "ggisp" / "index.html"
+    return FileResponse(pricing_file)
 
 
 @app.get("/api/health")
@@ -402,6 +413,29 @@ def approve(recommendation_id: int, data: ApproveRequest):
         "approval_status": "approved",
         "warning": "Founder approval, NOT third-party verification or institutional endorsement.",
     }
+
+
+@app.get("/api/guidance/approved")
+def get_all_approved_guidance():
+    """Retrieve all 12 founder-approved guidance recommendations governed by the Human Authority principle."""
+    with db() as con:
+        rows = con.execute("""
+            SELECT r.id, r.project_id, p.title as project_title, p.domain_slug, d.name as domain_name,
+                   r.recommendation, r.rationale, r.risks, r.author, r.approval_status, r.approved_at, r.created_at
+            FROM recommendations r
+            JOIN projects p ON r.project_id = p.id
+            JOIN domains d ON p.domain_slug = d.slug
+            WHERE r.approval_status = 'approved'
+            ORDER BY r.id ASC
+        """).fetchall()
+        return {
+            "total_approved": len(rows),
+            "governance_principle": "Human Authority Principle — Personally Authored & Approved by Founder Bhuvan Jakkula",
+            "founder_name": "Bhuvan Jakkula",
+            "founder_contact": "bjtmusic12@gmail.com",
+            "personal_support_statement": "For any queries, personal advisory, sovereign onboarding, or customer issues on these policy directives, contact Founder Bhuvan Jakkula personally at bjtmusic12@gmail.com.",
+            "guidance": [dict(r) for r in rows],
+        }
 
 
 # ---------------------------------------------------------

@@ -51,7 +51,7 @@ def sample_in_ball(seed: bytes, tau: int = 49, n: int = 256) -> Poly:
     count = 0
     while count < tau:
         if pos >= len(stream):
-            stream += shake256(seed + bytes([pos]), 64)
+            stream += shake256(seed + pos.to_bytes(4, "big"), 64)
         j = stream[pos]
         pos += 1
         if j < n and coeffs[j] == 0:
@@ -70,7 +70,7 @@ def sample_mask_poly(seed: bytes, gamma1: int, n: int = 256, q: int = DILITHIUM_
     span = 2 * gamma1 - 1
     while len(coeffs) < n:
         if idx + 3 > len(stream):
-            stream += shake256(seed + bytes([len(stream)]), n * 2)
+            stream += shake256(seed + len(stream).to_bytes(4, "big"), n * 2)
         val = stream[idx] | (stream[idx + 1] << 8) | ((stream[idx + 2] & 0x0F) << 16)
         idx += 3
         if val < span:
@@ -86,7 +86,7 @@ def sample_eta_poly(seed: bytes, eta: int, n: int = 256, q: int = DILITHIUM_Q) -
     idx = 0
     while len(coeffs) < n:
         if idx >= len(stream):
-            stream += shake256(seed + bytes([idx]), n)
+            stream += shake256(seed + idx.to_bytes(4, "big"), n)
         b = stream[idx]
         idx += 1
         t0 = b & 0x0F

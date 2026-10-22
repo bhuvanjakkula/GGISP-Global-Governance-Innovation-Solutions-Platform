@@ -52,3 +52,17 @@ def test_recommendation_and_approval_gate(client):
     p_detail = client.get(f"/api/projects/{pid}").json()
     assert p_detail["status"] == "ready"
     assert len(p_detail["audit_log"]) > 0
+
+
+def test_get_all_approved_guidance(client):
+    res = client.get("/api/guidance/approved")
+    assert res.status_code == 200
+    data = res.json()
+    assert data["total_approved"] >= 12
+    assert "Bhuvan Jakkula" in data["founder_name"]
+    assert data["founder_contact"] == "bjtmusic12@gmail.com"
+    assert len(data["guidance"]) >= 12
+    for item in data["guidance"]:
+        assert item["approval_status"] == "approved"
+        assert len(item["recommendation"]) > 10
+        assert item["author"] == "Founder"

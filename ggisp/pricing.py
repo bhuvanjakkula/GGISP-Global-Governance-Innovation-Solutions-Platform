@@ -14,6 +14,8 @@ logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/pricing", tags=["Pricing & Customer Enquiries"])
 
 SUPPORT_CONTACT_EMAIL = "bjtmusic12@gmail.com"
+FOUNDER_NAME = "Bhuvan Jakkula"
+FOUNDER_ROLE = "Platform Founder & Chief Architect"
 
 PRICING_PLANS = [
     {
@@ -116,6 +118,9 @@ def get_plans():
         "special_offer": "2 MONTHS FREE TRIAL ON ALL TIERS",
         "offer_terms": "Full access to all platform features for 60 days with zero upfront commitment. Cancel anytime.",
         "support_contact": SUPPORT_CONTACT_EMAIL,
+        "founder_name": FOUNDER_NAME,
+        "founder_role": FOUNDER_ROLE,
+        "personal_founder_support": f"Contact Founder {FOUNDER_NAME} personally for any queries, sovereign onboarding, or platform issues at {SUPPORT_CONTACT_EMAIL}.",
         "plans": PRICING_PLANS,
     }
 
@@ -149,8 +154,10 @@ def submit_enquiry(req: EnquiryRequest):
     return {
         "status": "SUCCESS",
         "enquiry_id": enquiry_id,
-        "message": f"Thank you, {req.full_name}. Your enquiry for the {req.selected_plan} plan (with 2 Months Free Trial) has been received. Our team will contact you shortly at {email_clean}. You may also reach us directly at {SUPPORT_CONTACT_EMAIL}.",
+        "message": f"Thank you, {req.full_name}. Your enquiry for the {req.selected_plan} plan (with 2 Months Free Trial) has been received. Founder {FOUNDER_NAME} and our advisory team will review your requirements and reach out to {email_clean}. You may also contact Founder {FOUNDER_NAME} personally at {SUPPORT_CONTACT_EMAIL} anytime for queries or customer support on your issues.",
         "support_email": SUPPORT_CONTACT_EMAIL,
+        "founder_name": FOUNDER_NAME,
+        "founder_role": FOUNDER_ROLE,
         "free_trial_activated": True,
         "free_trial_duration": "60 Days (2 Months)",
     }

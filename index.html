@@ -401,6 +401,7 @@
       <button class="nav-btn" data-tab="engineering" style="color: #38bdf8; font-weight: 700;">⚡ Planetary Engineering Solvers</button>
       <button class="nav-btn" data-tab="pqc" style="color: #34d399; font-weight: 700;">🛡️ Post-Quantum Cyber (PQC)</button>
       <button class="nav-btn" data-tab="pricing" id="navBtnPricing" style="background: rgba(245, 158, 11, 0.2); border: 1px solid #f59e0b; color: #fef08a; font-weight: 800;">💎 Pricing & Enquiries (2 Mo Free)</button>
+      <button class="nav-btn" onclick="openApprovedGuidanceModal()" style="color: #38bdf8; font-weight: 700; border: 1px solid rgba(56, 189, 248, 0.4); background: rgba(56, 189, 248, 0.1);">📜 Founder Guidance (12)</button>
       <a href="/workbench" target="_blank" class="nav-btn" style="color:#c084fc; text-decoration:none; display:inline-flex; align-items:center; gap:4px;">🔬 Innovation Workbench ↗</a>
       <a href="/lab" target="_blank" class="nav-btn" style="color:#38bdf8; text-decoration:none; display:inline-flex; align-items:center; gap:4px;">📊 Comparative Lab ↗</a>
     </div>
@@ -430,22 +431,26 @@
     </div>
     <div id="domainList">Loading divisions…</div>
 
-    <!-- Customer Support & Pricing Sidebar Widget -->
-    <div class="panel" style="margin-top: 16px; background: rgba(245, 158, 11, 0.08); border: 1px solid rgba(245, 158, 11, 0.3); padding: 12px; border-radius: 8px;">
-      <div class="eyebrow" style="color: #f59e0b; margin-bottom: 4px;">CUSTOMER SUPPORT & PLANS</div>
-      <div style="font-size: 12px; font-weight: 700; color: #fff; margin-bottom: 4px;">2 MONTHS FREE TRIAL</div>
+    <!-- Customer Support & Founder Advisory Sidebar Widget -->
+    <div class="panel" style="margin-top: 16px; background: rgba(245, 158, 11, 0.08); border: 1px solid rgba(245, 158, 11, 0.35); padding: 14px; border-radius: 8px;">
+      <div class="eyebrow" style="color: #f59e0b; margin-bottom: 2px;">FOUNDER & EXECUTIVE SUPPORT</div>
+      <div style="font-size: 13px; font-weight: 800; color: #fff; margin-bottom: 2px;">Bhuvan Jakkula</div>
+      <div style="font-size: 11px; color: #38bdf8; font-weight: 600; margin-bottom: 8px;">Platform Founder & Chief Architect</div>
       <div style="font-size: 11px; color: var(--text-muted); line-height: 1.5; margin-bottom: 8px;">
-        • Academic: $490/mo<br>
-        • Enterprise: $2,450/mo<br>
-        • Sovereign: $25,000/mo
+        For any customer queries, custom requirements, sovereign onboarding, or platform issues, contact Founder Bhuvan Jakkula personally. Dedicated 24/7 customer support.
       </div>
-      <div style="font-size: 11px; color: #cbd5e1; margin-bottom: 10px;">
-        Support Contact:<br>
-        <code style="color: #38bdf8; font-size: 10px; word-break: break-all;">bjtmusic12@gmail.com</code>
+      <div style="font-size: 11px; color: #cbd5e1; margin-bottom: 10px; background: #050914; padding: 8px; border-radius: 6px; border: 1px solid #1e293b;">
+        <div style="font-size: 10px; color: #94a3b8; text-transform: uppercase;">Direct Founder Support:</div>
+        <code style="color: #f59e0b; font-size: 11px; font-weight: 700; word-break: break-all;">bjtmusic12@gmail.com</code>
       </div>
-      <button class="btn btn-secondary btn-sm" onclick="switchTab('pricing')" style="width: 100%; justify-content: center; border-color: #f59e0b; color: #fef08a; cursor: pointer; font-size: 11px; font-weight: 700;">
-        💎 View Pricing & Stripe Plans
-      </button>
+      <div style="display: flex; flex-direction: column; gap: 6px;">
+        <button class="btn btn-secondary btn-sm" onclick="switchTab('pricing')" style="width: 100%; justify-content: center; border-color: #f59e0b; color: #fef08a; cursor: pointer; font-size: 11px; font-weight: 700;">
+          💎 View Pricing & Stripe Plans
+        </button>
+        <button class="btn btn-secondary btn-sm" onclick="openApprovedGuidanceModal()" style="width: 100%; justify-content: center; border-color: #38bdf8; color: #38bdf8; cursor: pointer; font-size: 11px; font-weight: 600;">
+          📜 View 12 Founder Directives
+        </button>
+      </div>
     </div>
 
     <div style="margin-top: 16px; padding-top: 12px; border-top: 1px solid var(--border);" class="help">
@@ -501,7 +506,11 @@
       <div class="metric-card"><small>Specialist Divisions</small><div class="metric-num">13</div><small>Multilateral domains</small></div>
       <div class="metric-card"><small>Active Research Projects</small><div class="metric-num" id="metricProjects">0</div><small>Across all divisions</small></div>
       <div class="metric-card"><small>Evidence Sources & Claims</small><div class="metric-num" id="metricEvidence">0</div><small>SHA-256 attested records</small></div>
-      <div class="metric-card"><small>Founder-Approved Guidance</small><div class="metric-num" id="metricApproved">0</div><small>Human authority principle</small></div>
+      <div class="metric-card" id="cardApprovedGuidance" onclick="openApprovedGuidanceModal()" style="cursor: pointer; border: 1px solid rgba(56, 189, 248, 0.4); background: rgba(56, 189, 248, 0.05); transition: all 0.2s;" title="Click to view all 12 Founder-Approved Policy Directives by Bhuvan Jakkula">
+        <small style="color: #38bdf8; font-weight: 700;">📜 Founder-Approved Guidance (Click)</small>
+        <div class="metric-num" id="metricApproved" style="color: #38bdf8;">0</div>
+        <small>Human authority principle • Bhuvan Jakkula ↗</small>
+      </div>
     </div>
 
     <!-- TAB 1: WORKSPACE -->
@@ -1133,32 +1142,37 @@
       <!-- Customer Enquiries & Support Desk -->
       <div class="grid-2">
         <!-- Direct Support Card -->
-        <div class="panel" style="background: rgba(15, 23, 42, 0.85); border-color: rgba(56, 189, 248, 0.4);">
-          <div class="eyebrow" style="color: #38bdf8;">CUSTOMER SUPPORT & DIRECT ENQUIRIES</div>
-          <h3 style="margin-top: 2px;">Contact Global Advisory & Support</h3>
+        <div class="panel" style="background: rgba(15, 23, 42, 0.85); border-color: rgba(245, 158, 11, 0.45);">
+          <div class="eyebrow" style="color: #f59e0b;">FOUNDER & EXECUTIVE CUSTOMER SUPPORT</div>
+          <h3 style="margin-top: 2px;">Contact Founder Bhuvan Jakkula Personally</h3>
           <p style="font-size: 13px; color: var(--text-muted); line-height: 1.6;">
-            Have questions regarding sovereign deployment, customized quantitative engines, or activating your 2-month institutional free trial? Our team is available directly.
+            Have queries, technical questions, sovereign onboarding needs, or issues with your subscription or data engines? Contact <b>Founder Bhuvan Jakkula</b> personally. Dedicated 24/7 customer support to resolve customer issues and guide quantitative implementations.
           </p>
 
           <div style="background: #050914; border: 1px solid #1e293b; border-radius: 10px; padding: 16px; margin: 16px 0;">
             <div style="font-size: 11px; text-transform: uppercase; color: var(--text-dim); letter-spacing: 1px; margin-bottom: 4px;">
-              OFFICIAL CUSTOMER SUPPORT INBOX
+              FOUNDER'S DIRECT CUSTOMER SUPPORT LINE
             </div>
             <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
-              <code style="font-size: 16px; color: #f59e0b; font-weight: 700; word-break: break-all;">bjtmusic12@gmail.com</code>
+              <code style="font-size: 18px; color: #f59e0b; font-weight: 800; word-break: break-all;">bjtmusic12@gmail.com</code>
               <button id="btnCopySupportEmail" class="btn btn-sm btn-secondary" style="font-size: 11px; cursor:pointer;">
                 📋 Copy Email
               </button>
             </div>
             <div style="font-size: 11px; color: #94a3b8; margin-top: 8px;">
-              Response Window: Standard within 4 business hours • Institutional Priority within 1 hour
+              Contact: <b>Bhuvan Jakkula</b> (Founder & Chief Architect) • Always active for customer queries & support
             </div>
           </div>
 
           <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-            <a href="mailto:bjtmusic12@gmail.com?subject=GGISP%20Platform%20Customer%20Enquiry%20-%20Free%20Trial" class="btn btn-primary" style="text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
-              📧 Send Direct Email
+            <a href="mailto:bjtmusic12@gmail.com?subject=GGISP%20Platform%20Query%20to%20Founder%20Bhuvan%20Jakkula" class="btn btn-primary" style="text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
+              📧 Email Founder Bhuvan Jakkula
             </a>
+            <button class="btn btn-secondary" onclick="openApprovedGuidanceModal()" style="border-color: #38bdf8; color: #38bdf8;">
+              📜 12 Founder Directives
+            </button>
+          </div>
+        </div>
             <button id="btnScrollToForm" class="btn btn-secondary" style="cursor:pointer;">
               ✍️ Fill Enquiry Form
             </button>
@@ -1278,6 +1292,51 @@
   </div>
 </div>
 
+<!-- Founder-Approved Policy Guidance Modal (12 Directives) -->
+<div id="guidanceModal" style="display:none; position:fixed; inset:0; background:rgba(3,7,18,0.88); backdrop-filter:blur(10px); z-index:1000; align-items:center; justify-content:center; padding:20px;">
+  <div style="background:#0b1120; border:1px solid #1e293b; border-radius:16px; width:95%; max-width:980px; max-height:90vh; display:flex; flex-direction:column; box-shadow:0 25px 60px -12px rgba(0,0,0,0.85); position:relative;">
+    <!-- Modal Header -->
+    <div style="padding:20px 24px; border-bottom:1px solid #1e293b; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;">
+      <div>
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span class="badge" style="background:#f59e0b; color:#000; font-weight:800; font-size:10px; padding:2px 8px;">HUMAN AUTHORITY PRINCIPLE</span>
+          <span style="font-size:11px; color:#38bdf8; font-weight:700;">12 Policy Directives Across Multilateral Domains</span>
+        </div>
+        <h2 style="margin:6px 0 2px 0; font-family:'Outfit', sans-serif; font-size:22px; color:#fff;">
+          🏛️ Founder-Approved Policy Guidance (12 Directives)
+        </h2>
+        <div style="font-size:12px; color:var(--text-muted);">
+          Personally Authored & Approved by <b>Founder Bhuvan Jakkula</b> • Rooted in verified empirical data and non-delegable human responsibility.
+        </div>
+      </div>
+      <button id="guidanceModalClose" style="background:transparent; border:0; color:#94a3b8; font-size:24px; cursor:pointer; line-height:1; padding:4px;" title="Close">✕</button>
+    </div>
+
+    <!-- Personal Founder Support & Queries Box -->
+    <div style="background:linear-gradient(135deg, rgba(245,158,11,0.12), rgba(2,132,199,0.08)); border-bottom:1px solid rgba(245,158,11,0.3); padding:14px 24px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;">
+      <div>
+        <div style="font-size:13px; font-weight:700; color:#fff;">
+          Have queries on these directives, or require custom sovereign policy models?
+        </div>
+        <div style="font-size:12px; color:#cbd5e1; margin-top:2px;">
+          Contact <b>Founder Bhuvan Jakkula</b> personally. Dedicated customer support for all customer issues, briefings, and sovereign SLAs.
+        </div>
+      </div>
+      <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+        <code style="color:#f59e0b; font-weight:700; font-size:13px; background:#050914; padding:5px 10px; border-radius:6px; border:1px solid #1e293b;">bjtmusic12@gmail.com</code>
+        <a href="mailto:bjtmusic12@gmail.com?subject=GGISP%20Policy%20Guidance%20Query%20to%20Founder%20Bhuvan%20Jakkula" class="btn btn-primary btn-sm" style="font-size:11px; text-decoration:none; padding:6px 14px; background:linear-gradient(135deg, #0284c7, #0369a1); display:inline-flex; align-items:center; gap:5px;">
+          ✉️ Contact Founder Personally
+        </a>
+      </div>
+    </div>
+
+    <!-- Guidance List Container -->
+    <div id="guidanceListContainer" style="overflow-y:auto; padding:20px 24px; flex:1; display:flex; flex-direction:column; gap:16px;">
+      <div style="color:#94a3b8; text-align:center; padding:30px;">Loading 12 Founder-Approved Policy Directives…</div>
+    </div>
+  </div>
+</div>
+
 <script>
 const state = {
   domains: [],
@@ -1287,12 +1346,25 @@ const state = {
   familyFilter: 'all',
   currentDetail: null,
   cachedMacro: null,
-  lastSimResult: null
+  lastSimResult: null,
+  isAuthenticated: false,
+  currentUser: null,
+  isAuthor: false
 };
 
 const $ = id => document.getElementById(id);
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const tag = (type, text) => `<span class="tag ${type}">${esc(text)}</span>`;
+
+function requireAuth(actionDescription = 'access this platform service') {
+  if (!state.isAuthenticated) {
+    notify(`🔒 Please Sign In or Create an Account to ${actionDescription}.`, 'error');
+    if ($('authModal')) $('authModal').style.display = 'flex';
+    return false;
+  }
+  return true;
+}
+window.requireAuth = requireAuth;
 
 async function api(url, options = {}) {
   let finalUrl = url;
@@ -1878,6 +1950,13 @@ document.addEventListener('submit', async e => {
   const f = e.target;
   const id = f.id;
   e.preventDefault();
+
+  // Authentication gate: customers must sign up or sign in to use services
+  if (!['authSignInForm', 'authSignUpForm', 'customerEnquiryForm', 'pricingEnquiryForm'].includes(id)) {
+    if (!requireAuth('use this platform service')) {
+      return;
+    }
+  }
 
   try {
     if (id === 'createProjectForm') {
@@ -2689,6 +2768,9 @@ async function checkAuthStatus() {
   try {
     const res = await api('/api/auth/me');
     if (res.authenticated && res.user) {
+      state.isAuthenticated = true;
+      state.currentUser = res.user;
+      state.isAuthor = Boolean(res.is_author);
       if ($('authModalBtn')) $('authModalBtn').style.display = 'none';
       if ($('userLoggedInPill')) $('userLoggedInPill').style.display = 'flex';
       if ($('userDisplayName')) $('userDisplayName').textContent = '👤 ' + (res.user.full_name || res.user.email);
@@ -2706,10 +2788,16 @@ async function checkAuthStatus() {
         }
       }
     } else {
+      state.isAuthenticated = false;
+      state.currentUser = null;
+      state.isAuthor = false;
       if ($('authModalBtn')) $('authModalBtn').style.display = 'flex';
       if ($('userLoggedInPill')) $('userLoggedInPill').style.display = 'none';
     }
   } catch (e) {
+    state.isAuthenticated = false;
+    state.currentUser = null;
+    state.isAuthor = false;
     if ($('authModalBtn')) $('authModalBtn').style.display = 'flex';
     if ($('userLoggedInPill')) $('userLoggedInPill').style.display = 'none';
   }
@@ -2724,6 +2812,83 @@ $('authModalClose')?.addEventListener('click', () => {
 });
 window.addEventListener('click', (e) => {
   if (e.target === $('authModal')) $('authModal').style.display = 'none';
+  if (e.target === $('guidanceModal')) $('guidanceModal').style.display = 'none';
+});
+
+// ---------------- Founder-Approved Policy Guidance (Human Authority Principle) ----------------
+async function openApprovedGuidanceModal() {
+  const modal = $('guidanceModal');
+  if (modal) modal.style.display = 'flex';
+  const container = $('guidanceListContainer');
+  if (!container) return;
+  container.innerHTML = '<div style="color:#94a3b8; text-align:center; padding:30px;">Loading 12 Founder-Approved Policy Directives…</div>';
+
+  try {
+    const data = await api('/api/guidance/approved');
+    const items = data.guidance || [];
+    if (!items.length) {
+      container.innerHTML = '<div style="color:#94a3b8; text-align:center; padding:30px;">No approved guidance recorded.</div>';
+      return;
+    }
+
+    container.innerHTML = items.map((item, idx) => `
+      <div style="background:#050914; border:1px solid #1e293b; border-radius:12px; padding:18px; display:flex; flex-direction:column; gap:10px;">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:8px;">
+          <div>
+            <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
+              <span class="badge" style="background:rgba(56,189,248,0.15); border:1px solid #38bdf8; color:#bae6fd; font-size:10px;">
+                ${esc(item.domain_name || item.domain_slug)}
+              </span>
+              <span style="font-size:11px; color:#34d399; font-weight:700;">✓ Human Authority Principle Verified</span>
+            </div>
+            <h4 style="margin:0; font-size:16px; color:#fff; font-family:'Outfit', sans-serif;">
+              ${idx + 1}. ${esc(item.project_title)}
+            </h4>
+          </div>
+          <span style="font-size:11px; color:var(--text-dim); background:rgba(255,255,255,0.05); padding:3px 8px; border-radius:6px; font-family:monospace;">
+            Directive #${item.id}
+          </span>
+        </div>
+
+        <div style="background:rgba(15,23,42,0.6); border-left:3px solid #f59e0b; padding:12px 16px; border-radius:0 8px 8px 0;">
+          <div style="font-size:11px; font-weight:700; color:#f59e0b; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:4px;">
+            Personally Authored Recommendation Statement:
+          </div>
+          <div style="font-size:13px; color:#f8fafc; line-height:1.6; font-weight:500;">
+            ${esc(item.recommendation)}
+          </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; font-size:12px;">
+          <div style="background:rgba(255,255,255,0.02); border:1px solid #1e293b; padding:12px; border-radius:8px;">
+            <b style="color:#38bdf8; display:block; margin-bottom:4px;">Strategic Rationale:</b>
+            <span style="color:#cbd5e1; line-height:1.5;">${esc(item.rationale)}</span>
+          </div>
+          <div style="background:rgba(255,255,255,0.02); border:1px solid #1e293b; padding:12px; border-radius:8px;">
+            <b style="color:#f43f5e; display:block; margin-bottom:4px;">Evaluated Risks & Trade-Offs:</b>
+            <span style="color:#cbd5e1; line-height:1.5;">${esc(item.risks)}</span>
+          </div>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; padding-top:8px; border-top:1px solid #1e293b; font-size:11px;">
+          <div style="color:var(--text-dim);">
+            ✍️ Personally approved by <b>Founder Bhuvan Jakkula</b> • Authority: ${esc(item.author || 'Founder')}
+          </div>
+          <a href="mailto:bjtmusic12@gmail.com?subject=Enquiry%20on%20Directive%20%23${item.id}%20(${encodeURIComponent(item.project_title)})" class="btn btn-secondary btn-sm" style="font-size:11px; padding:4px 10px; text-decoration:none; color:#38bdf8; border-color:#38bdf8;">
+            ✉️ Contact Founder Bhuvan Jakkula on this Directive
+          </a>
+        </div>
+      </div>
+    `).join('');
+  } catch (err) {
+    container.innerHTML = `<div style="color:#f43f5e; text-align:center; padding:30px;">Failed to load guidance: ${esc(err.message)}</div>`;
+  }
+}
+window.openApprovedGuidanceModal = openApprovedGuidanceModal;
+
+$('guidanceModalClose')?.addEventListener('click', () => {
+  $('guidanceModal').style.display = 'none';
+});
 });
 
 $('tabAuthSignInBtn')?.addEventListener('click', () => {

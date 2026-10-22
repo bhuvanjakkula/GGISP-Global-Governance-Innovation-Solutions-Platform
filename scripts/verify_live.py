@@ -133,9 +133,11 @@ print(f"  [OK] Mosca HNDL Matrix: Audited {mosca_res['total_domains_audited']} d
 # 8. Test User Authentication & Author Access Subsystem
 print("\n--- Verifying Authentication & Author Access Subsystem ---")
 # Sign up standard user
+import time
+unique_email = f"verify_analyst_{int(time.time())}@ggisp.org"
 st_su, su_res = test('http://127.0.0.1:8000/api/auth/signup', method='POST', data={
     'full_name': 'Live Verification Analyst',
-    'email': 'verify_analyst_2026@ggisp.org',
+    'email': unique_email,
     'mobile_number': '+1 202 555 0199',
     'password': 'LiveVerifyPassword123!'
 })
@@ -195,7 +197,16 @@ assert enq_res['support_email'] == 'bjtmusic12@gmail.com'
 assert enq_res['free_trial_activated'] is True
 print(f"  [OK] Customer Enquiry & 2-Month Trial: Activated (Ticket #{enq_res['enquiry_id']}, Contact: {enq_res['support_email']})")
 
-print("\nALL LIVE PRODUCTION, QUANTUM-SAFE, AUTHENTICATION & PRICING ENDPOINTS VALIDATED SUCCESSFULLY.")
+# 10. Test Founder-Approved Guidance (Human Authority Principle)
+print("\n--- Verifying Founder-Approved Guidance Subsystem ---")
+st_g, guidance_data = test('http://127.0.0.1:8000/api/guidance/approved')
+assert guidance_data['total_approved'] == 12
+assert 'Bhuvan Jakkula' in guidance_data['founder_name']
+assert guidance_data['founder_contact'] == 'bjtmusic12@gmail.com'
+assert len(guidance_data['guidance']) == 12
+print(f"  [OK] Founder Guidance: {guidance_data['total_approved']} Directives verified by Founder {guidance_data['founder_name']} ({guidance_data['founder_contact']})")
+
+print("\nALL LIVE PRODUCTION, QUANTUM-SAFE, AUTHENTICATION, PRICING & FOUNDER GUIDANCE ENDPOINTS VALIDATED SUCCESSFULLY.")
 
 
 
