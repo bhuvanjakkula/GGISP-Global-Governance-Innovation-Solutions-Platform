@@ -1,0 +1,24 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "/api/index.py"
+    },
+    {
+      "source": "/pricing",
+      "destination": "/pricing.html"
+    },
+    {
+      "source": "/stripe",
+      "destination": "/pricing.html"
+    },
+    {
+      "source": "/plans",
+      "destination": "/pricing.html"
+    },
+    {
+      "source": "/enquiries",
+      "destination": "/pricing.html"
+    }
+  ]
+}

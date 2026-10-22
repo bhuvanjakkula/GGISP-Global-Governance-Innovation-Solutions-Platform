@@ -34,6 +34,17 @@ logger = logging.getLogger(__name__)
 ROOT = Path(__file__).resolve().parent.parent
 
 
+# Eager initialization for serverless runtime cold starts
+try:
+    init_db()
+    from ggisp.auth import init_auth_tables
+    init_auth_tables()
+    from ggisp.pricing import init_enquiries_table
+    init_enquiries_table()
+except Exception as _e:
+    logger.warning("Eager DB initialization warning: %s", _e)
+
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     init_db()
@@ -419,6 +430,7 @@ def approve(recommendation_id: int, data: ApproveRequest):
 
 
 @app.get("/api/guidance/approved")
+@app.get("/guidance/approved")
 def get_all_approved_guidance():
     """Retrieve all 12 founder-approved guidance recommendations governed by the Human Authority principle."""
     with db() as con:
@@ -431,6 +443,17 @@ def get_all_approved_guidance():
             WHERE r.approval_status = 'approved'
             ORDER BY r.id ASC
         """).fetchall()
+        if not rows:
+            init_db()
+            rows = con.execute("""
+                SELECT r.id, r.project_id, p.title as project_title, p.domain_slug, d.name as domain_name,
+                       r.recommendation, r.rationale, r.risks, r.author, r.approval_status, r.approved_at, r.created_at
+                FROM recommendations r
+                JOIN projects p ON r.project_id = p.id
+                JOIN domains d ON p.domain_slug = d.slug
+                WHERE r.approval_status = 'approved'
+                ORDER BY r.id ASC
+            """).fetchall()
         return {
             "total_approved": len(rows),
             "governance_principle": "Human Authority Principle — Personally Authored & Approved by Founder Bhuvan Jakkula",
