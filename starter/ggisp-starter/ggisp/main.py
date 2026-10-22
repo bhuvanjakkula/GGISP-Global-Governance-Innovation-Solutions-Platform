@@ -159,6 +159,7 @@ class SaveSimulationRequest(BaseModel):
 # ---------------------------------------------------------
 
 @app.get("/", include_in_schema=False)
+@app.get("/index.html", include_in_schema=False)
 def index():
     html_file = ROOT / "ggisp" / "index.html"
     if not html_file.exists():
@@ -167,6 +168,7 @@ def index():
 
 
 @app.get("/pricing", include_in_schema=False)
+@app.get("/pricing.html", include_in_schema=False)
 @app.get("/stripe", include_in_schema=False)
 @app.get("/plans", include_in_schema=False)
 @app.get("/enquiries", include_in_schema=False)
