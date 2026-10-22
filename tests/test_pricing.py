@@ -27,6 +27,9 @@ def test_get_pricing_plans_includes_2_months_free_trial():
         assert "free trial" in plan["badge"].lower()
         assert plan["monthly_price_usd"] > 0
 
+    sovereign = [p for p in data["plans"] if p["id"] == "sovereign"][0]
+    assert sovereign["monthly_price_usd"] == 25000
+
 
 def test_submit_customer_enquiry_success():
     payload = {

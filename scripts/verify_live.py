@@ -171,7 +171,9 @@ st_p, plans_data = test('http://127.0.0.1:8000/api/pricing/plans')
 assert '2 MONTHS FREE TRIAL' in plans_data['special_offer']
 assert plans_data['support_contact'] == 'bjtmusic12@gmail.com'
 assert len(plans_data['plans']) == 3
-print(f"  [OK] Pricing Catalog: {len(plans_data['plans'])} Plans (Special Offer: '{plans_data['special_offer']}', Contact: {plans_data['support_contact']})")
+sov_plan = [p for p in plans_data['plans'] if p['id'] == 'sovereign'][0]
+assert sov_plan['monthly_price_usd'] == 25000
+print(f"  [OK] Pricing Catalog: {len(plans_data['plans'])} Plans (Sovereign: ${sov_plan['monthly_price_usd']}/mo, Special Offer: '{plans_data['special_offer']}', Contact: {plans_data['support_contact']})")
 
 st_enq, enq_res = test('http://127.0.0.1:8000/api/pricing/enquiries', method='POST', data={
     'full_name': 'H.E. Marcus Vance',

@@ -60,7 +60,7 @@ PRICING_PLANS = [
         "name": "Sovereign & Multilateral Alliance",
         "badge": "CUSTOM ONBOARDING • 2 MONTHS FREE TRIAL",
         "free_trial_months": 2,
-        "monthly_price_usd": 7800,
+        "monthly_price_usd": 25000,
         "annual_discount_percent": 30,
         "description": "Air-gapped and sovereign-grade deployment for national governments, ministries, and treaty secretariats.",
         "features": [
