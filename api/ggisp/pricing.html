@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GGISP — Subscriptions, Stripe Payment & Customer Support</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #030712;
+      --panel: #0b1120;
+      --panel-border: rgba(56, 189, 248, 0.2);
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --primary: #0284c7;
+      --primary-hover: #0369a1;
+      --gold: #f59e0b;
+      --gold-hover: #d97706;
+      --green: #10b981;
+      --purple: #9333ea;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', -apple-system, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    header {
+      background: rgba(11, 17, 32, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: #fff;
+    }
+    .logo-badge {
+      background: linear-gradient(135deg, #0284c7, #9333ea);
+      font-weight: 800;
+      font-family: 'Outfit', sans-serif;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 16px;
+      letter-spacing: 1px;
+    }
+    .container {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 36px 20px 60px 20px;
+      flex: 1;
+      width: 100%;
+    }
+    .hero {
+      text-align: center;
+      padding: 30px 20px;
+      margin-bottom: 40px;
+      background: linear-gradient(180deg, rgba(245, 158, 11, 0.08) 0%, rgba(2, 132, 199, 0.04) 100%);
+      border-radius: 16px;
+      border: 1px solid rgba(245, 158, 11, 0.3);
+    }
+    .badge-pill {
+      display: inline-block;
+      background: #f59e0b;
+      color: #000;
+      font-weight: 800;
+      font-size: 11px;
+      padding: 4px 12px;
+      border-radius: 20px;
+      letter-spacing: 0.5px;
+      margin-bottom: 12px;
+    }
+    h1 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 38px;
+      margin: 0 0 12px 0;
+      letter-spacing: -0.5px;
+    }
+    .hero-subtitle {
+      font-size: 16px;
+      color: var(--text-muted);
+      max-width: 760px;
+      margin: 0 auto 20px auto;
+      line-height: 1.6;
+    }
+    .hero-perks {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      font-size: 13px;
+      color: #cbd5e1;
+      flex-wrap: wrap;
+    }
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 24px;
+      margin-bottom: 48px;
+    }
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--panel-border);
+      border-radius: 14px;
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
+    }
+    .card.featured {
+      border: 2px solid var(--gold);
+      box-shadow: 0 0 25px rgba(245, 158, 11, 0.2);
+    }
+    .featured-ribbon {
+      position: absolute;
+      top: -13px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--gold);
+      color: #000;
+      font-size: 10px;
+      font-weight: 800;
+      padding: 4px 14px;
+      border-radius: 20px;
+      letter-spacing: 0.5px;
+    }
+    .plan-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 24px;
+      margin: 0 0 6px 0;
+    }
+    .plan-desc {
+      font-size: 13px;
+      color: var(--text-muted);
+      min-height: 40px;
+      margin-bottom: 16px;
+    }
+    .price-block {
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 18px 0;
+      margin-bottom: 20px;
+    }
+    .price-row {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+    }
+    .price-zero {
+      font-size: 38px;
+      font-weight: 800;
+      color: #fff;
+    }
+    .trial-text {
+      color: #34d399;
+      font-weight: 700;
+      font-size: 14px;
+    }
+    .renewal-text {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+    .feature-list {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 24px 0;
+      font-size: 13px;
+      color: #cbd5e1;
+      line-height: 1.9;
+    }
+    .feature-list li {
+      display: flex;
+      gap: 8px;
+    }
+    .check-mark {
+      color: #34d399;
+      font-weight: 700;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 18px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 700;
+      text-decoration: none;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: all 0.2s;
+      width: 100%;
+    }
+    .btn-stripe-teal {
+      background: linear-gradient(135deg, #0d9488, #0284c7);
+      color: #fff;
+      box-shadow: 0 4px 15px rgba(2, 132, 199, 0.3);
+      margin-bottom: 10px;
+    }
+    .btn-stripe-teal:hover {
+      background: linear-gradient(135deg, #0f766e, #0369a1);
+    }
+    .btn-stripe-gold {
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+      color: #000;
+      box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
+      margin-bottom: 10px;
+    }
+    .btn-stripe-gold:hover {
+      background: linear-gradient(135deg, #d97706, #b45309);
+    }
+    .btn-stripe-purple {
+      background: linear-gradient(135deg, #7e22ce, #9333ea);
+      color: #fff;
+      box-shadow: 0 4px 15px rgba(147, 51, 234, 0.3);
+      margin-bottom: 10px;
+    }
+    .btn-stripe-purple:hover {
+      background: linear-gradient(135deg, #6b21a8, #7e22ce);
+    }
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #cbd5e1;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+    }
+    .support-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-top: 20px;
+    }
+    @media (max-width: 860px) {
+      .support-grid { grid-template-columns: 1fr; }
+      h1 { font-size: 28px; }
+    }
+    .support-panel {
+      background: var(--panel);
+      border: 1px solid var(--panel-border);
+      border-radius: 14px;
+      padding: 28px;
+    }
+    .form-group {
+      margin-bottom: 14px;
+    }
+    label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: #cbd5e1;
+      margin-bottom: 6px;
+    }
+    input, select, textarea {
+      width: 100%;
+      background: #050914;
+      border: 1px solid #1e293b;
+      color: #fff;
+      padding: 10px 12px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-family: inherit;
+    }
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+    .row-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    code {
+      font-family: 'JetBrains Mono', monospace;
+    }
+    #notification {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      display: none;
+      z-index: 1000;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <a href="/" class="brand">
+    <div class="logo-badge">GGISP</div>
+    <div>
+      <div style="font-weight: 700; font-size: 14px;">Global Governance, Innovation & Solutions Platform</div>
+      <div style="font-size: 11px; color: var(--text-muted);">Official Institutional Pricing & Subscriptions Desk</div>
+    </div>
+  </a>
+  <div style="display: flex; gap: 12px; align-items: center;">
+    <a href="/" class="btn btn-secondary" style="width: auto; padding: 8px 16px;">
+      ← Return to Main Workspace
+    </a>
+  </div>
+</header>
+
+<div class="container">
+  <!-- Hero Section -->
+  <div class="hero">
+    <div class="badge-pill">🎉 SPECIAL GLOBAL LAUNCH INITIATIVE</div>
+    <h1>Institutional Subscriptions & Direct Stripe Checkout</h1>
+    <p class="hero-subtitle">
+      Activate uninterrupted access to all 13 multilateral divisions, 20 analytical solvers, cascade contagion engines, and NIST Post-Quantum Cybersecurity. Every plan includes a 60-day unrestricted trial.
+    </p>
+    <div class="hero-perks">
+      <span>✓ 2 Months Free Trial</span>
+      <span>✓ Immediate Stripe Card Checkout</span>
+      <span>✓ NIST Post-Quantum Cyber (PQC)</span>
+      <span>✓ Direct Support: <b>bjtmusic12@gmail.com</b></span>
+    </div>
+  </div>
+
+  <!-- Pricing Cards Grid -->
+  <div class="grid-3">
+
+    <!-- Plan 1: Academic & Research -->
+    <div class="card">
+      <div>
+        <div style="font-size: 11px; font-weight: 800; color: #38bdf8; letter-spacing: 0.5px; margin-bottom: 8px;">
+          ACADEMIC & RESEARCH
+        </div>
+        <h2 class="plan-title">Academic Tier</h2>
+        <p class="plan-desc">For universities, independent policy institutes, NGOs, and research fellows.</p>
+        
+        <div class="price-block">
+          <div class="price-row">
+            <span class="price-zero">$0</span>
+            <span class="trial-text">for first 2 months</span>
+          </div>
+          <div class="renewal-text">Then $490 USD / month • Billed annually or monthly</div>
+        </div>
+
+        <ul class="feature-list">
+          <li><span class="check-mark">✓</span> Access to all 13 Multilateral Research Divisions</li>
+          <li><span class="check-mark">✓</span> Cryptographic SHA-256 evidence source verification</li>
+          <li><span class="check-mark">✓</span> 100 scenario policy simulations per month</li>
+          <li><span class="check-mark">✓</span> Official multilateral data hub imports (WB / IMF / UN)</li>
+          <li><span class="check-mark">✓</span> Founder-reviewed policy advisory guidance</li>
+          <li><span class="check-mark">✓</span> Email support via <code style="color:#38bdf8;">bjtmusic12@gmail.com</code></li>
+        </ul>
+      </div>
+
+      <div>
+        <a href="https://buy.stripe.com/test_28E14f26D7mt5BfbSvcjS0y" target="_blank" rel="noopener noreferrer" class="btn btn-stripe-teal">
+          💳 Pay with Stripe ($490/mo)
+        </a>
+        <button class="btn btn-secondary select-plan-btn" data-plan="academic">
+          Activate 2-Month Free Trial / Invoice
+        </button>
+      </div>
+    </div>
+
+    <!-- Plan 2: Institutional & Enterprise (Featured) -->
+    <div class="card featured">
+      <div class="featured-ribbon">RECOMMENDED FOR INSTITUTIONS • 2 MO FREE</div>
+      <div>
+        <div style="font-size: 11px; font-weight: 800; color: var(--gold); letter-spacing: 0.5px; margin-bottom: 8px;">
+          INSTITUTIONAL & ENTERPRISE
+        </div>
+        <h2 class="plan-title">Institutional Tier</h2>
+        <p class="plan-desc">For global enterprises, risk advisories, central banks, and sovereign funds.</p>
+        
+        <div class="price-block">
+          <div class="price-row">
+            <span class="price-zero">$0</span>
+            <span class="trial-text">for first 2 months</span>
+          </div>
+          <div class="renewal-text">Then $2,450 USD / month • Billed annually or monthly</div>
+        </div>
+
+        <ul class="feature-list">
+          <li><span class="check-mark">✓</span> <b>Everything in Academic Tier</b></li>
+          <li><span class="check-mark">✓</span> <b>Full Suite of 20 Quantitative Analytical Engines</b></li>
+          <li><span class="check-mark">✓</span> Non-linear Planetary Cascade Solvers (SVI & Pareto Capital)</li>
+          <li><span class="check-mark">✓</span> NIST FIPS 203/204/205 Post-Quantum Envelope Encryption</li>
+          <li><span class="check-mark">✓</span> Machine Operational Playbooks (WTO, ICMA, CCSDS, FHIR)</li>
+          <li><span class="check-mark">✓</span> Comparative Lab parameter sweeps & CSV exports</li>
+          <li><span class="check-mark">✓</span> <b>Priority 24/7 technical and methodology support</b></li>
+        </ul>
+      </div>
+
+      <div>
+        <a href="https://buy.stripe.com/test_7sY4gr6mT0Y5fbP2hVcjS0z" target="_blank" rel="noopener noreferrer" class="btn btn-stripe-gold">
+          💳 Pay with Stripe ($2,450/mo)
+        </a>
+        <button class="btn btn-secondary select-plan-btn" data-plan="enterprise" style="border-color: rgba(245, 158, 11, 0.4); color: #fef08a;">
+          Activate 2-Month Free Trial / Invoice
+        </button>
+      </div>
+    </div>
+
+    <!-- Plan 3: Sovereign & Multilateral Alliance -->
+    <div class="card">
+      <div>
+        <div style="font-size: 11px; font-weight: 800; color: #c084fc; letter-spacing: 0.5px; margin-bottom: 8px;">
+          SOVEREIGN & MULTILATERAL ALLIANCE
+        </div>
+        <h2 class="plan-title">Sovereign Tier</h2>
+        <p class="plan-desc">Air-gapped and sovereign-grade deployments for national ministries and treaty bodies.</p>
+        
+        <div class="price-block">
+          <div class="price-row">
+            <span class="price-zero">$0</span>
+            <span class="trial-text">for first 2 months</span>
+          </div>
+          <div class="renewal-text">Then $25,000 USD / month • Custom sovereign SLA & wire</div>
+        </div>
+
+        <ul class="feature-list">
+          <li><span class="check-mark">✓</span> <b>Everything in Enterprise Tier</b></li>
+          <li><span class="check-mark">✓</span> Air-gapped deployment with private cryptographic key escrow</li>
+          <li><span class="check-mark">✓</span> Bespoke Shor quantum gate analysis for state secrets</li>
+          <li><span class="check-mark">✓</span> Direct executive advisory line with Platform Founder</li>
+          <li><span class="check-mark">✓</span> Custom econometric and multilateral contagion modules</li>
+          <li><span class="check-mark">✓</span> Unlimited simulation throughput & SLA guarantees</li>
+          <li><span class="check-mark">✓</span> Dedicated Executive Account Officer</li>
+        </ul>
+      </div>
+
+      <div>
+        <a href="https://buy.stripe.com/test_3cI9AL7qX2290gV2hVcjS0A" target="_blank" rel="noopener noreferrer" class="btn btn-stripe-purple">
+          💳 Pay with Stripe ($25,000/mo)
+        </a>
+        <button class="btn btn-secondary select-plan-btn" data-plan="sovereign" style="border-color: rgba(147, 51, 234, 0.4); color: #e9d5ff;">
+          Request Sovereign Onboarding / Wire
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Customer Support & Direct Enquiry Form -->
+  <div class="support-grid">
+
+    <!-- Direct Support Desk Card -->
+    <div class="support-panel" style="border-color: rgba(245, 158, 11, 0.45);">
+      <div style="font-size: 11px; font-weight: 800; color: var(--gold); letter-spacing: 1px; margin-bottom: 6px;">
+        FOUNDER & EXECUTIVE CUSTOMER SUPPORT
+      </div>
+      <h3 style="font-size: 20px; margin: 0 0 10px 0; font-family: 'Outfit', sans-serif;">
+        Contact Founder Bhuvan Jakkula Personally
+      </h3>
+      <p style="font-size: 13px; color: var(--text-muted); line-height: 1.6; margin-bottom: 20px;">
+        For questions on quantitative policy engines, sovereign SLAs, enterprise onboarding, or client issues, contact <b>Founder Bhuvan Jakkula</b> personally. Dedicated 24/7 customer support for all customer issues and queries.
+      </p>
+
+      <div style="background: #050914; border: 1px solid #1e293b; border-radius: 10px; padding: 18px; margin-bottom: 20px;">
+        <div style="font-size: 11px; text-transform: uppercase; color: var(--text-muted); letter-spacing: 0.5px; margin-bottom: 6px;">
+          FOUNDER'S DIRECT CUSTOMER SUPPORT LINE
+        </div>
+        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
+          <code style="font-size: 18px; color: var(--gold); font-weight: 800;">bjtmusic12@gmail.com</code>
+          <button id="btnCopyEmail" class="btn btn-secondary" style="width: auto; padding: 6px 14px; font-size: 11px;">
+            📋 Copy Email
+          </button>
+        </div>
+        <div style="font-size: 11px; color: #94a3b8; margin-top: 8px;">
+          Direct Contact: <b>Bhuvan Jakkula</b> (Platform Founder & Chief Architect) • Always active for customer queries & support
+        </div>
+      </div>
+
+      <a href="mailto:bjtmusic12@gmail.com?subject=GGISP%20Platform%20Query%20to%20Founder%20Bhuvan%20Jakkula" class="btn btn-stripe-gold" style="text-decoration:none;">
+        ✉️ Email Founder Bhuvan Jakkula Directly
+      </a>
+    </div>
+
+    <!-- Customer Enquiry Form -->
+    <div class="support-panel" id="enquiryFormSection">
+      <div style="font-size: 11px; font-weight: 800; color: var(--gold); letter-spacing: 1px; margin-bottom: 6px;">
+        RAPID TRIAL ACTIVATION
+      </div>
+      <h3 style="font-size: 20px; margin: 0 0 10px 0; font-family: 'Outfit', sans-serif;">
+        Submit Customer Enquiry / Free Trial
+      </h3>
+      <form id="pricingEnquiryForm">
+        <div class="row-2">
+          <div class="form-group">
+            <label>Full Name *</label>
+            <input type="text" id="formFullName" placeholder="Dr. Jane Doe" required>
+          </div>
+          <div class="form-group">
+            <label>Work Email *</label>
+            <input type="email" id="formEmail" placeholder="jane.doe@institution.org" required>
+          </div>
+        </div>
+
+        <div class="row-2">
+          <div class="form-group">
+            <label>Mobile / Phone Number</label>
+            <input type="tel" id="formMobile" placeholder="+1 (555) 019-2834">
+          </div>
+          <div class="form-group">
+            <label>Organization / Ministry</label>
+            <input type="text" id="formOrg" placeholder="Ministry / Central Bank / Fund">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Plan of Interest (Includes 2 Months Free Trial)</label>
+          <select id="formPlan">
+            <option value="enterprise">Institutional & Enterprise Tier ($0 for 2 Mo, then $2,450/mo)</option>
+            <option value="academic">Academic & Research Tier ($0 for 2 Mo, then $490/mo)</option>
+            <option value="sovereign">Sovereign & Multilateral Alliance ($0 for 2 Mo, then $25,000/mo)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Message / Objective for Free Trial *</label>
+          <textarea id="formMessage" rows="3" placeholder="Outline your team's policy modeling focus (debt, trade, climate finance, cyber defense)..." required></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-stripe-gold" id="btnSubmitForm">
+          🚀 Submit Enquiry & Activate 2-Month Free Trial
+        </button>
+      </form>
+      <div id="formResult" style="display: none; margin-top: 14px; padding: 12px; border-radius: 8px; font-size: 13px;"></div>
+    </div>
+
+  </div>
+
+</div>
+
+<div id="notification"></div>
+
+<script>
+const $ = id => document.getElementById(id);
+
+function notify(msg, type = 'success') {
+  const el = $('notification');
+  el.textContent = msg;
+  el.style.display = 'block';
+  el.style.background = type === 'success' ? '#10b981' : '#f43f5e';
+  el.style.color = '#fff';
+  setTimeout(() => { el.style.display = 'none'; }, 4000);
+}
+
+// Copy support email
+$('btnCopyEmail')?.addEventListener('click', () => {
+  const email = 'bjtmusic12@gmail.com';
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(email).then(() => {
+      notify('Support email (' + email + ') copied to clipboard!');
+    }).catch(() => {
+      prompt('Copy customer support email:', email);
+    });
+  } else {
+    prompt('Copy customer support email:', email);
+  }
+});
+
+// Select plan buttons scroll to form
+document.querySelectorAll('.select-plan-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const plan = btn.dataset.plan;
+    const sel = $('formPlan');
+    if (sel && plan) {
+      if (plan.includes('academic')) sel.value = 'academic';
+      else if (plan.includes('sovereign')) sel.value = 'sovereign';
+      else sel.value = 'enterprise';
+    }
+    $('enquiryFormSection')?.scrollIntoView({ behavior: 'smooth' });
+    $('formFullName')?.focus();
+    notify('Selected plan: ' + plan + ' (2-Month Free Trial included)', 'success');
+  });
+});
+
+// Submit enquiry form
+$('pricingEnquiryForm')?.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const btn = $('btnSubmitForm');
+  btn.disabled = true;
+  btn.textContent = 'Submitting Enquiry…';
+  const resEl = $('formResult');
+  resEl.style.display = 'none';
+
+  try {
+    const payload = {
+      full_name: $('formFullName').value.trim(),
+      email: $('formEmail').value.trim(),
+      mobile_number: $('formMobile').value.trim(),
+      organization: $('formOrg').value.trim(),
+      selected_plan: $('formPlan').value,
+      message: $('formMessage').value.trim()
+    };
+
+    let apiUrl = '/api/pricing/enquiries';
+    if (window.location.protocol === 'file:') {
+      apiUrl = 'http://127.0.0.1:8000' + apiUrl;
+    }
+
+    const resp = await fetch(apiUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+
+    const data = await resp.json();
+    if (!resp.ok) {
+      throw new Error(data.detail || 'Failed to submit enquiry');
+    }
+
+    resEl.style.display = 'block';
+    resEl.style.background = 'rgba(16, 185, 129, 0.15)';
+    resEl.style.border = '1px solid #10b981';
+    resEl.style.color = '#a7f3d0';
+    resEl.innerHTML = `
+      <b>✅ ENQUIRY RECEIVED & 2-MONTH TRIAL ACTIVATED:</b><br>
+      ${data.message}<br>
+      <div style="margin-top:6px; font-size:11px; color:#cbd5e1;">
+        Support Desk: <code>${data.support_email}</code> | Confirmation Ticket: #${data.enquiry_id}
+      </div>
+    `;
+
+    notify('Enquiry submitted successfully! Ticket #' + data.enquiry_id, 'success');
+    $('pricingEnquiryForm').reset();
+  } catch (err) {
+    resEl.style.display = 'block';
+    resEl.style.background = 'rgba(244, 63, 94, 0.15)';
+    resEl.style.border = '1px solid #f43f5e';
+    resEl.style.color = '#fecdd3';
+    resEl.innerHTML = `<b>Submission Failed:</b> ${err.message}`;
+    notify('Error: ' + err.message, 'error');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '🚀 Submit Enquiry & Activate 2-Month Free Trial';
+  }
+});
+</script>
+</body>
+</html>

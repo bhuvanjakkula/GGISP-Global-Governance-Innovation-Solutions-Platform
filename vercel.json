@@ -1,24 +1,47 @@
 {
-  "rewrites": [
+  "version": 2,
+  "builds": [
     {
-      "source": "/api/(.*)",
-      "destination": "/api/index.py"
+      "src": "main.py",
+      "use": "@vercel/python"
     },
     {
-      "source": "/pricing",
-      "destination": "/pricing.html"
+      "src": "index.html",
+      "use": "@vercel/static"
     },
     {
-      "source": "/stripe",
-      "destination": "/pricing.html"
+      "src": "pricing.html",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/pricing",
+      "dest": "/pricing.html"
     },
     {
-      "source": "/plans",
-      "destination": "/pricing.html"
+      "src": "/stripe",
+      "dest": "/pricing.html"
     },
     {
-      "source": "/enquiries",
-      "destination": "/pricing.html"
+      "src": "/plans",
+      "dest": "/pricing.html"
+    },
+    {
+      "src": "/enquiries",
+      "dest": "/pricing.html"
+    },
+    {
+      "src": "/api/(.*)",
+      "dest": "main.py"
+    },
+    {
+      "src": "/",
+      "dest": "/index.html"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "main.py"
     }
   ]
 }

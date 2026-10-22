@@ -1,0 +1,3163 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <title>GGISP Platform v0.2 • Global Governance, Innovation & Solutions Platform</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-main: #0b1120;
+      --bg-surface: #111a2e;
+      --bg-card: #17233d;
+      --bg-glass: rgba(23, 35, 61, 0.75);
+      --border: rgba(148, 163, 184, 0.15);
+      --border-accent: rgba(20, 184, 166, 0.4);
+      --teal-glow: #14b8a6;
+      --teal-dark: #0f766e;
+      --cyan: #06b6d4;
+      --gold: #f59e0b;
+      --rose: #f43f5e;
+      --emerald: #10b981;
+      --text-main: #f1f5f9;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+      --radius: 12px;
+      --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg-main);
+      color: var(--text-main);
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif;
+      font-size: 14px;
+      line-height: 1.55;
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(20, 184, 166, 0.12) 0px, transparent 50%),
+        radial-gradient(at 100% 0%, rgba(6, 182, 212, 0.1) 0px, transparent 50%),
+        radial-gradient(at 50% 100%, rgba(15, 23, 42, 0.8) 0px, transparent 50%);
+      min-height: 100vh;
+    }
+    header {
+      background: rgba(17, 26, 46, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 24px;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .brand { display: flex; align-items: center; gap: 14px; }
+    .brand-logo {
+      background: linear-gradient(135deg, #0d9488, #06b6d4);
+      color: white;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      font-size: 20px;
+      padding: 6px 14px;
+      border-radius: 10px;
+      letter-spacing: 1px;
+      box-shadow: 0 0 15px rgba(20, 184, 166, 0.35);
+    }
+    .brand h1 { margin: 0; font-family: 'Outfit', sans-serif; font-size: 17px; font-weight: 700; color: #fff; }
+    .brand small { display: block; color: var(--text-muted); font-size: 11px; }
+    .header-pills { display: flex; align-items: center; gap: 10px; }
+    .status-pill {
+      background: rgba(20, 184, 166, 0.12);
+      border: 1px solid rgba(20, 184, 166, 0.3);
+      color: #5eead4;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .status-pill::before {
+      content: ''; display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: #14b8a6;
+      box-shadow: 0 0 6px #14b8a6;
+    }
+    .top-nav {
+      display: flex;
+      gap: 6px;
+      background: rgba(11, 17, 32, 0.6);
+      padding: 4px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+    }
+    .nav-btn {
+      background: transparent;
+      border: 0;
+      color: var(--text-muted);
+      padding: 6px 14px;
+      border-radius: 7px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all .2s;
+    }
+    .nav-btn.active, .nav-btn:hover { background: var(--bg-card); color: #fff; }
+    .nav-btn.active { color: #5eead4; border: 1px solid rgba(20, 184, 166, 0.3); }
+
+    .layout {
+      max-width: 1540px;
+      margin: 0 auto;
+      padding: 20px;
+      display: grid;
+      grid-template-columns: 310px minmax(0, 1fr);
+      gap: 20px;
+    }
+    aside {
+      background: var(--bg-glass);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+      height: calc(100vh - 105px);
+      overflow-y: auto;
+      position: sticky;
+      top: 85px;
+    }
+    .panel {
+      background: var(--bg-glass);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow);
+    }
+    .panel:hover { border-color: rgba(148, 163, 184, 0.25); }
+
+    .eyebrow {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--teal-glow);
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    h2 { font-family: 'Outfit', sans-serif; font-size: 18px; font-weight: 700; margin: 0 0 12px; color: #fff; }
+    h3 { font-family: 'Outfit', sans-serif; font-size: 15px; font-weight: 600; margin: 0 0 8px; color: #e2e8f0; }
+    p { margin: 0 0 10px; color: var(--text-muted); }
+    .help { font-size: 12px; color: var(--text-dim); }
+
+    /* Domain List */
+    .domain-filter {
+      display: flex;
+      gap: 4px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+    .df-btn {
+      background: rgba(15, 23, 42, 0.5);
+      border: 1px solid var(--border);
+      color: var(--text-dim);
+      font-size: 11px;
+      padding: 3px 8px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .df-btn.active { background: var(--teal-dark); color: #fff; border-color: var(--teal-glow); }
+
+    .domain-item {
+      width: 100%;
+      text-align: left;
+      padding: 10px 12px;
+      border-radius: 8px;
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--text-main);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      margin-bottom: 4px;
+      transition: all .15s;
+    }
+    .domain-item:hover { background: rgba(255, 255, 255, 0.04); }
+    .domain-item.active { background: rgba(20, 184, 166, 0.12); border-color: var(--border-accent); color: #5eead4; }
+    .domain-info b { display: block; font-size: 13px; font-weight: 600; }
+    .domain-info small { color: var(--text-dim); font-size: 11px; }
+    .badge {
+      background: rgba(148, 163, 184, 0.15);
+      color: var(--text-muted);
+      font-size: 11px;
+      padding: 2px 7px;
+      border-radius: 12px;
+      font-weight: 600;
+    }
+
+    /* Metrics Grid */
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+    .metric-card {
+      background: linear-gradient(135deg, rgba(23, 35, 61, 0.7), rgba(17, 26, 46, 0.8));
+      border: 1px solid var(--border);
+      padding: 16px;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+    .metric-card::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, transparent, var(--teal-glow), transparent);
+    }
+    .metric-num { font-family: 'Outfit', sans-serif; font-size: 26px; font-weight: 800; color: #fff; margin: 2px 0; }
+    .metric-card small { color: var(--text-muted); font-size: 12px; }
+
+    /* Work Area Grid */
+    .grid-2 { display: grid; grid-template-columns: 360px minmax(0, 1fr); gap: 20px; }
+
+    /* Forms & Inputs */
+    label { display: block; font-size: 12px; font-weight: 600; color: #cbd5e1; margin-bottom: 5px; }
+    input:not([type="checkbox"]), select, textarea {
+      width: 100%;
+      background: #0f172a;
+      border: 1px solid rgba(148, 163, 184, 0.2);
+      border-radius: 8px;
+      padding: 8px 12px;
+      color: #f8fafc;
+      font-family: inherit;
+      font-size: 13px;
+      transition: border-color .2s;
+    }
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: var(--teal-glow);
+      box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.2);
+    }
+    textarea { min-height: 70px; resize: vertical; }
+    .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all .2s;
+      border: 0;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #0d9488, #0891b2);
+      color: white;
+      box-shadow: 0 4px 12px rgba(13, 148, 136, 0.3);
+    }
+    .btn-primary:hover { opacity: 0.92; transform: translateY(-1px); }
+    .btn-secondary {
+      background: rgba(30, 41, 59, 0.7);
+      border: 1px solid var(--border);
+      color: #e2e8f0;
+    }
+    .btn-secondary:hover { background: rgba(51, 65, 85, 0.8); border-color: rgba(148, 163, 184, 0.3); }
+    .btn-gold {
+      background: linear-gradient(135deg, #d97706, #b45309);
+      color: white;
+    }
+    .btn-sm { font-size: 11px; padding: 4px 10px; border-radius: 6px; }
+
+    /* Tags & Statuses */
+    .tag {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .tag.supported, .tag.ready, .tag.approved { background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }
+    .tag.unverified, .tag.concept, .tag.draft { background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); }
+    .tag.disputed, .tag.error { background: rgba(244, 63, 94, 0.15); color: #fb7185; border: 1px solid rgba(244, 63, 94, 0.3); }
+    .tag.research, .tag.review { background: rgba(6, 182, 212, 0.15); color: #38bdf8; border: 1px solid rgba(6, 182, 212, 0.3); }
+
+    /* Project Cards */
+    .project-card {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      padding: 12px 14px;
+      margin-bottom: 8px;
+      cursor: pointer;
+      text-align: left;
+      width: 100%;
+      color: var(--text-main);
+      transition: all .15s;
+    }
+    .project-card:hover { border-color: rgba(20, 184, 166, 0.4); background: rgba(20, 184, 166, 0.05); }
+    .project-card.active { border-color: var(--teal-glow); background: rgba(20, 184, 166, 0.12); }
+    .project-card b { display: block; font-size: 13px; margin-bottom: 3px; color: #fff; }
+    .project-card small { color: var(--text-muted); font-size: 11px; }
+
+    /* Dossier Records */
+    .record-card {
+      background: rgba(15, 23, 42, 0.5);
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      padding: 14px;
+      margin-bottom: 10px;
+    }
+    .record-card:hover { border-color: rgba(148, 163, 184, 0.25); }
+    .record-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; margin-bottom: 6px; }
+
+    /* Live Data Card */
+    .data-pill {
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px;
+      text-align: center;
+    }
+    .data-pill small { color: var(--text-dim); display: block; font-size: 10px; text-transform: uppercase; }
+    .data-pill b { font-family: 'Outfit', sans-serif; font-size: 16px; color: #38bdf8; display: block; margin-top: 2px; }
+
+    /* SVG Chart */
+    .chart-container {
+      background: #090d16;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px;
+      margin: 14px 0;
+    }
+    svg.chart { width: 100%; height: 210px; overflow: visible; }
+    .chart-legend { display: flex; gap: 15px; font-size: 11px; margin-top: 8px; justify-content: center; }
+    .legend-item { display: flex; align-items: center; gap: 5px; color: var(--text-muted); }
+    .legend-color { width: 10px; height: 10px; border-radius: 2px; }
+
+    /* Notification message */
+    #notification {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      max-width: 420px;
+      z-index: 100;
+      padding: 12px 18px;
+      border-radius: 10px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+      font-size: 13px;
+      font-weight: 500;
+      display: none;
+      animation: slideIn .2s ease;
+    }
+    #notification.success { background: #064e3b; border: 1px solid #059669; color: #a7f3d0; }
+    #notification.error { background: #881337; border: 1px solid #be123c; color: #fecdd3; }
+    @keyframes slideIn { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+    /* Responsive */
+    @media (max-width: 1080px) {
+      .layout { grid-template-columns: 1fr; }
+      aside { height: auto; position: static; }
+      .grid-2 { grid-template-columns: 1fr; }
+      .metrics { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="brand">
+    <div class="brand-logo">GGISP</div>
+    <div>
+      <h1>Global Governance, Innovation & Solutions Platform</h1>
+      <small>Platform v0.2 • Independent Research • Official Multilateral Data • Human Authority</small>
+    </div>
+  </div>
+  <div class="header-pills">
+    <span class="status-pill">13 Specialist Divisions Active</span>
+    <div class="top-nav">
+      <button class="nav-btn active" data-tab="workspace">Research Workspace</button>
+      <button class="nav-btn" data-tab="models">Policy Modelling Lab</button>
+      <button class="nav-btn" data-tab="official-data">Official Data Hub</button>
+      <button class="nav-btn" data-tab="specialist">13 Specialist Innovation Engines</button>
+      <button class="nav-btn" data-tab="engineering" style="color: #38bdf8; font-weight: 700;">⚡ Planetary Engineering Solvers</button>
+      <button class="nav-btn" data-tab="pqc" style="color: #34d399; font-weight: 700;">🛡️ Post-Quantum Cyber (PQC)</button>
+      <button class="nav-btn" data-tab="pricing" id="navBtnPricing" style="background: rgba(245, 158, 11, 0.2); border: 1px solid #f59e0b; color: #fef08a; font-weight: 800;">💎 Pricing & Enquiries (2 Mo Free)</button>
+      <button class="nav-btn" onclick="openApprovedGuidanceModal()" style="color: #38bdf8; font-weight: 700; border: 1px solid rgba(56, 189, 248, 0.4); background: rgba(56, 189, 248, 0.1);">📜 Founder Guidance (12)</button>
+      <a href="/workbench" target="_blank" class="nav-btn" style="color:#c084fc; text-decoration:none; display:inline-flex; align-items:center; gap:4px;">🔬 Innovation Workbench ↗</a>
+      <a href="/lab" target="_blank" class="nav-btn" style="color:#38bdf8; text-decoration:none; display:inline-flex; align-items:center; gap:4px;">📊 Comparative Lab ↗</a>
+    </div>
+    <div id="userAuthWidget" style="display: flex; align-items: center; gap: 8px;">
+      <button id="authModalBtn" class="btn btn-secondary btn-sm" style="border-color: #38bdf8; color: #38bdf8; display: flex; align-items: center; gap: 5px; cursor: pointer;">
+        👤 Sign In / Sign Up
+      </button>
+      <div id="userLoggedInPill" style="display: none; align-items: center; gap: 8px; background: rgba(15, 23, 42, 0.9); border: 1px solid rgba(56, 189, 248, 0.4); padding: 4px 10px; border-radius: 20px; font-size: 11px;">
+        <span id="userDisplayName" style="font-weight: 600; color: #fff;"></span>
+        <span id="userRoleBadge" class="badge" style="font-size: 10px;"></span>
+        <button id="btnSignOut" style="background: transparent; border: 0; color: #f43f5e; cursor: pointer; font-size: 11px; padding: 0 4px; font-weight: 600;" title="Sign Out">Sign Out</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="layout">
+  <!-- Sidebar: 13 Divisions -->
+  <aside>
+    <div class="eyebrow">RESEARCH DIVISIONS</div>
+    <div class="domain-filter">
+      <button class="df-btn active" data-family="all">All</button>
+      <button class="df-btn" data-family="economic">Economic</button>
+      <button class="df-btn" data-family="high">Security</button>
+      <button class="df-btn" data-family="policy">Policy</button>
+      <button class="df-btn" data-family="environment">Environment</button>
+    </div>
+    <div id="domainList">Loading divisions…</div>
+
+    <!-- Customer Support & Founder Advisory Sidebar Widget -->
+    <div class="panel" style="margin-top: 16px; background: rgba(245, 158, 11, 0.08); border: 1px solid rgba(245, 158, 11, 0.35); padding: 14px; border-radius: 8px;">
+      <div class="eyebrow" style="color: #f59e0b; margin-bottom: 2px;">FOUNDER & EXECUTIVE SUPPORT</div>
+      <div style="font-size: 13px; font-weight: 800; color: #fff; margin-bottom: 2px;">Bhuvan Jakkula</div>
+      <div style="font-size: 11px; color: #38bdf8; font-weight: 600; margin-bottom: 8px;">Platform Founder & Chief Architect</div>
+      <div style="font-size: 11px; color: var(--text-muted); line-height: 1.5; margin-bottom: 8px;">
+        For any customer queries, custom requirements, sovereign onboarding, or platform issues, contact Founder Bhuvan Jakkula personally. Dedicated 24/7 customer support.
+      </div>
+      <div style="font-size: 11px; color: #cbd5e1; margin-bottom: 10px; background: #050914; padding: 8px; border-radius: 6px; border: 1px solid #1e293b;">
+        <div style="font-size: 10px; color: #94a3b8; text-transform: uppercase;">Direct Founder Support:</div>
+        <code style="color: #f59e0b; font-size: 11px; font-weight: 700; word-break: break-all;">bjtmusic12@gmail.com</code>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 6px;">
+        <button class="btn btn-secondary btn-sm" onclick="switchTab('pricing')" style="width: 100%; justify-content: center; border-color: #f59e0b; color: #fef08a; cursor: pointer; font-size: 11px; font-weight: 700;">
+          💎 View Pricing & Stripe Plans
+        </button>
+        <button class="btn btn-secondary btn-sm" onclick="openApprovedGuidanceModal()" style="width: 100%; justify-content: center; border-color: #38bdf8; color: #38bdf8; cursor: pointer; font-size: 11px; font-weight: 600;">
+          📜 View 12 Founder Directives
+        </button>
+      </div>
+    </div>
+
+    <div style="margin-top: 16px; padding-top: 12px; border-top: 1px solid var(--border);" class="help">
+      All 13 divisions share verified evidence, cryptographic source hashes, and founder-reviewed advisory workflows.
+    </div>
+  </aside>
+
+  <!-- Main View -->
+  <main>
+    <!-- Prominent Global Launch & Pricing Announcement Banner with Direct Stripe Links -->
+    <div class="panel" style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.18), rgba(14, 165, 233, 0.18)); border: 1px solid rgba(245, 158, 11, 0.6); margin-bottom: 16px; padding: 16px 20px;">
+      <div style="display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 12px;">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <span style="font-size: 28px;">💎</span>
+          <div>
+            <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+              <span class="badge" style="background: #f59e0b; color: #000; font-weight: 800; font-size: 11px; padding: 3px 10px;">🎉 2 MONTHS FREE TRIAL ON ALL PLANS</span>
+              <span style="font-size: 14px; font-weight: 700; color: #fff;">Institutional Subscriptions & Direct Stripe Checkout</span>
+            </div>
+            <div style="font-size: 12px; color: #cbd5e1; margin-top: 4px;">
+              Direct credit card checkout via Stripe • 60-day unrestricted trial • Support inbox: <code style="color: #38bdf8; font-weight: 700;">bjtmusic12@gmail.com</code>
+            </div>
+          </div>
+        </div>
+        <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+          <a href="/pricing" target="_blank" class="btn btn-secondary btn-sm" style="font-size: 11px; text-decoration: none; display: inline-flex; align-items: center; gap: 4px; border-color: #38bdf8; color: #38bdf8; padding: 6px 12px;">
+            📑 Open Dedicated Pricing Page ↗
+          </a>
+          <button class="btn btn-primary btn-sm" onclick="switchTab('pricing')" style="background: linear-gradient(135deg, #f59e0b, #d97706); color: #000; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 5px; padding: 6px 14px;">
+            💎 Full Plan Comparison →
+          </button>
+        </div>
+      </div>
+
+      <!-- Quick Stripe Direct Payment Links Row -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 10px; padding-top: 10px; border-top: 1px solid rgba(245, 158, 11, 0.25);">
+        <a href="https://buy.stripe.com/test_28E14f26D7mt5BfbSvcjS0y" target="_blank" rel="noopener noreferrer" style="background: linear-gradient(135deg, #0d9488, #0284c7); color: #fff; padding: 8px 12px; border-radius: 8px; text-decoration: none; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: space-between; border: 1px solid rgba(255,255,255,0.15);">
+          <span>💳 Academic Tier ($490/mo)</span>
+          <span style="font-size: 11px; background: rgba(0,0,0,0.25); padding: 2px 6px; border-radius: 4px;">Pay with Stripe ↗</span>
+        </a>
+        <a href="https://buy.stripe.com/test_7sY4gr6mT0Y5fbP2hVcjS0z" target="_blank" rel="noopener noreferrer" style="background: linear-gradient(135deg, #f59e0b, #d97706); color: #000; padding: 8px 12px; border-radius: 8px; text-decoration: none; font-size: 12px; font-weight: 800; display: flex; align-items: center; justify-content: space-between; border: 1px solid rgba(0,0,0,0.2);">
+          <span>💳 Institutional Tier ($2,450/mo)</span>
+          <span style="font-size: 11px; background: rgba(0,0,0,0.15); padding: 2px 6px; border-radius: 4px;">Pay with Stripe ↗</span>
+        </a>
+        <a href="https://buy.stripe.com/test_3cI9AL7qX2290gV2hVcjS0A" target="_blank" rel="noopener noreferrer" style="background: linear-gradient(135deg, #7e22ce, #9333ea); color: #fff; padding: 8px 12px; border-radius: 8px; text-decoration: none; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: space-between; border: 1px solid rgba(255,255,255,0.15);">
+          <span>💳 Sovereign Tier ($25,000/mo)</span>
+          <span style="font-size: 11px; background: rgba(0,0,0,0.25); padding: 2px 6px; border-radius: 4px;">Pay with Stripe ↗</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="metrics" id="metricsBar">
+      <div class="metric-card"><small>Specialist Divisions</small><div class="metric-num">13</div><small>Multilateral domains</small></div>
+      <div class="metric-card"><small>Active Research Projects</small><div class="metric-num" id="metricProjects">0</div><small>Across all divisions</small></div>
+      <div class="metric-card"><small>Evidence Sources & Claims</small><div class="metric-num" id="metricEvidence">0</div><small>SHA-256 attested records</small></div>
+      <div class="metric-card" id="cardApprovedGuidance" onclick="openApprovedGuidanceModal()" style="cursor: pointer; border: 1px solid rgba(56, 189, 248, 0.4); background: rgba(56, 189, 248, 0.05); transition: all 0.2s;" title="Click to view all 12 Founder-Approved Policy Directives by Bhuvan Jakkula">
+        <small style="color: #38bdf8; font-weight: 700;">📜 Founder-Approved Guidance (Click)</small>
+        <div class="metric-num" id="metricApproved" style="color: #38bdf8;">0</div>
+        <small>Human authority principle • Bhuvan Jakkula ↗</small>
+      </div>
+    </div>
+
+    <!-- TAB 1: WORKSPACE -->
+    <div id="tab-workspace" class="tab-content">
+      <div class="grid-2">
+        <div>
+          <!-- Projects List -->
+          <div class="panel">
+            <div class="eyebrow">PROJECT REGISTRY</div>
+            <h2>Research Projects</h2>
+            <div id="projectList">Loading projects…</div>
+          </div>
+
+          <!-- Create Project -->
+          <div class="panel">
+            <div class="eyebrow">NEW RESEARCH PROJECT DOSSIER</div>
+            <h2>Create Research Project</h2>
+            <form id="createProjectForm">
+              <div style="margin-bottom: 10px;">
+                <label>Division</label>
+                <select id="projDomain" name="domain_slug" required></select>
+              </div>
+              <div class="row-2" style="margin-bottom: 10px;">
+                <div>
+                  <label>Project Title</label>
+                  <input name="title" minlength="4" maxlength="180" placeholder="e.g. Sovereign Debt & Tariff Shocks" required>
+                </div>
+                <div>
+                  <label>Country Code (ISO-3)</label>
+                  <input name="country_code" value="KEN" maxlength="5" required>
+                </div>
+              </div>
+              <div style="margin-bottom: 12px;">
+                <label>Specific Research Question / Problem</label>
+                <textarea name="problem" minlength="15" placeholder="State a precise, empirically falsifiable policy question..." required></textarea>
+              </div>
+              <button class="btn btn-primary" type="submit" style="width:100%;">+ Initialize Research Dossier</button>
+            </form>
+          </div>
+        </div>
+
+        <!-- Project Dossier Workspace -->
+        <div id="dossierWorkspace">
+          <div class="panel">
+            <p>Select a project from the left or create a new one to open the research workspace.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 2: MODELLING LAB -->
+    <div id="tab-models" class="tab-content" style="display:none;">
+      <div class="panel">
+        <div class="eyebrow">QUANTITATIVE SIMULATION LAB</div>
+        <h2>Validated Mathematical Policy Models</h2>
+        <p>Transparent, peer-checkable stock-flow equations and cross-domain simulations calibrated with official data.</p>
+        
+        <div class="top-nav" style="margin-bottom: 16px; width: fit-content;">
+          <button class="nav-btn active" data-model="debt">Dynamic Sovereign Debt Model</button>
+          <button class="nav-btn" data-model="devfin">Development Finance Allocation</button>
+          <button class="nav-btn" data-model="cross">Cross-Domain Macro-Fiscal Simulator</button>
+        </div>
+
+        <!-- Model 1: Dynamic Sovereign Debt -->
+        <div id="model-pane-debt">
+          <form id="debtModelForm">
+            <div class="row-3" style="margin-bottom: 10px;">
+              <div><label>Initial Debt / GDP (%)</label><input type="number" step="0.1" name="initial_debt_percent_gdp" value="70.8" required></div>
+              <div><label>Effective Nominal Interest Rate (%)</label><input type="number" step="0.1" name="interest_rate_percent" value="7.2" required></div>
+              <div><label>Nominal GDP Growth (%)</label><input type="number" step="0.1" name="nominal_gdp_growth_percent" value="6.5" required></div>
+            </div>
+            <div class="row-3" style="margin-bottom: 10px;">
+              <div><label>Primary Budget Surplus / GDP (%)</label><input type="number" step="0.1" name="primary_surplus_percent_gdp" value="-0.8" required></div>
+              <div><label>Foreign Currency Debt Share (%)</label><input type="number" step="1" name="foreign_debt_share_percent" value="55" required></div>
+              <div><label>Year-1 Currency Depreciation (%)</label><input type="number" step="0.5" name="currency_depreciation_percent" value="10" required></div>
+            </div>
+            <div class="row-2" style="margin-bottom: 14px;">
+              <div><label>Contingent Liabilities Shock (% GDP)</label><input type="number" step="0.5" name="contingent_liabilities_percent_gdp" value="0.0"></div>
+              <div><label>Simulation Horizon (Years)</label><input type="number" min="1" max="25" name="years" value="5" required></div>
+            </div>
+            <div style="display:flex; gap:10px;">
+              <button class="btn btn-primary" type="submit">Run Debt Scenarios</button>
+              <button class="btn btn-secondary" type="button" id="saveDebtSimBtn">Save Result to Selected Project</button>
+            </div>
+          </form>
+          <div id="debtModelOutput" style="margin-top: 16px;"></div>
+        </div>
+
+        <!-- Model 2: Development Finance -->
+        <div id="model-pane-devfin" style="display:none;">
+          <form id="devfinModelForm">
+            <div class="row-3" style="margin-bottom: 10px;">
+              <div><label>Financing Pool (Million USD)</label><input type="number" step="10" name="total_financing_pool_million_usd" value="2500" required></div>
+              <div><label>National GDP (Million USD)</label><input type="number" step="100" name="country_gdp_million_usd" value="110000" required></div>
+              <div><label>Annual Govt Revenue (Million USD)</label><input type="number" step="100" name="annual_govt_revenue_million_usd" value="19500" required></div>
+            </div>
+            <div class="row-3" style="margin-bottom: 10px;">
+              <div><label>Existing Debt Service (Million USD)</label><input type="number" step="10" name="current_annual_debt_service_million_usd" value="4800" required></div>
+              <div><label>Concessional Interest (%)</label><input type="number" step="0.1" name="concessional_interest_rate_percent" value="1.8" required></div>
+              <div><label>Grant Share (%)</label><input type="number" step="1" name="grant_element_share_percent" value="35" required></div>
+            </div>
+            <div class="row-2" style="margin-bottom: 14px;">
+              <div><label>Sector Weights: Infra / Health / Edu / Climate (%)</label>
+                <div class="row-2">
+                  <input type="number" name="infrastructure_weight" value="35" title="Infrastructure">
+                  <input type="number" name="healthcare_weight" value="25" title="Healthcare">
+                  <input type="number" name="education_weight" value="20" title="Education">
+                  <input type="number" name="climate_adaptation_weight" value="20" title="Climate">
+                </div>
+              </div>
+              <div><label>Loan Maturity (Years)</label><input type="number" name="loan_maturity_years" value="25" required></div>
+            </div>
+            <button class="btn btn-primary" type="submit">Optimize Capital Allocation</button>
+          </form>
+          <div id="devfinModelOutput" style="margin-top: 16px;"></div>
+        </div>
+
+        <!-- Model 3: Cross Domain Macro-Fiscal -->
+        <div id="model-pane-cross" style="display:none;">
+          <form id="crossModelForm">
+            <div class="row-3" style="margin-bottom: 10px;">
+              <div><label>Country Code</label><input name="country_code" value="KEN" required></div>
+              <div><label>Initial Debt / GDP (%)</label><input type="number" step="0.1" name="initial_debt_percent_gdp" value="70.8" required></div>
+              <div><label>Baseline GDP Growth (%)</label><input type="number" step="0.1" name="baseline_gdp_growth_percent" value="5.2" required></div>
+            </div>
+            <div class="row-3" style="margin-bottom: 10px;">
+              <div><label>Annual Exports (Million USD)</label><input type="number" step="10" name="annual_exports_million_usd" value="7430" required></div>
+              <div><label>Trade Openness / GDP (%)</label><input type="number" step="0.5" name="trade_openness_percent_gdp" value="34.5" required></div>
+              <div><label>Partner Tariff Shock (Delta pp)</label><input type="number" step="0.5" name="partner_tariff_shock_delta_pp" value="5.0" required></div>
+            </div>
+            <div class="row-2" style="margin-bottom: 14px;">
+              <div><label>Concessional MDB Financing (Million USD/yr)</label><input type="number" step="10" name="annual_concessional_finance_million_usd" value="1200" required></div>
+              <div><label>Simulation Horizon (Years)</label><input type="number" min="1" max="15" name="years" value="5" required></div>
+            </div>
+            <button class="btn btn-primary" type="submit">Simulate Cross-Domain Policy Paths</button>
+          </form>
+          <div id="crossModelOutput" style="margin-top: 16px;"></div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- TAB 3: OFFICIAL DATA HUB -->
+    <div id="tab-official-data" class="tab-content" style="display:none;">
+      <div class="panel">
+        <div class="eyebrow">MULTILATERAL DATA INTEGRATION</div>
+        <h2>World Bank • IMF • WTO Official Data Hub</h2>
+        <p>Live queries with authenticated fallback datasets and cryptographic provenance snapshots.</p>
+
+        <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 16px;">
+          <label style="margin:0; font-size:13px;">Select Benchmark Sovereign:</label>
+          <select id="countrySelect" style="max-width: 250px;">
+            <option value="KEN">Kenya (KEN) — Sub-Saharan Africa</option>
+            <option value="GHA">Ghana (GHA) — West Africa</option>
+            <option value="LKA">Sri Lanka (LKA) — South Asia</option>
+            <option value="ARG">Argentina (ARG) — Latin America</option>
+            <option value="ZMB">Zambia (ZMB) — Southern Africa</option>
+            <option value="VNM">Vietnam (VNM) — East Asia</option>
+            <option value="IND">India (IND) — South Asia</option>
+          </select>
+          <button class="btn btn-primary" id="fetchOfficialBtn">Query Multilateral Hub</button>
+          <button class="btn btn-gold" id="applyToModelsBtn">Apply to Simulation Lab →</button>
+        </div>
+
+        <div id="officialDataDisplay">Click "Query Multilateral Hub" to inspect harmonized World Bank, IMF, and WTO data.</div>
+      </div>
+    </div>
+
+    <!-- TAB 4: 13 SPECIALIST INNOVATION ENGINES -->
+    <div id="tab-specialist" class="tab-content" style="display:none;">
+      <div class="panel">
+        <div class="eyebrow">HIGH INNOVATION SUITE • 13 DOMAINS</div>
+        <h2>Specialist Quantitative Innovation Engines</h2>
+        <p>Advanced algorithmic policy solvers for every international domain — from nuclear safeguards and orbital space safety to global minimum taxes and genomic early warning.</p>
+
+        <div style="display: flex; gap: 12px; align-items: center; margin-bottom: 18px; flex-wrap: wrap;">
+          <label style="margin:0; font-size:13px; font-weight:600;">Select Specialist Division:</label>
+          <select id="specialistEngineSelect" style="max-width: 380px;"></select>
+          <button class="btn btn-primary" id="loadEngineSpecBtn">Configure Parameters</button>
+        </div>
+
+        <div id="engineCardHeader" class="record-card" style="margin-bottom:16px; border-left: 3px solid var(--teal-glow);">
+          <div class="record-header">
+            <div>
+              <b id="engineTitleDisplay" style="font-size:15px; color:#fff;">Select an engine</b>
+              <small id="engineInstDisplay" style="color:var(--text-dim); display:block; margin-top:2px;"></small>
+            </div>
+            <span class="tag supported" id="engineSlugBadge">DOMAIN ENGINE</span>
+          </div>
+          <p id="engineDescDisplay" style="font-size:13px; margin: 6px 0 0; color:#cbd5e1;"></p>
+        </div>
+
+        <div class="grid-2">
+          <!-- Parameter Inputs -->
+          <div class="panel" style="padding:16px; background:rgba(15,23,42,0.6);">
+            <div class="eyebrow">ALGORITHMIC PARAMETERS</div>
+            <form id="specialistEngineForm">
+              <div id="engineParamFields"></div>
+              <button class="btn btn-primary" type="submit" style="width:100%; margin-top:14px;">▶ Execute Quantitative Engine</button>
+            </form>
+          </div>
+
+          <!-- Output Display -->
+          <div class="panel" style="padding:16px; background:rgba(15,23,42,0.6);">
+            <div class="eyebrow">SIMULATION OUTPUT & POLICY EVALUATION</div>
+            <div id="engineOutputDisplay"><p class="help">Configure parameters and click "Execute Quantitative Engine" to run calculations.</p></div>
+          </div>
+        </div>
+      </div>
+    <!-- TAB 5: PLANETARY ENGINEERING SOLVERS & ADVANCED TECHNOLOGIES -->
+    <div id="tab-engineering" class="tab-content" style="display:none;">
+      <div class="panel" style="background: linear-gradient(135deg, rgba(23, 35, 61, 0.9), rgba(15, 23, 42, 0.95)); border: 1px solid rgba(56, 189, 248, 0.3);">
+        <div class="eyebrow" style="color: #38bdf8;">MISSION CONTROL • ADVANCED PLANETARY ENGINEERING</div>
+        <h2 style="font-size: 22px; margin-top: 4px;">Real-World Operational Solvers & Cryptographic Verification Deck</h2>
+        <p style="color: var(--text-muted); max-width: 900px; margin-bottom: 20px;">
+          Direct machine-actionable execution payloads across international operations centers: CCSDS 508.0 Conjunction Data Messages (CDM), HL7 / FHIR R4 Critical Care Transfers, OASIS STIX 2.1 Enclave Playbooks, OGC GeoJSON Exploration Drill targets, EVM Parametric Smart Contracts, and SHA-256 Merkle Proof Attestation.
+        </p>
+
+        <!-- Engineering Sub-Grid -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+          
+          <!-- LEFT: SYSTEMIC CASCADE SOLVER -->
+          <div class="panel" style="background: rgba(11, 17, 32, 0.7); border: 1px solid rgba(148, 163, 184, 0.2);">
+            <div class="eyebrow" style="color: #f59e0b;">CROSS-DOMAIN NON-LINEAR COUPLING</div>
+            <h3 style="margin-top:0;">Autonomous Cascade Stress-Tester & Pareto Optimizer</h3>
+            <p style="font-size:12px; color:var(--text-muted);">
+              Models compounding multi-system shocks across climate, sovereign debt, pandemic ICU demand, space debris conjunctions, and critical minerals.
+            </p>
+
+            <form id="cascadeSolverForm">
+              <div style="margin-bottom: 10px;">
+                <label style="display:flex; justify-content:space-between;">
+                  <span>Cyclone Windspeed (Knots)</span>
+                  <b id="lblCyclone">120 kts (Cat 4)</b>
+                </label>
+                <input type="range" id="rngCyclone" min="65" max="185" value="120" style="width:100%;">
+              </div>
+
+              <div style="margin-bottom: 10px;">
+                <label style="display:flex; justify-content:space-between;">
+                  <span>Sovereign Debt / GDP (%)</span>
+                  <b id="lblDebt">82.0%</b>
+                </label>
+                <input type="range" id="rngDebt" min="35" max="160" value="82" style="width:100%;">
+              </div>
+
+              <div style="margin-bottom: 10px;">
+                <label style="display:flex; justify-content:space-between;">
+                  <span>Pandemic ICU Surge (R₀)</span>
+                  <b id="lblR0">3.2</b>
+                </label>
+                <input type="range" id="rngR0" min="1.0" max="6.0" step="0.1" value="3.2" style="width:100%;">
+              </div>
+
+              <div style="margin-bottom: 10px;">
+                <label style="display:flex; justify-content:space-between;">
+                  <span>Critical Mineral Embargo Shock (%)</span>
+                  <b id="lblMinerals">35% Export Ban</b>
+                </label>
+                <input type="range" id="rngMinerals" min="0" max="80" value="35" style="width:100%;">
+              </div>
+
+              <div style="margin-bottom: 14px;">
+                <label style="display:flex; justify-content:space-between;">
+                  <span>Available Fiscal Contingency Reserve ($M USD)</span>
+                  <b id="lblBuffer">$250M USD</b>
+                </label>
+                <input type="range" id="rngBuffer" min="20" max="1000" step="10" value="250" style="width:100%;">
+              </div>
+
+              <button type="submit" class="btn btn-primary" style="width:100%; background: linear-gradient(135deg, #0284c7, #0d9488);">
+                ⚡ Compute Non-Linear Contagion & Pareto Intervention
+              </button>
+            </form>
+
+            <div id="cascadeResultsDisplay" style="margin-top: 14px;"></div>
+          </div>
+
+          <!-- RIGHT: OPERATIONAL PLAYBOOK GENERATOR -->
+          <div>
+            <div class="panel" style="background: rgba(11, 17, 32, 0.7); border: 1px solid rgba(148, 163, 184, 0.2); margin-bottom: 20px;">
+              <div class="eyebrow" style="color: #10b981;">REAL-WORLD MACHINE DISPATCH</div>
+              <h3 style="margin-top:0;">Automated Operational Playbook Generator</h3>
+              <p style="font-size:12px; color:var(--text-muted);">
+                Generate ready-to-deploy machine protocols adhering directly to aerospace, healthcare, cybersecurity, and financial engineering standards.
+              </p>
+
+              <div style="display:flex; gap:10px; margin-bottom:12px;">
+                <select id="playbookDomainSelect" style="flex:1;">
+                  <option value="space-security">Space Security • CCSDS 508.0 Conjunction Data Message (CDM)</option>
+                  <option value="global-health">Global Health • HL7 / FHIR R4 Critical Care Transfer Bundle</option>
+                  <option value="cybersecurity">Cybersecurity • OASIS STIX 2.1 Threat Indicator & D3FEND Playbook</option>
+                  <option value="critical-minerals">Critical Minerals • OGC GeoJSON High-Prospectivity Drill Targets</option>
+                  <option value="climate-finance">Climate Finance • EVM Solidity Parametric Payout Smart Contract</option>
+                  <option value="sovereign-debt">Sovereign Debt • ICMA Enhanced Single-Limb CAC Voting Script</option>
+                  <option value="nuclear-security">Nuclear Security • IAEA Safeguards Zero-Knowledge Inspection Manifest</option>
+                  <option value="un-security-council">UN Security Council • UNSC Resolution Voting & Article 108 Ledger</option>
+                  <option value="wto-trade">WTO & Global Trade • WTO Tariff Harmonized Schedule & Chokepoint Reroute</option>
+                  <option value="ai-governance">AI Governance • NIST OSCAL Machine-Readable Security Assessment</option>
+                  <option value="ocean-governance">Ocean Governance • FAO Port State Measures Agreement IUU Notice</option>
+                  <option value="international-tax">International Taxation • OECD Pillar Two GloBE XML CbCR Return</option>
+                  <option value="development-finance">Development Finance • MDB Risk-Participation Guarantee Term Sheet</option>
+                </select>
+                <button id="btnGeneratePlaybook" class="btn btn-gold">Generate Payload</button>
+              </div>
+
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                <span style="font-size:11px; color:var(--text-muted);" id="playbookFormatTag">Standard: JSON Payload</span>
+                <button class="btn btn-secondary" style="padding:4px 10px; font-size:11px;" id="btnCopyPlaybook">📋 Copy Code</button>
+              </div>
+              <pre id="playbookCodeViewer" style="background:#050914; border:1px solid #1e293b; padding:12px; border-radius:8px; font-family:monospace; font-size:11px; max-height:280px; overflow-y:auto; color:#38bdf8; margin:0;">Click "Generate Payload" to generate standardized machine-actionable instructions.</pre>
+            </div>
+
+            <!-- CRYPTOGRAPHIC MERKLE TREE AUDITOR -->
+            <div class="panel" style="background: rgba(11, 17, 32, 0.7); border: 1px solid rgba(148, 163, 184, 0.2);">
+              <div class="eyebrow" style="color: #a855f7;">CRYPTOGRAPHIC TAMPER-PROOF ATTESTATION</div>
+              <h3 style="margin-top:0;">Planetary Evidence Merkle Tree & Audit Proof Terminal</h3>
+              <p style="font-size:12px; color:var(--text-muted);">
+                SHA-256 Merkle tree anchoring all projects, sources, simulations, and founder approvals into a verifiable cryptographic root.
+              </p>
+              
+              <div style="display:flex; gap:10px; margin-bottom:12px;">
+                <button id="btnFetchMerkleTree" class="btn btn-primary" style="background:#7e22ce;">Inspect Live Merkle Root</button>
+                <button id="btnVerifyLeafProof" class="btn btn-secondary">Verify Proof Path</button>
+              </div>
+
+              <div id="merkleTreeDisplay" style="font-size:12px; color:var(--text-muted); background:#050914; border:1px solid #1e293b; padding:10px; border-radius:8px;">
+                Click "Inspect Live Merkle Root" to compute deterministic cryptographic state.
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+    </div>
+
+    <!-- TAB 6: POST-QUANTUM CRYPTOGRAPHY & CYBER RESILIENCE (NIST FIPS 203/204/205) -->
+    <div id="tab-pqc" class="tab-content" style="display:none;">
+      <div class="panel" style="background: rgba(11, 17, 32, 0.85); border: 1px solid rgba(52, 211, 153, 0.35);">
+        <div class="eyebrow" style="color: #34d399;">POST-QUANTUM CYBERSECURITY • NIST FIPS 203/204/205 STANDARDS</div>
+        <h2 style="margin-top:2px;">Post-Quantum Cryptography & Quantum Threat Defense Subsystem</h2>
+        <p style="color:var(--text-muted); font-size:13px; max-width:980px;">
+          Hardened against Shor's and Grover's quantum cryptanalytic attacks. Implements Module-Lattice Key Encapsulation (ML-KEM / Kyber), Module-Lattice Digital Signatures (ML-DSA / Dilithium), Stateless Hash-Based Signatures (SLH-DSA / SPHINCS+), Hybrid Post-Quantum Envelope Encryption (AES-256-GCM), and Mosca's Theorem (HNDL) Threat Modeling.
+        </p>
+
+        <!-- PQC Status Summary Cards -->
+        <div class="row-3" style="margin-bottom: 20px;">
+          <div class="data-pill" style="border-color: rgba(52, 211, 153, 0.4); text-align:left; padding:14px;">
+            <small style="color:#34d399; font-weight:700;">NIST FIPS 203 • LATTICE KEM</small>
+            <b style="color:#f1f5f9; font-size:15px; margin:4px 0;">ML-KEM-768 (Kyber)</b>
+            <div style="font-size:11px; color:#94a3b8;">192-bit Quantum IND-CCA2 Key Encapsulation over ring R_3329 with Fujisaki-Okamoto implicit rejection.</div>
+          </div>
+          <div class="data-pill" style="border-color: rgba(56, 189, 248, 0.4); text-align:left; padding:14px;">
+            <small style="color:#38bdf8; font-weight:700;">NIST FIPS 204 • LATTICE SIGNATURES</small>
+            <b style="color:#f1f5f9; font-size:15px; margin:4px 0;">ML-DSA-65 (Dilithium)</b>
+            <div style="font-size:11px; color:#94a3b8;">EUF-CMA Quantum Digital Signatures using Fiat-Shamir with Aborts over R_8380417.</div>
+          </div>
+          <div class="data-pill" style="border-color: rgba(168, 85, 247, 0.4); text-align:left; padding:14px;">
+            <small style="color:#c084fc; font-weight:700;">NIST FIPS 205 • STATELESS HASH</small>
+            <b style="color:#f1f5f9; font-size:15px; margin:4px 0;">SLH-DSA (WOTS+)</b>
+            <div style="font-size:11px; color:#94a3b8;">Stateless hash-based signatures relying purely on SHA3/SHAKE-256 pre-image resistance; immune to Shor's algorithm.</div>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <!-- Left Column: Interactive PQC Cryptographic Terminals -->
+          <div>
+            <!-- Terminal 1: ML-KEM-768 Interactive Key Encapsulation -->
+            <div class="panel" style="background: rgba(15, 23, 42, 0.7); margin-bottom: 16px;">
+              <div class="eyebrow" style="color: #34d399;">NIST FIPS 203 KEY ENCAPSULATION</div>
+              <h3 style="margin-top:0;">ML-KEM-768 Key Encapsulation & Shared Secret Derivation</h3>
+              <p style="font-size:11px; color:var(--text-muted);">
+                Generate quantum public/private keypair, encapsulate a 256-bit secret, and verify round-trip secret reconciliation.
+              </p>
+              <div style="display:flex; gap:8px; margin-bottom:12px; flex-wrap:wrap;">
+                <button class="btn btn-primary" id="btnPqcGenKem" style="background:linear-gradient(135deg, #059669, #0d9488);">🔑 Generate ML-KEM-768 Keypair</button>
+                <button class="btn btn-secondary" id="btnPqcEncapsulate">🔒 Encapsulate Secret</button>
+                <button class="btn btn-secondary" id="btnPqcDecapsulate">🔓 Decapsulate & Reconcile</button>
+              </div>
+              <div id="pqcKemDisplay" style="background:#050914; border:1px solid #1e293b; padding:12px; border-radius:8px; font-size:11px; color:#cbd5e1; max-height:220px; overflow-y:auto; font-family:monospace;">
+                Click "Generate ML-KEM-768 Keypair" to initialize lattice ring R_3329.
+              </div>
+            </div>
+
+            <!-- Terminal 2: ML-DSA-65 Quantum Digital Signatures -->
+            <div class="panel" style="background: rgba(15, 23, 42, 0.7); margin-bottom: 16px;">
+              <div class="eyebrow" style="color: #38bdf8;">NIST FIPS 204 DIGITAL SIGNATURES</div>
+              <h3 style="margin-top:0;">ML-DSA-65 Quantum Digital Signatures & Anti-Tamper Engine</h3>
+              <p style="font-size:11px; color:var(--text-muted);">
+                Sign policy statements and empirical claims with lattice-based Fiat-Shamir proofs. Test anti-tamper rejection.
+              </p>
+              <div style="margin-bottom:8px;">
+                <label style="font-size:11px;">Message to Sign / Attest:</label>
+                <input id="pqcSignMessageInput" value="UN Multilateral Sovereign Debt Restructuring Protocol 2026 - Attested by Founder" style="font-size:12px;">
+              </div>
+              <div style="display:flex; gap:8px; margin-bottom:12px; flex-wrap:wrap;">
+                <button class="btn btn-primary" id="btnPqcSignMessage">✍️ Sign with ML-DSA-65</button>
+                <button class="btn btn-secondary" id="btnPqcVerifyMessage">✅ Verify Signature</button>
+                <button class="btn btn-secondary" id="btnPqcTamperTest" style="color:#f43f5e; border-color:rgba(244,63,94,0.4);">⚠️ Simulate Tamper Attack</button>
+              </div>
+              <div id="pqcDsaDisplay" style="background:#050914; border:1px solid #1e293b; padding:12px; border-radius:8px; font-size:11px; color:#cbd5e1; max-height:220px; overflow-y:auto; font-family:monospace;">
+                Click "Sign with ML-DSA-65" to generate quantum signature.
+              </div>
+            </div>
+
+            <!-- Terminal 3: Post-Quantum Envelope Encryption -->
+            <div class="panel" style="background: rgba(15, 23, 42, 0.7);">
+              <div class="eyebrow" style="color: #f59e0b;">QUANTUM-SAFE ENVELOPE ENCRYPTION</div>
+              <h3 style="margin-top:0;">Hybrid Envelope: ML-KEM-768 + AES-256-GCM</h3>
+              <p style="font-size:11px; color:var(--text-muted);">
+                Encrypt sensitive policy briefs or sovereign negotiating positions against future quantum eavesdroppers ("Harvest Now, Decrypt Later").
+              </p>
+              <div style="margin-bottom:8px;">
+                <label style="font-size:11px;">Confidential Policy Plaintext:</label>
+                <textarea id="pqcEnvelopePlaintext" rows="2" style="font-size:12px;">CONFIDENTIAL: Critical minerals supply agreement between Sovereign State and Multi-lateral Transition Facility. Tariff exemption clause verified.</textarea>
+              </div>
+              <div style="display:flex; gap:8px; margin-bottom:12px;">
+                <button class="btn btn-primary" id="btnPqcEncryptEnvelope" style="background:linear-gradient(135deg, #d97706, #0d9488);">🛡️ Encrypt with Post-Quantum Envelope</button>
+                <button class="btn btn-secondary" id="btnPqcDecryptEnvelope">🔓 Decrypt Envelope</button>
+              </div>
+              <div id="pqcEnvelopeDisplay" style="background:#050914; border:1px solid #1e293b; padding:12px; border-radius:8px; font-size:11px; color:#cbd5e1; max-height:220px; overflow-y:auto; font-family:monospace;">
+                Ready to encrypt payload.
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column: Quantum Threat Matrix & Merkle Attestation -->
+          <div>
+            <!-- Terminal 4: Post-Quantum Merkle Root Attestation -->
+            <div class="panel" style="background: rgba(15, 23, 42, 0.7); margin-bottom: 16px; border-color: rgba(168, 85, 247, 0.3);">
+              <div class="eyebrow" style="color: #c084fc;">POST-QUANTUM AUDIT TREE ATTESTATION</div>
+              <h3 style="margin-top:0;">ML-DSA-65 Planetary Merkle Root Signer</h3>
+              <p style="font-size:11px; color:var(--text-muted);">
+                Sign the live cryptographic Merkle Root of all 13 research divisions with a NIST FIPS 204 digital signature.
+              </p>
+              <button class="btn btn-primary" id="btnPqcSignMerkleRoot" style="background:linear-gradient(135deg, #7e22ce, #0d9488); margin-bottom:12px;">
+                🛡️ Sign Live Merkle Root with ML-DSA-65
+              </button>
+              <div id="pqcMerkleSignDisplay" style="background:#050914; border:1px solid #1e293b; padding:12px; border-radius:8px; font-size:11px; color:#cbd5e1; max-height:220px; overflow-y:auto; font-family:monospace;">
+                Click "Sign Live Merkle Root" to generate post-quantum cryptographic proof.
+              </div>
+            </div>
+
+            <!-- Terminal 5: Shor's Algorithm Gate Calculator -->
+            <div class="panel" style="background: rgba(15, 23, 42, 0.7); margin-bottom: 16px;">
+              <div class="eyebrow" style="color: #f43f5e;">SHOR'S QUANTUM THREAT CALCULATOR</div>
+              <h3 style="margin-top:0;">Quantum Resource Estimation vs Classical Cryptography</h3>
+              <div class="row-2" style="margin-bottom:10px;">
+                <div>
+                  <label style="font-size:11px;">Classical Algorithm:</label>
+                  <select id="pqcShorAlgoSelect">
+                    <option value="RSA">RSA (Integer Factorization)</option>
+                    <option value="ECDSA">ECDSA (Elliptic Curve Discrete Log)</option>
+                  </select>
+                </div>
+                <div>
+                  <label style="font-size:11px;">Key Size (Bits):</label>
+                  <select id="pqcShorBitsSelect">
+                    <option value="2048">2048 bits (Standard RSA)</option>
+                    <option value="3072">3072 bits (128-bit classical equivalent)</option>
+                    <option value="4096">4096 bits (Heavy RSA)</option>
+                    <option value="256">256 bits (P-256 standard ECDSA)</option>
+                    <option value="384">384 bits (P-384 ECDSA)</option>
+                  </select>
+                </div>
+              </div>
+              <button class="btn btn-secondary" id="btnCalcShorGates" style="margin-bottom:10px;">Compute Shor Gate Depth</button>
+              <div id="pqcShorDisplay" style="background:#050914; border:1px solid #1e293b; padding:10px; border-radius:8px; font-size:11px;">
+                Select algorithm and click "Compute Shor Gate Depth".
+              </div>
+            </div>
+
+            <!-- Terminal 6: Mosca HNDL Matrix Across 13 Domains -->
+            <div class="panel" style="background: rgba(15, 23, 42, 0.7);">
+              <div class="eyebrow" style="color: #38bdf8;">MOSCA'S THEOREM (X + Y > Z) AUDIT</div>
+              <h3 style="margin-top:0;">13-Domain "Harvest Now, Decrypt Later" Exposure Matrix</h3>
+              <p style="font-size:11px; color:var(--text-muted);">
+                Evaluates shelf-life sensitivity (X), PQC migration timeline (Y), and CRQC horizon (Z) across all research areas.
+              </p>
+              <button class="btn btn-secondary" id="btnLoadMoscaAudit" style="margin-bottom:10px;">Audit 13 Multilateral Domains</button>
+              <div id="pqcMoscaTableDisplay" style="max-height:280px; overflow-y:auto; font-size:11px; background:#050914; border:1px solid #1e293b; padding:8px; border-radius:8px;">
+                Click "Audit 13 Multilateral Domains" to inspect exposure windows.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB: PRICING & ENQUIRIES -->
+    <div id="tab-pricing" class="tab-content" style="display:none;">
+      <!-- Hero Banner -->
+      <div class="panel" style="background: linear-gradient(135deg, rgba(217, 119, 6, 0.15), rgba(13, 148, 136, 0.15)); border: 1px solid rgba(245, 158, 11, 0.4); text-align: center; padding: 28px 20px; margin-bottom: 24px;">
+        <span class="badge" style="background: #f59e0b; color: #000; font-weight: 800; font-size: 11px; padding: 5px 12px; margin-bottom: 12px; letter-spacing: 0.5px;">
+          🎉 SPECIAL GLOBAL LAUNCH INITIATIVE
+        </span>
+        <h2 style="font-size: 28px; margin: 10px 0 6px 0; font-family: 'Outfit', sans-serif;">
+          2 Months Free Trial on All Institutional Plans
+        </h2>
+        <p style="color: #cbd5e1; font-size: 14px; max-width: 760px; margin: 0 auto 16px auto;">
+          Full, unrestricted access to all 13 multilateral divisions, 20 analytical engines, cascade contagion solvers, and NIST post-quantum cybersecurity for 60 days. Zero upfront billing. Cancel anytime.
+        </p>
+        <div style="display:flex; justify-content:center; gap:16px; font-size:12px; color:var(--text-muted); flex-wrap:wrap;">
+          <span>✓ 60-Day Full Access</span>
+          <span>✓ NIST PQC Hardened</span>
+          <span>✓ Immutable Merkle Audit Proof</span>
+          <span>✓ Direct Expert Support</span>
+        </div>
+      </div>
+
+      <!-- Pricing Cards Grid -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(310px, 1fr)); gap: 20px; margin-bottom: 30px;">
+        
+        <!-- Plan 1: Academic & Research -->
+        <div class="panel" style="background: rgba(15, 23, 42, 0.7); display: flex; flex-direction: column; justify-content: space-between;">
+          <div>
+            <div class="badge" style="background: rgba(56, 189, 248, 0.15); border: 1px solid #38bdf8; color: #bae6fd; font-size: 10px; margin-bottom: 10px;">
+              2 MONTHS FREE TRIAL
+            </div>
+            <h3 style="margin: 0 0 4px 0; font-size: 20px;">Academic & Research</h3>
+            <p style="font-size: 12px; color: var(--text-muted); min-height: 36px;">For universities, independent policy institutes, and research scholars.</p>
+            
+            <div style="margin: 16px 0; padding-bottom: 14px; border-bottom: 1px solid var(--border);">
+              <div style="display:flex; align-items:baseline; gap:6px;">
+                <span style="font-size: 32px; font-weight: 800; color: #fff;">$0</span>
+                <span style="color: #34d399; font-weight: 600; font-size: 13px;">for first 2 months</span>
+              </div>
+              <small style="color: var(--text-dim); display: block; margin-top: 2px;">Then $490/month (billed annually) or cancel anytime</small>
+            </div>
+
+            <ul style="list-style: none; padding: 0; margin: 0 0 20px 0; font-size: 12px; color: #cbd5e1; line-height: 1.8;">
+              <li>✓ All 13 Multilateral Research Divisions</li>
+              <li>✓ Cryptographic SHA-256 evidence source verification</li>
+              <li>✓ 100 scenario policy simulations / month</li>
+              <li>✓ Official multilateral data hub access (WB / IMF / UN)</li>
+              <li>✓ Founder-reviewed policy advisory guidance</li>
+              <li>✓ Standard email support (<code style="color:#38bdf8;">bjtmusic12@gmail.com</code>)</li>
+            </ul>
+          </div>
+          <div>
+            <a href="https://buy.stripe.com/test_28E14f26D7mt5BfbSvcjS0y" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="width: 100%; justify-content: center; text-decoration: none; margin-bottom: 8px; font-weight: 700; background: linear-gradient(135deg, #0d9488, #0284c7); display: flex; align-items: center; gap: 6px; box-sizing: border-box;">
+              💳 Pay with Stripe ($490/mo)
+            </a>
+            <button class="btn btn-secondary select-plan-btn" data-plan="academic" style="width: 100%; justify-content: center; border-color: #38bdf8; color: #38bdf8; cursor: pointer; font-size: 11px; box-sizing: border-box;">
+              Activate 2-Month Free Trial / Invoice
+            </button>
+          </div>
+        </div>
+
+        <!-- Plan 2: Institutional & Enterprise (Featured) -->
+        <div class="panel" style="background: rgba(15, 23, 42, 0.85); border: 2px solid #f59e0b; display: flex; flex-direction: column; justify-content: space-between; position: relative;">
+          <div style="position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: #f59e0b; color: #000; font-size: 10px; font-weight: 800; padding: 3px 10px; border-radius: 12px; letter-spacing: 0.5px;">
+            MOST POPULAR • 2 MO FREE
+          </div>
+          <div>
+            <div class="badge" style="background: rgba(245, 158, 11, 0.2); border: 1px solid #f59e0b; color: #fef08a; font-size: 10px; margin-bottom: 10px;">
+              RECOMMENDED FOR MULTILATERAL INSTITUTIONS
+            </div>
+            <h3 style="margin: 0 0 4px 0; font-size: 20px;">Institutional & Enterprise</h3>
+            <p style="font-size: 12px; color: var(--text-muted); min-height: 36px;">Comprehensive policy intelligence for global enterprises, central banks, and funds.</p>
+            
+            <div style="margin: 16px 0; padding-bottom: 14px; border-bottom: 1px solid var(--border);">
+              <div style="display:flex; align-items:baseline; gap:6px;">
+                <span style="font-size: 32px; font-weight: 800; color: #fff;">$0</span>
+                <span style="color: #34d399; font-weight: 600; font-size: 13px;">for first 2 months</span>
+              </div>
+              <small style="color: var(--text-dim); display: block; margin-top: 2px;">Then $2,450/month (billed annually) or cancel anytime</small>
+            </div>
+
+            <ul style="list-style: none; padding: 0; margin: 0 0 20px 0; font-size: 12px; color: #cbd5e1; line-height: 1.8;">
+              <li>✓ <b>Everything in Academic Tier</b></li>
+              <li>✓ <b>Full Suite of 20 Quantitative Analytical Engines</b></li>
+              <li>✓ Non-linear Planetary Cascade Solvers (SVI & Pareto Capital)</li>
+              <li>✓ NIST FIPS 203/204/205 Post-Quantum Envelope Encryption</li>
+              <li>✓ Machine Operational Playbooks (WTO, ICMA, CCSDS, FHIR)</li>
+              <li>✓ Comparative Lab sweeps & reproducible audit logs</li>
+              <li>✓ <b>Priority 24/7 technical and methodology support</b></li>
+            </ul>
+          </div>
+          <div>
+            <a href="https://buy.stripe.com/test_7sY4gr6mT0Y5fbP2hVcjS0z" target="_blank" rel="noopener noreferrer" class="btn btn-gold" style="width: 100%; justify-content: center; text-decoration: none; margin-bottom: 8px; font-weight: 700; display: flex; align-items: center; gap: 6px; box-sizing: border-box;">
+              💳 Pay with Stripe ($2,450/mo)
+            </a>
+            <button class="btn btn-secondary select-plan-btn" data-plan="enterprise" style="width: 100%; justify-content: center; border-color: #f59e0b; color: #fef08a; cursor: pointer; font-size: 11px; box-sizing: border-box;">
+              Activate 2-Month Free Trial / Invoice
+            </button>
+          </div>
+        </div>
+
+        <!-- Plan 3: Sovereign & Multilateral Alliance -->
+        <div class="panel" style="background: rgba(15, 23, 42, 0.7); display: flex; flex-direction: column; justify-content: space-between;">
+          <div>
+            <div class="badge" style="background: rgba(168, 85, 247, 0.2); border: 1px solid #a855f7; color: #e9d5ff; font-size: 10px; margin-bottom: 10px;">
+              CUSTOM SOVEREIGN ONBOARDING
+            </div>
+            <h3 style="margin: 0 0 4px 0; font-size: 20px;">Sovereign & Multilateral Alliance</h3>
+            <p style="font-size: 12px; color: var(--text-muted); min-height: 36px;">Air-gapped and sovereign-grade deployments for national ministries and treaty bodies.</p>
+            
+            <div style="margin: 16px 0; padding-bottom: 14px; border-bottom: 1px solid var(--border);">
+              <div style="display:flex; align-items:baseline; gap:6px;">
+                <span style="font-size: 32px; font-weight: 800; color: #fff;">$0</span>
+                <span style="color: #34d399; font-weight: 600; font-size: 13px;">for first 2 months</span>
+              </div>
+              <small style="color: var(--text-dim); display: block; margin-top: 2px;">Then $25,000/month (billed annually) or custom sovereign SLA</small>
+            </div>
+
+            <ul style="list-style: none; padding: 0; margin: 0 0 20px 0; font-size: 12px; color: #cbd5e1; line-height: 1.8;">
+              <li>✓ <b>Everything in Enterprise Tier</b></li>
+              <li>✓ Air-gapped deployment with private cryptographic key escrow</li>
+              <li>✓ Bespoke Shor quantum gate analysis for state secrets</li>
+              <li>✓ Direct executive advisory line with Platform Founder</li>
+              <li>✓ Custom econometric modules and multilateral treaty modeling</li>
+              <li>✓ Unlimited simulation throughput & SLA guarantees</li>
+              <li>✓ Dedicated Executive Account Officer</li>
+            </ul>
+          </div>
+          <div>
+            <a href="https://buy.stripe.com/test_3cI9AL7qX2290gV2hVcjS0A" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="width: 100%; justify-content: center; text-decoration: none; margin-bottom: 8px; font-weight: 700; background: linear-gradient(135deg, #7e22ce, #9333ea); display: flex; align-items: center; gap: 6px; box-sizing: border-box;">
+              💳 Pay with Stripe ($25,000/mo)
+            </a>
+            <button class="btn btn-secondary select-plan-btn" data-plan="sovereign" style="width: 100%; justify-content: center; border-color: #a855f7; color: #c084fc; cursor: pointer; font-size: 11px; box-sizing: border-box;">
+              Request Sovereign Onboarding / Wire
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Customer Enquiries & Support Desk -->
+      <div class="grid-2">
+        <!-- Direct Support Card -->
+        <div class="panel" style="background: rgba(15, 23, 42, 0.85); border-color: rgba(245, 158, 11, 0.45);">
+          <div class="eyebrow" style="color: #f59e0b;">FOUNDER & EXECUTIVE CUSTOMER SUPPORT</div>
+          <h3 style="margin-top: 2px;">Contact Founder Bhuvan Jakkula Personally</h3>
+          <p style="font-size: 13px; color: var(--text-muted); line-height: 1.6;">
+            Have queries, technical questions, sovereign onboarding needs, or issues with your subscription or data engines? Contact <b>Founder Bhuvan Jakkula</b> personally. Dedicated 24/7 customer support to resolve customer issues and guide quantitative implementations.
+          </p>
+
+          <div style="background: #050914; border: 1px solid #1e293b; border-radius: 10px; padding: 16px; margin: 16px 0;">
+            <div style="font-size: 11px; text-transform: uppercase; color: var(--text-dim); letter-spacing: 1px; margin-bottom: 4px;">
+              FOUNDER'S DIRECT CUSTOMER SUPPORT LINE
+            </div>
+            <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
+              <code style="font-size: 18px; color: #f59e0b; font-weight: 800; word-break: break-all;">bjtmusic12@gmail.com</code>
+              <button id="btnCopySupportEmail" class="btn btn-sm btn-secondary" style="font-size: 11px; cursor:pointer;">
+                📋 Copy Email
+              </button>
+            </div>
+            <div style="font-size: 11px; color: #94a3b8; margin-top: 8px;">
+              Contact: <b>Bhuvan Jakkula</b> (Founder & Chief Architect) • Always active for customer queries & support
+            </div>
+          </div>
+
+          <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+            <a href="mailto:bjtmusic12@gmail.com?subject=GGISP%20Platform%20Query%20to%20Founder%20Bhuvan%20Jakkula" class="btn btn-primary" style="text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
+              📧 Email Founder Bhuvan Jakkula
+            </a>
+            <button class="btn btn-secondary" onclick="openApprovedGuidanceModal()" style="border-color: #38bdf8; color: #38bdf8;">
+              📜 12 Founder Directives
+            </button>
+          </div>
+        </div>
+            <button id="btnScrollToForm" class="btn btn-secondary" style="cursor:pointer;">
+              ✍️ Fill Enquiry Form
+            </button>
+          </div>
+        </div>
+
+        <!-- Interactive Enquiry Form -->
+        <div class="panel" style="background: rgba(15, 23, 42, 0.85);" id="enquiryFormSection">
+          <div class="eyebrow" style="color: #f59e0b;">RAPID TRIAL ACTIVATION & ENQUIRY</div>
+          <h3 style="margin-top: 2px;">Submit Customer Enquiry</h3>
+          <form id="customerEnquiryForm">
+            <div class="row-2" style="margin-bottom: 10px;">
+              <div>
+                <label style="font-size: 11px;">Full Name</label>
+                <input type="text" id="enquiryFullName" placeholder="Ambassador or Dr. Jane Doe" required style="font-size: 12px;">
+              </div>
+              <div>
+                <label style="font-size: 11px;">Work Email ID</label>
+                <input type="email" id="enquiryEmail" placeholder="jane.doe@institution.org" required style="font-size: 12px;">
+              </div>
+            </div>
+
+            <div class="row-2" style="margin-bottom: 10px;">
+              <div>
+                <label style="font-size: 11px;">Mobile / WhatsApp Number</label>
+                <input type="tel" id="enquiryMobile" placeholder="+1 (555) 019-2834" style="font-size: 12px;">
+              </div>
+              <div>
+                <label style="font-size: 11px;">Organization / Agency</label>
+                <input type="text" id="enquiryOrg" placeholder="Ministry / Fund / Enterprise" style="font-size: 12px;">
+              </div>
+            </div>
+
+            <div style="margin-bottom: 10px;">
+              <label style="font-size: 11px;">Plan of Interest (Includes 2 Months Free Trial)</label>
+              <select id="enquirySelectedPlan" style="font-size: 12px;">
+                <option value="enterprise">Institutional & Enterprise Tier ($0 for 2 Mo, then $2,450/mo)</option>
+                <option value="academic">Academic & Research Tier ($0 for 2 Mo, then $490/mo)</option>
+                <option value="sovereign">Sovereign & Multilateral Alliance ($0 for 2 Mo, then $25,000/mo)</option>
+              </select>
+            </div>
+
+            <div style="margin-bottom: 14px;">
+              <label style="font-size: 11px;">Message / Objectives for Trial</label>
+              <textarea id="enquiryMessage" rows="3" placeholder="Please outline your institution's policy focus (e.g. debt restructuring, trade analysis, cyber defense, or disaster finance)..." required style="font-size: 12px;"></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary" id="btnSubmitEnquiry" style="width: 100%; justify-content: center; font-weight: 700; cursor:pointer;">
+              🚀 Submit Enquiry & Activate 2-Month Free Trial
+            </button>
+          </form>
+          <div id="enquiryFormResponse" style="display:none; margin-top:12px; padding:10px; border-radius:8px; font-size:12px;"></div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- Global Notification Toast -->
+<div id="notification"></div>
+
+<!-- Authentication Modal (Sign In / Sign Up) -->
+<div id="authModal" style="display:none; position:fixed; inset:0; background:rgba(3,7,18,0.8); backdrop-filter:blur(8px); z-index:1000; align-items:center; justify-content:center;">
+  <div style="background:#0b1120; border:1px solid #1e293b; border-radius:14px; width:92%; max-width:440px; box-shadow:0 25px 50px -12px rgba(0,0,0,0.7); padding:26px; position:relative;">
+    <button id="authModalClose" style="position:absolute; top:16px; right:16px; background:transparent; border:0; color:#94a3b8; font-size:18px; cursor:pointer; line-height:1;" title="Close">✕</button>
+    
+    <div style="display:flex; gap:8px; margin-bottom:20px; border-bottom:1px solid #1e293b; padding-bottom:12px;">
+      <button class="nav-btn active" id="tabAuthSignInBtn" style="font-size:13px; font-weight:700;">Sign In</button>
+      <button class="nav-btn" id="tabAuthSignUpBtn" style="font-size:13px; font-weight:700;">Create Account</button>
+    </div>
+
+    <!-- Sign In Panel -->
+    <div id="authSignInPane">
+      <h3 style="margin:0 0 4px 0; font-family:'Outfit', sans-serif;">Sign In to GGISP</h3>
+      <p style="font-size:12px; color:var(--text-muted); margin-bottom:16px;">Access multilateral research, quantitative solvers, and sovereign policy tools.</p>
+      <form id="authSignInForm">
+        <div style="margin-bottom:12px;">
+          <label style="font-size:11px; font-weight:600; color:#cbd5e1; display:block; margin-bottom:4px;">Email ID</label>
+          <input type="email" id="authSignInEmail" placeholder="your.email@domain.com" required style="font-size:13px; width:100%; box-sizing:border-box;">
+        </div>
+        <div style="margin-bottom:16px;">
+          <label style="font-size:11px; font-weight:600; color:#cbd5e1; display:block; margin-bottom:4px;">Password</label>
+          <input type="password" id="authSignInPassword" placeholder="••••••••" style="font-size:13px; width:100%; box-sizing:border-box;">
+        </div>
+        <button type="submit" class="btn btn-primary" id="btnSubmitSignIn" style="width:100%; justify-content:center; padding:10px; font-size:13px; font-weight:700;">
+          Sign In
+        </button>
+      </form>
+    </div>
+
+    <!-- Sign Up Panel -->
+    <div id="authSignUpPane" style="display:none;">
+      <h3 style="margin:0 0 4px 0; font-family:'Outfit', sans-serif;">Create Researcher Account</h3>
+      <p style="font-size:12px; color:var(--text-muted); margin-bottom:16px;">Register with verified credentials to unlock sovereign analytics.</p>
+      <form id="authSignUpForm">
+        <div style="margin-bottom:10px;">
+          <label style="font-size:11px; font-weight:600; color:#cbd5e1; display:block; margin-bottom:4px;">Full Name</label>
+          <input type="text" id="authSignUpName" placeholder="Dr. Jane Doe" required style="font-size:13px; width:100%; box-sizing:border-box;">
+        </div>
+        <div style="margin-bottom:10px;">
+          <label style="font-size:11px; font-weight:600; color:#cbd5e1; display:block; margin-bottom:4px;">Email ID</label>
+          <input type="email" id="authSignUpEmail" placeholder="jane.doe@institution.org" required style="font-size:13px; width:100%; box-sizing:border-box;">
+        </div>
+        <div style="margin-bottom:10px;">
+          <label style="font-size:11px; font-weight:600; color:#cbd5e1; display:block; margin-bottom:4px;">Mobile Number</label>
+          <input type="tel" id="authSignUpMobile" placeholder="+1 (555) 000-0000" required style="font-size:13px; width:100%; box-sizing:border-box;">
+        </div>
+        <div style="margin-bottom:16px;">
+          <label style="font-size:11px; font-weight:600; color:#cbd5e1; display:block; margin-bottom:4px;">Password</label>
+          <input type="password" id="authSignUpPassword" placeholder="At least 6 characters" minlength="6" required style="font-size:13px; width:100%; box-sizing:border-box;">
+        </div>
+        <button type="submit" class="btn btn-primary" id="btnSubmitSignUp" style="width:100%; justify-content:center; padding:10px; font-size:13px; font-weight:700; background:linear-gradient(135deg, #0d9488, #0284c7);">
+          Create Account
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Founder-Approved Policy Guidance Modal (12 Directives) -->
+<div id="guidanceModal" style="display:none; position:fixed; inset:0; background:rgba(3,7,18,0.88); backdrop-filter:blur(10px); z-index:1000; align-items:center; justify-content:center; padding:20px;">
+  <div style="background:#0b1120; border:1px solid #1e293b; border-radius:16px; width:95%; max-width:980px; max-height:90vh; display:flex; flex-direction:column; box-shadow:0 25px 60px -12px rgba(0,0,0,0.85); position:relative;">
+    <!-- Modal Header -->
+    <div style="padding:20px 24px; border-bottom:1px solid #1e293b; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;">
+      <div>
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span class="badge" style="background:#f59e0b; color:#000; font-weight:800; font-size:10px; padding:2px 8px;">HUMAN AUTHORITY PRINCIPLE</span>
+          <span style="font-size:11px; color:#38bdf8; font-weight:700;">12 Policy Directives Across Multilateral Domains</span>
+        </div>
+        <h2 style="margin:6px 0 2px 0; font-family:'Outfit', sans-serif; font-size:22px; color:#fff;">
+          🏛️ Founder-Approved Policy Guidance (12 Directives)
+        </h2>
+        <div style="font-size:12px; color:var(--text-muted);">
+          Personally Authored & Approved by <b>Founder Bhuvan Jakkula</b> • Rooted in verified empirical data and non-delegable human responsibility.
+        </div>
+      </div>
+      <button id="guidanceModalClose" style="background:transparent; border:0; color:#94a3b8; font-size:24px; cursor:pointer; line-height:1; padding:4px;" title="Close">✕</button>
+    </div>
+
+    <!-- Personal Founder Support & Queries Box -->
+    <div style="background:linear-gradient(135deg, rgba(245,158,11,0.12), rgba(2,132,199,0.08)); border-bottom:1px solid rgba(245,158,11,0.3); padding:14px 24px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;">
+      <div>
+        <div style="font-size:13px; font-weight:700; color:#fff;">
+          Have queries on these directives, or require custom sovereign policy models?
+        </div>
+        <div style="font-size:12px; color:#cbd5e1; margin-top:2px;">
+          Contact <b>Founder Bhuvan Jakkula</b> personally. Dedicated customer support for all customer issues, briefings, and sovereign SLAs.
+        </div>
+      </div>
+      <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+        <code style="color:#f59e0b; font-weight:700; font-size:13px; background:#050914; padding:5px 10px; border-radius:6px; border:1px solid #1e293b;">bjtmusic12@gmail.com</code>
+        <a href="mailto:bjtmusic12@gmail.com?subject=GGISP%20Policy%20Guidance%20Query%20to%20Founder%20Bhuvan%20Jakkula" class="btn btn-primary btn-sm" style="font-size:11px; text-decoration:none; padding:6px 14px; background:linear-gradient(135deg, #0284c7, #0369a1); display:inline-flex; align-items:center; gap:5px;">
+          ✉️ Contact Founder Personally
+        </a>
+      </div>
+    </div>
+
+    <!-- Guidance List Container -->
+    <div id="guidanceListContainer" style="overflow-y:auto; padding:20px 24px; flex:1; display:flex; flex-direction:column; gap:16px;">
+      <div style="color:#94a3b8; text-align:center; padding:30px;">Loading 12 Founder-Approved Policy Directives…</div>
+    </div>
+  </div>
+</div>
+
+<script>
+const state = {
+  domains: [],
+  projects: [],
+  selectedProjectId: null,
+  activeTab: 'workspace',
+  familyFilter: 'all',
+  currentDetail: null,
+  cachedMacro: null,
+  lastSimResult: null,
+  isAuthenticated: false,
+  currentUser: null,
+  isAuthor: false
+};
+
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const tag = (type, text) => `<span class="tag ${type}">${esc(text)}</span>`;
+
+function requireAuth(actionDescription = 'access this platform service') {
+  if (!state.isAuthenticated) {
+    notify(`🔒 Please Sign In or Create an Account to ${actionDescription}.`, 'error');
+    if ($('authModal')) $('authModal').style.display = 'flex';
+    return false;
+  }
+  return true;
+}
+window.requireAuth = requireAuth;
+
+async function api(url, options = {}) {
+  let finalUrl = url;
+  if (window.location.protocol === 'file:' && url.startsWith('/')) {
+    finalUrl = 'http://127.0.0.1:8000' + url;
+  }
+  const token = localStorage.getItem('ggisp_auth_token');
+  const headers = { 'Content-Type': 'application/json', ...(options.headers || {}) };
+  if (token && !headers['Authorization']) {
+    headers['Authorization'] = 'Bearer ' + token;
+  }
+  const resp = await fetch(finalUrl, {
+    ...options,
+    headers,
+    cache: 'no-cache'
+  });
+  if (!resp.ok) {
+    let err = await resp.json().catch(() => ({}));
+    let msg = err.detail || `HTTP ${resp.status}`;
+    if (Array.isArray(msg)) msg = msg.map(m => m.msg).join('; ');
+    throw new Error(msg);
+  }
+  return resp.json();
+}
+
+function notify(text, type = 'success') {
+  const el = $('notification');
+  el.textContent = text;
+  el.className = type;
+  el.style.display = 'block';
+  setTimeout(() => { el.style.display = 'none'; }, 4500);
+}
+
+// ---------------- Navigation & Tabs ----------------
+function switchTab(tabName) {
+  document.querySelectorAll('.nav-btn[data-tab]').forEach(b => b.classList.remove('active'));
+  const targetBtn = document.querySelector(`.nav-btn[data-tab="${tabName}"]`);
+  if (targetBtn) targetBtn.classList.add('active');
+  document.querySelectorAll('.tab-content').forEach(tc => tc.style.display = 'none');
+  const targetTab = $('tab-' + tabName);
+  if (targetTab) {
+    targetTab.style.display = 'block';
+    state.activeTab = tabName;
+    if (tabName === 'pricing') {
+      if ($('metricsBar')) $('metricsBar').style.display = 'none';
+      targetTab.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } else {
+      if ($('metricsBar')) $('metricsBar').style.display = 'grid';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }
+  if (tabName === 'specialist' && (!state.specialistCatalog || !state.specialistCatalog.length)) {
+    loadSpecialistCatalog();
+  }
+}
+window.switchTab = switchTab;
+
+function checkRoute() {
+  const hash = (window.location.hash || '').replace('#', '').toLowerCase();
+  const path = (window.location.pathname || '').toLowerCase();
+  if (hash === 'pricing' || hash === 'enquiries' || hash === 'plans' || path === '/pricing' || path === '/enquiries') {
+    switchTab('pricing');
+  } else if (hash && $('tab-' + hash)) {
+    switchTab(hash);
+  }
+}
+window.addEventListener('hashchange', checkRoute);
+window.addEventListener('popstate', checkRoute);
+
+document.querySelectorAll('.nav-btn[data-tab]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    switchTab(btn.dataset.tab);
+  });
+});
+
+document.querySelectorAll('.nav-btn[data-model]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.nav-btn[data-model]').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    ['debt', 'devfin', 'cross'].forEach(m => $('model-pane-' + m).style.display = 'none');
+    $('model-pane-' + btn.dataset.model).style.display = 'block';
+  });
+});
+
+document.querySelectorAll('.df-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.df-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    state.familyFilter = btn.dataset.family;
+    renderDomains();
+  });
+});
+
+async function updateMetricsSummary() {
+  try {
+    const summary = await api('/api/metrics/summary');
+    if ($('metricProjects')) $('metricProjects').textContent = summary.projects;
+    if ($('metricEvidence')) $('metricEvidence').textContent = summary.total_evidence;
+    if ($('metricApproved')) $('metricApproved').textContent = summary.approved_guidance;
+  } catch (e) {
+    console.error('Error loading metrics summary:', e);
+  }
+}
+
+// ---------------- Initial Load ----------------
+async function init() {
+  try {
+    const [domains, projects] = await Promise.all([
+      api('/api/domains'),
+      api('/api/projects')
+    ]);
+    state.domains = domains;
+    state.projects = projects;
+
+    renderDomains();
+    renderProjects();
+    await updateMetricsSummary();
+
+    if (projects.length > 0) {
+      selectProject(projects[0].id);
+    }
+    loadOfficialData('KEN');
+    await loadSpecialistCatalog();
+    await checkAuthStatus();
+    checkRoute();
+  } catch (err) {
+    notify('Failed to initialize: ' + err.message, 'error');
+  }
+}
+
+function renderDomains() {
+  const filtered = state.domains.filter(d => state.familyFilter === 'all' || d.family === state.familyFilter);
+  $('domainList').innerHTML = filtered.map(d => `
+    <button class="domain-item" data-domain="${d.slug}">
+      <div class="domain-info">
+        <b>${esc(d.name)}</b>
+        <small>${esc(d.lead_institution || d.family)}</small>
+      </div>
+      <span class="badge">${d.project_count}</span>
+    </button>
+  `).join('');
+
+  $('projDomain').innerHTML = state.domains.map(d => `<option value="${d.slug}">${esc(d.name)}</option>`).join('');
+}
+
+function renderProjects() {
+  const el = $('projectList');
+  if (!state.projects.length) {
+    el.innerHTML = '<p class="help">No projects yet. Create one below.</p>';
+    return;
+  }
+  el.innerHTML = state.projects.map(p => `
+    <button class="project-card ${p.id === state.selectedProjectId ? 'active' : ''}" data-project-id="${p.id}">
+      <b>${esc(p.title)}</b>
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-top:4px;">
+        <small>${esc(p.domain_name || p.domain_slug)} • ${p.country_code || 'GLOBAL'}</small>
+        ${tag(p.status, p.status)}
+      </div>
+    </button>
+  `).join('');
+
+  // Update top metrics
+  $('metricProjects').textContent = state.projects.length;
+  $('metricApproved').textContent = state.projects.filter(p => p.status === 'ready').length;
+}
+
+// ---------------- Project Selection & Dossier ----------------
+async function selectProject(id) {
+  state.selectedProjectId = id;
+  renderProjects();
+  try {
+    const detail = await api(`/api/projects/${id}`);
+    state.currentDetail = detail;
+    renderDossier(detail);
+    await updateMetricsSummary();
+  } catch (e) {
+    notify('Error loading project: ' + e.message, 'error');
+  }
+}
+
+function renderDossier(p) {
+  const el = $('dossierWorkspace');
+  const srcOptions = '<option value="">No linked source</option>' + p.sources.map(s => `<option value="${s.id}">S${s.id} · ${esc(s.title)}</option>`).join('');
+
+  $('metricEvidence').textContent = (p.sources.length + p.claims.length);
+
+  el.innerHTML = `
+    <div class="panel">
+      <div class="record-header">
+        <div>
+          <div class="eyebrow">${esc(p.domain_meta?.name || p.domain_slug)} • ${p.country_code || 'GLOBAL'}</div>
+          <h2>${esc(p.title)}</h2>
+        </div>
+        ${tag(p.status, p.status)}
+      </div>
+      <p style="color:#e2e8f0; font-size:14px; margin-bottom:14px;">${esc(p.problem)}</p>
+      <div style="display:flex; gap:10px; flex-wrap:wrap;">
+        <button class="btn btn-primary" onclick="launchSpecialistForDomain('${p.domain_slug}')">⚙️ Run Specialist Engine</button>
+        <button class="btn btn-secondary" style="border-color:#38bdf8; color:#38bdf8;" onclick="launchPlaybookForDomain('${p.domain_slug}')">📜 Operational Playbook</button>
+        <a href="/api/projects/${p.id}/brief.md" download class="btn btn-secondary">↓ Export Markdown Brief</a>
+        <button class="btn btn-gold" id="openAiDrawerBtn">⚡ AI Research Assistant</button>
+      </div>
+    </div>
+
+    <!-- AI Drawer -->
+    <div id="aiDrawer" class="panel" style="display:none; border-color: rgba(245, 158, 11, 0.4); background: rgba(30, 27, 20, 0.7);">
+      <div class="record-header">
+        <div>
+          <div class="eyebrow" style="color:var(--gold);">AI RESEARCH ASSISTANT</div>
+          <h2>Preliminary Working Notes</h2>
+        </div>
+        ${tag('unverified', 'UNVERIFIED / NOT APPROVED')}
+      </div>
+      <p class="help">AI drafts are strictly segregated from founder advice. Explicit consent is required to trigger external AI assistance.</p>
+      <div style="margin-bottom:12px;">
+        <button class="btn btn-gold" id="triggerAiBtn">Generate Preliminary AI Working Synthesis</button>
+      </div>
+      <div id="aiOutputDisplay">
+        ${p.ai_drafts?.length ? p.ai_drafts.map(a => `
+          <div class="record-card">
+            <small style="color:var(--gold);">Model: ${esc(a.model)} • ${esc(a.created_at)}</small>
+            <pre style="white-space:pre-wrap; background:#0b1120; padding:12px; border-radius:8px; font-size:12px; color:#cbd5e1; max-height:350px; overflow-y:auto;">${esc(a.output_text)}</pre>
+          </div>
+        `).join('') : '<p class="help">No AI drafts recorded yet.</p>'}
+      </div>
+    </div>
+
+    <!-- Section 1: Evidence Library -->
+    <div class="panel">
+      <div class="eyebrow">SECTION 1 • EVIDENCE LIBRARY</div>
+      <h2>Primary Sources (${p.sources.length})</h2>
+      <div>
+        ${p.sources.length ? p.sources.map(s => `
+          <div class="record-card">
+            <div class="record-header">
+              <b>S${s.id} · ${esc(s.title)}</b>
+              ${s.manually_reviewed ? tag('supported', 'EXAMINED BY FOUNDER') : tag('unverified', 'UNREVIEWED')}
+            </div>
+            <small style="color:var(--text-muted);">${esc(s.publisher)} (${s.publication_year || 'N/A'}) • Quality: ${esc(s.quality_rating || 'standard')}</small>
+            <div style="margin: 4px 0;"><a href="${esc(s.url)}" target="_blank" rel="noopener noreferrer" style="color:#38bdf8; font-size:12px;">Open Source Link ↗</a></div>
+            ${s.content_hash ? `<div style="font-family:monospace; font-size:10px; color:var(--text-dim);">SHA-256: ${s.content_hash.slice(0, 24)}...</div>` : ''}
+            ${s.notes ? `<p style="margin-top:6px; font-size:12px;">${esc(s.notes)}</p>` : ''}
+          </div>
+        `).join('') : '<p class="help">No sources cataloged. Add verified international organization reports below.</p>'}
+      </div>
+
+      <hr style="border:0; border-top:1px solid var(--border); margin:16px 0;">
+      <h3>+ Add Evidence Source</h3>
+      <form id="addSourceForm">
+        <div style="margin-bottom:8px;"><label>Source Title</label><input name="title" required minlength="3"></div>
+        <div class="row-3" style="margin-bottom:8px;">
+          <div><label>Publisher / Organization</label><input name="publisher" required></div>
+          <div><label>Publication Year</label><input type="number" name="publication_year" value="2024"></div>
+          <div><label>Quality Rating</label><select name="quality_rating"><option value="high">High (Official MDB / Peer-reviewed)</option><option value="medium">Medium</option><option value="low">Low</option><option value="unrated">Unrated</option></select></div>
+        </div>
+        <div style="margin-bottom:8px;"><label>HTTPS URL</label><input name="url" type="url" placeholder="https://..." required></div>
+        <div style="margin-bottom:8px;"><label>Analyst Notes & Citation Findings</label><textarea name="notes" placeholder="Key paragraph, data points, caveats"></textarea></div>
+        <label style="display:flex; align-items:center; gap:8px; font-weight:normal; margin-bottom:10px;">
+          <input type="checkbox" name="manually_reviewed" style="width:auto;"> I have personally examined this publication (Human Attestation)
+        </label>
+        <button class="btn btn-secondary" type="submit">+ Record Evidence Source</button>
+      </form>
+    </div>
+
+    <!-- Section 2: Empirical Claims -->
+    <div class="panel">
+      <div class="eyebrow">SECTION 2 • CLAIMS & EPISTEMIC LIMITS</div>
+      <h2>Empirical Claims (${p.claims.length})</h2>
+      <div>
+        ${p.claims.length ? p.claims.map(c => `
+          <div class="record-card">
+            <div class="record-header">
+              <b>C${c.id} · ${esc(c.statement)}</b>
+              ${tag(c.evidence_status, c.evidence_status)}
+            </div>
+            <small style="color:var(--text-dim);">Linked Source: ${c.source_id ? 'S' + c.source_id : 'None'} • Confidence: ${c.confidence_score || 3}/5</small>
+            ${c.limitations ? `<p style="font-size:12px; margin-top:4px; color:#fca5a5;"><b>Limitations:</b> ${esc(c.limitations)}</p>` : ''}
+            ${c.contrary_evidence ? `<p style="font-size:12px; color:#fde68a;"><b>Contrary Evidence:</b> ${esc(c.contrary_evidence)}</p>` : ''}
+          </div>
+        `).join('') : '<p class="help">No claims recorded yet.</p>'}
+      </div>
+
+      <hr style="border:0; border-top:1px solid var(--border); margin:16px 0;">
+      <h3>+ Record Empirical Claim</h3>
+      <form id="addClaimForm">
+        <div style="margin-bottom:8px;"><label>Statement</label><textarea name="statement" minlength="8" required placeholder="State a verifiable factual assertion..."></textarea></div>
+        <div class="row-3" style="margin-bottom:8px;">
+          <div><label>Evidence Status</label><select name="evidence_status"><option value="unverified">Unverified</option><option value="supported">Supported by examined source</option><option value="disputed">Disputed / Contested</option></select></div>
+          <div><label>Linked Source</label><select name="source_id">${srcOptions}</select></div>
+          <div><label>Confidence (1-5)</label><input type="number" name="confidence_score" min="1" max="5" value="4"></div>
+        </div>
+        <div class="row-2" style="margin-bottom:10px;">
+          <div><label>Known Limitations</label><input name="limitations" placeholder="Data gaps, sample bias..."></div>
+          <div><label>Contrary Evidence</label><input name="contrary_evidence" placeholder="Competing viewpoints..."></div>
+        </div>
+        <button class="btn btn-secondary" type="submit">+ Record Claim</button>
+      </form>
+    </div>
+
+    <!-- Section 3: Competing Proposals -->
+    <div class="panel">
+      <div class="eyebrow">SECTION 3 • POLICY DELIBERATION</div>
+      <h2>Competing Policy Proposals (${p.competing_proposals?.length || 0})</h2>
+      <div>
+        ${p.competing_proposals?.length ? p.competing_proposals.map(cp => `
+          <div class="record-card">
+            <b>${esc(cp.proposal_title)}</b>
+            <p style="font-size:12px; margin:4px 0;"><b>Summary:</b> ${esc(cp.proponent_summary)}</p>
+            <p style="font-size:12px; color:#f59e0b;"><b>Trade-offs:</b> ${esc(cp.trade_offs)}</p>
+          </div>
+        `).join('') : '<p class="help">No competing proposals registered. Compare multiple options before finalizing guidance.</p>'}
+      </div>
+
+      <hr style="border:0; border-top:1px solid var(--border); margin:16px 0;">
+      <h3>+ Add Competing Policy Proposal</h3>
+      <form id="addProposalForm">
+        <div style="margin-bottom:8px;"><label>Proposal Title</label><input name="proposal_title" required placeholder="e.g. Rapid Orthodox Fiscal Consolidation"></div>
+        <div style="margin-bottom:8px;"><label>Proponent Summary</label><textarea name="proponent_summary" required placeholder="What does this alternative propose?"></textarea></div>
+        <div style="margin-bottom:8px;"><label>Structural Trade-offs & Costs</label><textarea name="trade_offs" required placeholder="What are the severe drawbacks or unintended consequences?"></textarea></div>
+        <button class="btn btn-secondary" type="submit">+ Register Competing Option</button>
+      </form>
+    </div>
+
+    <!-- Section 4: Founder's Advisory Centre -->
+    <div class="panel" style="border-color: rgba(20, 184, 166, 0.4);">
+      <div class="eyebrow">SECTION 4 • FOUNDER'S ADVISORY CENTRE</div>
+      <h2>Personally Authored Policy Guidance (${p.recommendations.length})</h2>
+      <p class="help">All recommendations are human-authored. The Human Authority gate blocks approval until at least one reviewed, supported claim exists.</p>
+
+      <div>
+        ${p.recommendations.length ? p.recommendations.map(r => `
+          <div class="record-card" style="border-left: 3px solid ${r.approval_status === 'approved' ? '#10b981' : '#f59e0b'};">
+            <div class="record-header">
+              <b>R${r.id} · By ${esc(r.author)}</b>
+              ${tag(r.approval_status, r.approval_status)}
+            </div>
+            <p style="font-size:14px; color:#fff; font-weight:600; margin:6px 0;">${esc(r.recommendation)}</p>
+            <p style="font-size:12px; margin:4px 0;"><b>Rationale & Mechanism:</b> ${esc(r.rationale)}</p>
+            <p style="font-size:12px; color:#fca5a5; margin:4px 0;"><b>Risks & Uncertainty:</b> ${esc(r.risks)}</p>
+            <div style="margin-top:8px;">
+              ${r.approval_status === 'draft' ? `<button class="btn btn-sm btn-primary" data-approve-rec="${r.id}">Approve After Personal Review</button>` : `<small style="color:#34d399;">Approved at ${esc(r.approved_at)}</small>`}
+            </div>
+          </div>
+        `).join('') : '<p class="help">No founder recommendations written yet.</p>'}
+      </div>
+
+      <hr style="border:0; border-top:1px solid var(--border); margin:16px 0;">
+      <h3>+ Write Policy Recommendation</h3>
+      <form id="addRecForm">
+        <div style="margin-bottom:8px;"><label>Author Label</label><input name="author" value="Founder" required></div>
+        <div style="margin-bottom:8px;"><label>Actionable Policy Recommendation</label><textarea name="recommendation" minlength="10" required placeholder="State your specific policy advice..."></textarea></div>
+        <div style="margin-bottom:8px;"><label>Mechanism & Economic Rationale</label><textarea name="rationale" minlength="10" required placeholder="Why does this mechanism work?"></textarea></div>
+        <div style="margin-bottom:10px;"><label>Risks, Implementation Trade-offs & Mitigations</label><textarea name="risks" minlength="10" required placeholder="What could go wrong?"></textarea></div>
+        <button class="btn btn-primary" type="submit">Save as Draft Recommendation</button>
+      </form>
+    </div>
+  `;
+}
+
+// ---------------- Official Data Hub ----------------
+async function loadOfficialData(countryCode) {
+  const display = $('officialDataDisplay');
+  display.innerHTML = '<p class="help">Fetching World Bank, IMF, and WTO data…</p>';
+  try {
+    const data = await api(`/api/external-data/profile/${countryCode}`);
+    state.cachedMacro = data;
+    const wb = data.world_bank;
+    const imf = data.imf;
+    const wto = data.wto;
+
+    display.innerHTML = `
+      <div style="margin-bottom: 14px;">
+        <h3>${esc(data.country_name)} (${esc(data.country_code)}) — Multilateral Economic Profile</h3>
+        <small style="color:var(--text-dim);">${esc(data.provenance.world_bank_source)} • ${esc(data.provenance.imf_source)}</small>
+      </div>
+
+      <div class="row-3" style="margin-bottom: 14px;">
+        <div class="data-pill"><small>World Bank GDP Growth</small><b>${wb.gdp_growth_percent}%</b></div>
+        <div class="data-pill"><small>IMF Gross Public Debt</small><b>${imf.gross_debt_percent_gdp}% GDP</b></div>
+        <div class="data-pill"><small>IMF DSA Risk Rating</small><b style="font-size:12px; color:#f59e0b;">${esc(imf.dsa_risk_rating)}</b></div>
+      </div>
+
+      <div class="row-3" style="margin-bottom: 14px;">
+        <div class="data-pill"><small>WTO Merchandise Exports</small><b>$${(wto.merchandise_exports_million_usd/1000).toFixed(1)}B</b></div>
+        <div class="data-pill"><small>WTO Simple Average Tariff</small><b>${wto.simple_average_mfn_tariff_percent}%</b></div>
+        <div class="data-pill"><small>External Debt Service / Exports</small><b>${wb.debt_service_exports_percent}%</b></div>
+      </div>
+
+      <div class="record-card" style="font-size:12px;">
+        <b>Multilateral Policy Details:</b>
+        <div style="margin-top:4px;"><b>IMF Program:</b> ${esc(imf.imf_program_status)}</div>
+        <div><b>Top Export Sectors (WTO):</b> ${wto.top_export_categories?.join(', ') || 'N/A'}</div>
+      </div>
+    `;
+  } catch (err) {
+    display.innerHTML = `<p class="help" style="color:#fb7185;">Failed to load official data: ${esc(err.message)}</p>`;
+  }
+}
+
+// ---------------- Chart Renderer ----------------
+function renderSvgChart(scenarios, years) {
+  const colors = {
+    baseline: '#38bdf8',
+    fiscal_consolidation: '#34d399',
+    adverse_shock: '#f43f5e',
+    restructuring_reform: '#f59e0b'
+  };
+
+  const width = 640;
+  const height = 180;
+  const pad = 35;
+
+  let allVals = [];
+  Object.values(scenarios).forEach(arr => arr.forEach(pt => allVals.push(pt.debt_percent_gdp)));
+  const minVal = Math.min(...allVals) * 0.9;
+  const maxVal = Math.max(...allVals) * 1.1;
+
+  const getX = y => pad + (y / years) * (width - 2 * pad);
+  const getY = v => height - pad - ((v - minVal) / (maxVal - minVal || 1)) * (height - 2 * pad);
+
+  let paths = '';
+  Object.entries(scenarios).forEach(([name, data]) => {
+    let dStr = '';
+    data.forEach((pt, i) => {
+      const x = getX(pt.year);
+      const y = getY(pt.debt_percent_gdp);
+      dStr += (i === 0 ? `M ${x} ${y}` : ` L ${x} ${y}`);
+    });
+    paths += `<path d="${dStr}" fill="none" stroke="${colors[name]}" stroke-width="2.5" />`;
+  });
+
+  return `
+    <div class="chart-container">
+      <svg class="chart" viewBox="0 0 ${width} ${height}">
+        <line x1="${pad}" y1="${height - pad}" x2="${width - pad}" y2="${height - pad}" stroke="#334155" stroke-width="1" />
+        <line x1="${pad}" y1="${pad}" x2="${pad}" y2="${height - pad}" stroke="#334155" stroke-width="1" />
+        <text x="${pad}" y="${height - 10}" fill="#94a3b8" font-size="10">Year 0</text>
+        <text x="${width - pad}" y="${height - 10}" fill="#94a3b8" font-size="10">Year ${years}</text>
+        <text x="5" y="${pad + 10}" fill="#94a3b8" font-size="10">${maxVal.toFixed(0)}%</text>
+        <text x="5" y="${height - pad}" fill="#94a3b8" font-size="10">${minVal.toFixed(0)}%</text>
+        ${paths}
+      </svg>
+      <div class="chart-legend">
+        <div class="legend-item"><span class="legend-color" style="background:#38bdf8;"></span> Baseline</div>
+        <div class="legend-item"><span class="legend-color" style="background:#34d399;"></span> Fiscal Reform</div>
+        <div class="legend-item"><span class="legend-color" style="background:#f43f5e;"></span> Adverse Shock</div>
+        <div class="legend-item"><span class="legend-color" style="background:#f59e0b;"></span> Restructuring</div>
+      </div>
+    </div>
+  `;
+}
+
+// ---------------- Event Listeners ----------------
+document.addEventListener('click', async e => {
+  const prCard = e.target.closest('[data-project-id]');
+  if (prCard) {
+    selectProject(Number(prCard.dataset.projectId));
+    return;
+  }
+
+  const domBtn = e.target.closest('[data-domain]');
+  if (domBtn) {
+    const slug = domBtn.dataset.domain;
+    document.querySelectorAll('.domain-item').forEach(b => b.classList.remove('active'));
+    domBtn.classList.add('active');
+
+    const match = state.projects.find(p => p.domain_slug === slug);
+    if (match) {
+      selectProject(match.id);
+      document.querySelector('.nav-btn[data-tab="workspace"]')?.click();
+      notify(`Active research project loaded for ${slug}.`, 'success');
+    } else {
+      const pDom = $('projDomain');
+      if (pDom) pDom.value = slug;
+      document.querySelector('.nav-btn[data-tab="workspace"]')?.click();
+      notify(`Domain selected: ${slug}. Complete the enquiry form below.`, 'info');
+    }
+
+    // Synchronize specialist console and engineering solvers
+    const engSelect = $('specialistEngineSelect');
+    if (engSelect) {
+      engSelect.value = slug;
+      selectSpecialistEngine(slug);
+    }
+    const pbSelect = $('playbookDomainSelect');
+    if (pbSelect) pbSelect.value = slug;
+    return;
+  }
+
+  if (e.target.id === 'fetchOfficialBtn') {
+    loadOfficialData($('countrySelect').value);
+    return;
+  }
+
+  if (e.target.id === 'applyToModelsBtn') {
+    if (!state.cachedMacro) return;
+    const def = state.cachedMacro.calibrated_model_defaults;
+    const df = $('debtModelForm');
+    if (df) {
+      df.elements.initial_debt_percent_gdp.value = def.initial_debt_percent_gdp;
+      df.elements.interest_rate_percent.value = def.interest_rate_percent;
+      df.elements.nominal_gdp_growth_percent.value = def.nominal_gdp_growth_percent;
+      df.elements.primary_surplus_percent_gdp.value = def.primary_surplus_percent_gdp;
+      df.elements.foreign_debt_share_percent.value = def.foreign_debt_share_percent;
+    }
+    const cf = $('crossModelForm');
+    if (cf) {
+      cf.elements.country_code.value = state.cachedMacro.country_code;
+      cf.elements.initial_debt_percent_gdp.value = def.initial_debt_percent_gdp;
+      cf.elements.annual_exports_million_usd.value = def.base_exports_million_usd;
+    }
+    notify(`Calibrated official data for ${state.cachedMacro.country_name} loaded into Simulation Lab!`);
+    document.querySelector('.nav-btn[data-tab="models"]').click();
+    return;
+  }
+
+  if (e.target.id === 'openAiDrawerBtn') {
+    const dr = $('aiDrawer');
+    dr.style.display = dr.style.display === 'none' ? 'block' : 'none';
+    return;
+  }
+
+  if (e.target.id === 'triggerAiBtn') {
+    if (!confirm('Explicit Consent Confirmation:\n\nTrigger preliminary AI research drafting for this project? Project sources, claims, and problem statement will be synthesized.')) return;
+    const b = $('triggerAiBtn');
+    b.disabled = true;
+    b.textContent = 'Synthesizing…';
+    try {
+      const res = await api(`/api/projects/${state.selectedProjectId}/ai-draft`, {
+        method: 'POST',
+        body: JSON.stringify({ confirmed_external_ai_transfer: true })
+      });
+      notify('AI preliminary working note generated and segregated.');
+      selectProject(state.selectedProjectId);
+    } catch (err) {
+      notify(err.message, 'error');
+    } finally {
+      b.disabled = false;
+      b.textContent = 'Generate Preliminary AI Working Synthesis';
+    }
+    return;
+  }
+
+  const appBtn = e.target.closest('[data-approve-rec]');
+  if (appBtn) {
+    if (!confirm('Confirm Personal Human Authority:\n\nHave you personally evaluated the empirical sources and uncertainties for this recommendation? This records founder approval only, not institutional endorsement.')) return;
+    try {
+      await api(`/api/recommendations/${appBtn.dataset.approveRec}/approve`, {
+        method: 'POST',
+        body: JSON.stringify({ confirmed_human_review: true })
+      });
+      notify('Founder approval recorded in audit log.');
+      selectProject(state.selectedProjectId);
+    } catch (err) {
+      notify(err.message, 'error');
+    }
+    return;
+  }
+
+  if (e.target.id === 'saveDebtSimBtn') {
+    if (!state.selectedProjectId || !state.lastSimResult) {
+      notify('Run a simulation and ensure a project is selected first.', 'error');
+      return;
+    }
+    try {
+      await api(`/api/projects/${state.selectedProjectId}/save-simulation`, {
+        method: 'POST',
+        body: JSON.stringify({
+          model_type: 'debt_sustainability',
+          scenario_name: 'Dynamic Sovereign Debt Simulation',
+          parameters: state.lastSimResult.assumptions,
+          results: state.lastSimResult
+        })
+      });
+      notify('Simulation results logged to project dossier!');
+    } catch (err) {
+      notify(err.message, 'error');
+    }
+  }
+});
+
+// ---------------- Form Submissions ----------------
+document.addEventListener('submit', async e => {
+  const f = e.target;
+  const id = f.id;
+  e.preventDefault();
+
+  // Authentication gate: customers must sign up or sign in to use services
+  if (!['authSignInForm', 'authSignUpForm', 'customerEnquiryForm', 'pricingEnquiryForm'].includes(id)) {
+    if (!requireAuth('use this platform service')) {
+      return;
+    }
+  }
+
+  try {
+    if (id === 'createProjectForm') {
+      const fd = new FormData(f);
+      const res = await api('/api/projects', {
+        method: 'POST',
+        body: JSON.stringify(Object.fromEntries(fd))
+      });
+      notify('Research project initialized!');
+      f.reset();
+      const updated = await api('/api/projects');
+      state.projects = updated;
+      selectProject(res.id);
+    }
+
+    if (id === 'addSourceForm') {
+      const fd = new FormData(f);
+      const d = Object.fromEntries(fd);
+      d.manually_reviewed = Boolean(f.elements.manually_reviewed.checked);
+      if (d.publication_year) d.publication_year = Number(d.publication_year);
+      await api(`/api/projects/${state.selectedProjectId}/sources`, {
+        method: 'POST',
+        body: JSON.stringify(d)
+      });
+      notify('Source logged with SHA-256 provenance hash.');
+      selectProject(state.selectedProjectId);
+    }
+
+    if (id === 'addClaimForm') {
+      const fd = new FormData(f);
+      const d = Object.fromEntries(fd);
+      d.source_id = d.source_id ? Number(d.source_id) : null;
+      d.confidence_score = Number(d.confidence_score || 3);
+      await api(`/api/projects/${state.selectedProjectId}/claims`, {
+        method: 'POST',
+        body: JSON.stringify(d)
+      });
+      notify('Empirical claim cataloged.');
+      selectProject(state.selectedProjectId);
+    }
+
+    if (id === 'addProposalForm') {
+      const fd = new FormData(f);
+      await api(`/api/projects/${state.selectedProjectId}/competing-proposals`, {
+        method: 'POST',
+        body: JSON.stringify(Object.fromEntries(fd))
+      });
+      notify('Competing policy option logged.');
+      selectProject(state.selectedProjectId);
+    }
+
+    if (id === 'addRecForm') {
+      const fd = new FormData(f);
+      await api(`/api/projects/${state.selectedProjectId}/recommendations`, {
+        method: 'POST',
+        body: JSON.stringify(Object.fromEntries(fd))
+      });
+      notify('Authored recommendation saved in draft.');
+      selectProject(state.selectedProjectId);
+    }
+
+    if (id === 'debtModelForm') {
+      const fd = new FormData(f);
+      const d = {};
+      for (const [k, v] of fd.entries()) d[k] = Number(v);
+      const res = await api('/api/modelling/debt/simulate', {
+        method: 'POST',
+        body: JSON.stringify(d)
+      });
+      state.lastSimResult = res;
+
+      $('debtModelOutput').innerHTML = `
+        ${renderSvgChart(res.scenarios, d.years)}
+        <div class="row-2" style="margin-top:10px;">
+          <div class="data-pill"><small>Stabilizing Primary Balance</small><b>${res.debt_stabilizing_primary_balance_percent_gdp}% GDP</b></div>
+          <div class="data-pill"><small>Interest-Growth Diff (r - g)</small><b>${res.interest_growth_differential}%</b></div>
+        </div>
+        <p class="help" style="margin-top:10px;">${esc(res.disclaimer)}</p>
+      `;
+      notify('Dynamic debt scenarios computed.');
+    }
+
+    if (id === 'devfinModelForm') {
+      const fd = new FormData(f);
+      const d = {};
+      for (const [k, v] of fd.entries()) d[k] = Number(v);
+      const res = await api('/api/modelling/development-finance/simulate', {
+        method: 'POST',
+        body: JSON.stringify(d)
+      });
+      $('devfinModelOutput').innerHTML = `
+        <div class="row-3" style="margin-bottom:12px;">
+          <div class="data-pill"><small>SDG Impact Multiplier</small><b>${res.composite_weighted_multiplier}x</b></div>
+          <div class="data-pill"><small>SDG Composite Score</small><b>${res.composite_sdg_impact_score_100}/100</b></div>
+          <div class="data-pill"><small>Debt Service / Revenue</small><b>${res.debt_service_to_revenue_percent}%</b></div>
+        </div>
+        <div class="record-card">
+          <b>Sustainability Assessment:</b> ${esc(res.sustainability_rating)}
+        </div>
+      `;
+      notify('Development finance allocation optimized.');
+    }
+
+    if (id === 'crossModelForm') {
+      const fd = new FormData(f);
+      const d = {};
+      for (const [k, v] of fd.entries()) {
+        d[k] = k === 'country_code' ? v : Number(v);
+      }
+      const res = await api('/api/modelling/cross-domain/simulate', {
+        method: 'POST',
+        body: JSON.stringify(d)
+      });
+      const p1 = res.policy_paths.path_1_austerity_status_quo;
+      const p2 = res.policy_paths.path_2_uncoordinated_haircut;
+      const p3 = res.policy_paths.path_3_ggisp_multilateral_accord;
+
+      $('crossModelOutput').innerHTML = `
+        <div class="row-3" style="margin-bottom:12px;">
+          <div class="data-pill"><small>Path 1 (Austerity)</small><b style="color:#f43f5e;">${p1.final_debt_percent_gdp}% Debt</b><small>Health -35%</small></div>
+          <div class="data-pill"><small>Path 2 (Haircut only)</small><b style="color:#f59e0b;">${p2.final_debt_percent_gdp}% Debt</b><small>Market access risk</small></div>
+          <div class="data-pill"><small>Path 3 (GGISP Accord)</small><b style="color:#34d399;">${p3.final_debt_percent_gdp}% Debt</b><small>Health/Climate +16%</small></div>
+        </div>
+        <div class="record-card">
+          <b>Policy Conclusion:</b> ${esc(res.policy_implication)}
+        </div>
+      `;
+      notify('Cross-domain simulation completed.');
+    }
+
+    if (id === 'specialistEngineForm') {
+      const fd = new FormData(f);
+      const params = {};
+      const item = state.specialistCatalog?.find(c => c.domain_slug === state.selectedEngineSlug);
+      const defaults = item?.default_parameters || {};
+
+      for (const [k, defVal] of Object.entries(defaults)) {
+        if (typeof defVal === 'boolean') {
+          params[k] = Boolean(f.elements[k]?.checked);
+        } else if (typeof defVal === 'number') {
+          params[k] = Number(fd.get(k) || 0);
+        } else {
+          params[k] = String(fd.get(k) || '');
+        }
+      }
+
+      const res = await api(`/api/engines/${state.selectedEngineSlug}/simulate`, {
+        method: 'POST',
+        body: JSON.stringify(params)
+      });
+
+      let outputHtml = `<div class="record-card" style="border-left: 3px solid var(--teal-glow);"><b style="color:#fff; font-size:15px;">${esc(res.engine || item.engine_name)}</b>`;
+      outputHtml += `<div class="row-2" style="margin:10px 0;">`;
+
+      for (const [k, v] of Object.entries(res)) {
+        if (['engine', 'domain', 'methodology', 'treaty_reference', 'international_treaty_benchmark', 'framework_reference', 'regulatory_framework', 'international_architecture'].includes(k)) continue;
+        if (typeof v === 'object' && v !== null && !Array.isArray(v)) {
+          outputHtml += `</div><div class="record-card" style="margin:6px 0;"><b>${k.replace(/_/g, ' ').toUpperCase()}:</b><pre style="font-size:11px; margin:4px 0; color:#cbd5e1;">${esc(JSON.stringify(v, null, 2))}</pre></div><div class="row-2">`;
+        } else if (typeof v === 'string' && (v.includes('CRITICAL') || v.includes('ALERT') || v.includes('COMPLIANT') || v.includes('RECOMMENDATION') || v.includes('STATUS') || v.includes('VIABLE') || v.includes('HARVEST') || v.includes('HAIRCU') || v.includes('DEPLETED'))) {
+          outputHtml += `</div><div class="record-card" style="margin:6px 0; border-left:3px solid #f59e0b;"><b style="color:#f59e0b;">Assessment:</b> <span style="font-size:13px; color:#fff;">${esc(v)}</span></div><div class="row-2">`;
+        } else {
+          outputHtml += `<div class="data-pill"><small>${esc(k.replace(/_/g, ' '))}</small><b>${esc(v)}</b></div>`;
+        }
+      }
+
+      outputHtml += `</div>`;
+      if (res.policy_implication || res.diplomatic_recommendation || res.strategic_recommendation) {
+        const pol = res.policy_implication || res.diplomatic_recommendation || res.strategic_recommendation;
+        outputHtml += `<div class="record-card" style="margin-top:10px; border-left:3px solid #38bdf8;"><b>Strategic Policy Implication:</b><p style="font-size:12px; margin:4px 0; color:#e2e8f0;">${esc(pol)}</p></div>`;
+      }
+      outputHtml += `</div>`;
+
+      $('engineOutputDisplay').innerHTML = outputHtml;
+      notify(`${item.engine_name} successfully simulated!`);
+    }
+
+  } catch (err) {
+    notify(err.message, 'error');
+  }
+});
+
+// ---------------- 13 Specialist Innovation Engines ----------------
+async function loadSpecialistCatalog() {
+  try {
+    const catalog = await api('/api/engines/catalog');
+    state.specialistCatalog = catalog;
+    const sel = $('specialistEngineSelect');
+    if (!sel) return;
+    sel.innerHTML = catalog.map(c => `<option value="${c.domain_slug}">${esc(c.engine_name)} (${esc(c.domain_slug)})</option>`).join('');
+    if (catalog.length > 0) {
+      selectSpecialistEngine(catalog[0].domain_slug);
+    }
+  } catch (err) {
+    console.error('Failed to load specialist catalog:', err);
+  }
+}
+
+function selectSpecialistEngine(slug) {
+  state.selectedEngineSlug = slug;
+  const item = state.specialistCatalog?.find(c => c.domain_slug === slug);
+  if (!item) return;
+
+  $('engineTitleDisplay').textContent = item.engine_name;
+  $('engineInstDisplay').textContent = 'Treaty / Lead Authority: ' + item.reference_institution;
+  $('engineSlugBadge').textContent = item.domain_slug.toUpperCase();
+  $('engineDescDisplay').textContent = item.description;
+
+  const container = $('engineParamFields');
+  const params = item.default_parameters || {};
+  let fieldsHtml = '';
+
+  for (const [key, val] of Object.entries(params)) {
+    const labelText = key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+    const isBool = typeof val === 'boolean';
+    const isNum = typeof val === 'number';
+
+    if (isBool) {
+      fieldsHtml += `
+        <div style="margin-bottom:8px;">
+          <label style="display:flex; align-items:center; gap:8px;">
+            <input type="checkbox" name="${key}" ${val ? 'checked' : ''} style="width:auto;"> ${labelText}
+          </label>
+        </div>
+      `;
+    } else if (isNum) {
+      const step = val % 1 === 0 ? '1' : '0.1';
+      fieldsHtml += `
+        <div style="margin-bottom:8px;">
+          <label>${labelText}</label>
+          <input type="number" step="${step}" name="${key}" value="${val}" required>
+        </div>
+      `;
+    } else {
+      fieldsHtml += `
+        <div style="margin-bottom:8px;">
+          <label>${labelText}</label>
+          <input type="text" name="${key}" value="${esc(val)}" required>
+        </div>
+      `;
+    }
+  }
+
+  container.innerHTML = fieldsHtml;
+  $('engineOutputDisplay').innerHTML = '<p class="help">Ready to run. Adjust parameters and click "Execute Quantitative Engine".</p>';
+}
+
+$('loadEngineSpecBtn')?.addEventListener('click', () => {
+  selectSpecialistEngine($('specialistEngineSelect').value);
+});
+$('specialistEngineSelect')?.addEventListener('change', () => {
+  selectSpecialistEngine($('specialistEngineSelect').value);
+});
+
+window.launchSpecialistForDomain = function(slug) {
+  document.querySelector('.nav-btn[data-tab="specialist"]')?.click();
+  const sel = $('specialistEngineSelect');
+  if (sel) {
+    sel.value = slug;
+    selectSpecialistEngine(slug);
+  }
+};
+
+window.launchPlaybookForDomain = function(slug) {
+  document.querySelector('.nav-btn[data-tab="engineering"]')?.click();
+  const sel = $('playbookDomainSelect');
+  if (sel) {
+    sel.value = slug;
+    $('btnGeneratePlaybook')?.click();
+  }
+};
+
+// ---------------- Engineering Subsystem Event Handlers ----------------
+$('rngCyclone')?.addEventListener('input', e => $('lblCyclone').textContent = e.target.value + ' kts');
+$('rngDebt')?.addEventListener('input', e => $('lblDebt').textContent = e.target.value + '%');
+$('rngR0')?.addEventListener('input', e => $('lblR0').textContent = e.target.value);
+$('rngMinerals')?.addEventListener('input', e => $('lblMinerals').textContent = e.target.value + '% Export Ban');
+$('rngBuffer')?.addEventListener('input', e => $('lblBuffer').textContent = '$' + e.target.value + 'M USD');
+
+$('cascadeSolverForm')?.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const btn = e.target.querySelector('button[type="submit"]');
+  btn.disabled = true;
+  btn.textContent = 'Computing Non-Linear Contagion…';
+  try {
+    const payload = {
+      climate_cyclone_intensity_knots: parseFloat($('rngCyclone').value),
+      sovereign_debt_gdp_percent: parseFloat($('rngDebt').value),
+      icu_pandemic_surge_r0: parseFloat($('rngR0').value),
+      space_debris_conjunction_p_c: 2.4e-4,
+      critical_mineral_embargo_percent: parseFloat($('rngMinerals').value),
+      available_emergency_fiscal_buffer_million_usd: parseFloat($('rngBuffer').value)
+    };
+    const res = await api('/api/engineering/cascade/simulate', {
+      method: 'POST',
+      body: JSON.stringify(payload)
+    });
+
+    const sviPre = res.pre_intervention_systemic_vulnerability_index_100;
+    const sviPost = res.post_intervention_residual_vulnerability_100;
+    const eff = res.cascade_suppression_efficiency_percent;
+
+    $('cascadeResultsDisplay').innerHTML = `
+      <div style="background: rgba(15, 23, 42, 0.9); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 8px; padding: 14px; margin-top: 10px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 10px;">
+          <div>
+            <div style="font-size:11px; text-transform:uppercase; color:var(--text-muted); letter-spacing:1px;">Systemic Vulnerability Index (SVI)</div>
+            <div style="font-size:24px; font-weight:800; color:${sviPre > 65 ? '#f43f5e' : '#f59e0b'};">
+              ${sviPre} <span style="font-size:14px; color:var(--text-dim);">→ Mitigated to</span> <span style="color:#10b981;">${sviPost}</span>
+            </div>
+          </div>
+          <div style="text-align:right;">
+            <span class="badge" style="background:rgba(16,185,129,0.2); border:1px solid #10b981; color:#a7f3d0; font-size:12px; padding:4px 8px;">
+              🛡️ ${eff}% Cascade Arrest
+            </span>
+          </div>
+        </div>
+
+        <div style="font-size:12px; font-weight:600; color:#38bdf8; margin-bottom:6px;">Pareto-Optimal Intervention Dispatch ($${res.pareto_optimal_resource_dispatch.total_budget_allocated_million_usd}M Allocated):</div>
+        <table style="width:100%; font-size:11px; border-collapse:collapse; margin-bottom:10px;">
+          <thead>
+            <tr style="border-bottom:1px solid rgba(148,163,184,0.2); color:var(--text-dim); text-align:left;">
+              <th style="padding:4px 0;">Target Program</th>
+              <th style="padding:4px 0;">Dispatched Capital</th>
+              <th style="padding:4px 0; text-align:right;">Priority Tier</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${res.pareto_optimal_resource_dispatch.allocations.map(a => `
+              <tr style="border-bottom:1px solid rgba(148,163,184,0.1);">
+                <td style="padding:5px 0; color:#f1f5f9;">${esc(a.program)}</td>
+                <td style="padding:5px 0; color:#38bdf8; font-weight:600;">$${a.amount_million_usd}M</td>
+                <td style="padding:5px 0; text-align:right;"><span class="badge" style="font-size:10px;">${esc(a.priority)}</span></td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+
+        <div style="font-size:11px; color:#94a3b8; background:rgba(0,0,0,0.3); padding:8px; border-radius:6px;">
+          <b>Command Deck:</b> ${esc(res.planetary_command_status)}
+        </div>
+      </div>
+    `;
+    notify('Systemic cascade simulated successfully', 'success');
+  } catch (err) {
+    notify('Cascade solver failed: ' + err.message, 'error');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '⚡ Compute Non-Linear Contagion & Pareto Intervention';
+  }
+});
+
+// Operational Playbook Generator
+$('btnGeneratePlaybook')?.addEventListener('click', async () => {
+  const domain = $('playbookDomainSelect').value;
+  try {
+    $('playbookCodeViewer').textContent = '// Generating real-world machine payload for ' + domain + '…';
+    const payload = await api('/api/engineering/playbooks/' + domain);
+    $('playbookCodeViewer').textContent = JSON.stringify(payload, null, 2);
+    $('playbookFormatTag').textContent = 'Standard: ' + (payload.standard || payload.resourceType || payload.type || 'JSON');
+    notify('Generated payload for ' + domain, 'success');
+  } catch (err) {
+    $('playbookCodeViewer').textContent = '// Error generating payload: ' + err.message;
+    notify(err.message, 'error');
+  }
+});
+
+$('btnCopyPlaybook')?.addEventListener('click', () => {
+  const code = $('playbookCodeViewer').textContent;
+  if (!code || code.startsWith('// Error') || code.startsWith('Click')) {
+    notify('Generate a payload first', 'error');
+    return;
+  }
+  navigator.clipboard.writeText(code).then(() => {
+    notify('Payload copied to clipboard', 'success');
+  });
+});
+
+// Merkle Tree Auditor
+let cachedAuditTree = null;
+$('btnFetchMerkleTree')?.addEventListener('click', async () => {
+  try {
+    $('merkleTreeDisplay').textContent = 'Computing live cryptographic Merkle state…';
+    const data = await api('/api/engineering/merkle/audit-tree');
+    cachedAuditTree = data;
+    $('merkleTreeDisplay').innerHTML = `
+      <div style="margin-bottom:8px;">
+        <span style="color:#a855f7; font-weight:700;">MERKLE ROOT (SHA-256):</span><br>
+        <code style="word-break:break-all; color:#c084fc; font-size:11px;">${data.merkle_root}</code>
+      </div>
+      <div style="display:flex; gap:16px; font-size:11px; margin-bottom:8px;">
+        <div><b>Total Attested Records:</b> ${data.total_attested_records}</div>
+        <div><b>Tree Depth:</b> ${data.layers_depth} layers</div>
+      </div>
+      <div style="font-size:11px; color:#94a3b8; max-height:120px; overflow-y:auto; border-top:1px solid #1e293b; padding-top:6px;">
+        ${data.verified_leaves.slice(0, 8).map(l => `
+          <div style="display:flex; justify-content:space-between; margin-bottom:3px;">
+            <span>[${l.type.toUpperCase()}] ${esc(l.title)}</span>
+            <code style="color:#38bdf8;">${l.hash.substring(0, 10)}…</code>
+          </div>
+        `).join('')}
+      </div>
+    `;
+    notify('Merkle tree updated', 'success');
+  } catch (err) {
+    $('merkleTreeDisplay').textContent = 'Failed to load Merkle tree: ' + err.message;
+    notify(err.message, 'error');
+  }
+});
+
+$('btnVerifyLeafProof')?.addEventListener('click', async () => {
+  if (!cachedAuditTree || !cachedAuditTree.verified_leaves.length) {
+    notify('Inspect the Merkle Root first', 'error');
+    return;
+  }
+  try {
+    const targetLeaf = cachedAuditTree.verified_leaves[0];
+    const tree = cachedAuditTree.tree_internal;
+    // Build proof path on client or verify endpoint
+    const layers = tree.layers;
+    const proof = [];
+    let idx = 0;
+    for (let l = 0; l < layers.length - 1; l++) {
+      const layer = layers[l];
+      const isRight = (idx % 2 === 1);
+      const sibIdx = isRight ? idx - 1 : idx + 1;
+      const sibHash = sibIdx < layer.length ? layer[sibIdx] : layer[idx];
+      proof.push({ position: isRight ? 'left' : 'right', sibling_hash: sibHash });
+      idx = Math.floor(idx / 2);
+    }
+
+    const verification = await api('/api/engineering/merkle/verify-proof', {
+      method: 'POST',
+      body: JSON.stringify({
+        root: cachedAuditTree.merkle_root,
+        leaf_hash: targetLeaf.hash,
+        proof_steps: proof
+      })
+    });
+
+    $('merkleTreeDisplay').innerHTML += `
+      <div style="margin-top:8px; padding:6px 10px; background:rgba(16,185,129,0.15); border:1px solid #10b981; border-radius:6px; color:#a7f3d0; font-size:11px;">
+        ✅ <b>VERIFIED TAMPER-PROOF:</b> Leaf <code>${targetLeaf.hash.substring(0, 16)}…</code> (${targetLeaf.type}: ${esc(targetLeaf.title)}) matches Merkle Root. Status: ${verification.attestation_status}.
+      </div>
+    `;
+    notify('Cryptographic proof verified', 'success');
+  } catch (err) {
+    notify('Proof verification failed: ' + err.message, 'error');
+  }
+});
+
+// ---------------- Post-Quantum Cryptography (PQC) Subsystem Handlers ----------------
+let pqcKemState = { pk: '', sk: '', ct: '', ss: '' };
+let pqcDsaState = { pk: '', sk: '', sig: '', lastMsg: '' };
+let pqcEnvelopeState = { envelope: null, pk: '', sk: '' };
+
+// Terminal 1: ML-KEM-768
+$('btnPqcGenKem')?.addEventListener('click', async () => {
+  try {
+    $('pqcKemDisplay').textContent = 'Initializing lattice Negacyclic Polynomial Ring R_3329 and generating ML-KEM-768 keypair…';
+    const kp = await api('/api/pqc/kem/generate-keypair', { method: 'POST' });
+    pqcKemState.pk = kp.public_key_hex;
+    pqcKemState.sk = kp.secret_key_hex;
+    $('pqcKemDisplay').innerHTML = `
+      <div style="color:#34d399; font-weight:700; margin-bottom:4px;">✅ ML-KEM-768 KEYPAIR GENERATED (NIST FIPS 203):</div>
+      <div style="margin-bottom:4px;"><b>Security Level:</b> ${esc(kp.security_level)} | <b>Public Key:</b> ${kp.public_key_bytes_len} bytes | <b>Secret Key:</b> ${kp.secret_key_bytes_len} bytes</div>
+      <div style="color:var(--text-muted); margin-bottom:4px;">Public Key (Hex prefix): <code style="color:#38bdf8;">${kp.public_key_hex.substring(0, 64)}…</code></div>
+      <div style="color:var(--text-muted);">Secret Key (Hex prefix): <code style="color:#a855f7;">${kp.secret_key_hex.substring(0, 64)}…</code></div>
+    `;
+    notify('ML-KEM-768 keypair generated', 'success');
+  } catch (err) {
+    $('pqcKemDisplay').textContent = 'Key generation error: ' + err.message;
+    notify(err.message, 'error');
+  }
+});
+
+$('btnPqcEncapsulate')?.addEventListener('click', async () => {
+  if (!pqcKemState.pk) {
+    notify('Generate ML-KEM keypair first', 'error');
+    return;
+  }
+  try {
+    $('pqcKemDisplay').textContent = 'Executing Fujisaki-Okamoto lattice encapsulation…';
+    const res = await api('/api/pqc/kem/encapsulate', {
+      method: 'POST',
+      body: JSON.stringify({ public_key_hex: pqcKemState.pk })
+    });
+    pqcKemState.ct = res.ciphertext_hex;
+    pqcKemState.ss = res.shared_secret_hex;
+    $('pqcKemDisplay').innerHTML += `
+      <div style="margin-top:8px; padding-top:6px; border-top:1px dashed #334155;">
+        <div style="color:#38bdf8; font-weight:700;">🔒 ENCAPSULATION COMPLETE (${res.shared_secret_bits}-bit secret):</div>
+        <div style="color:var(--text-muted); margin-top:2px;">Lattice Ciphertext: <code style="color:#f59e0b;">${res.ciphertext_hex.substring(0, 48)}…</code></div>
+        <div style="color:var(--text-muted);">Sender Shared Secret: <code style="color:#10b981;">${res.shared_secret_hex}</code></div>
+      </div>
+    `;
+    notify('Shared secret encapsulated', 'success');
+  } catch (err) {
+    $('pqcKemDisplay').textContent = 'Encapsulation error: ' + err.message;
+    notify(err.message, 'error');
+  }
+});
+
+$('btnPqcDecapsulate')?.addEventListener('click', async () => {
+  if (!pqcKemState.sk || !pqcKemState.ct) {
+    notify('Encapsulate a secret first', 'error');
+    return;
+  }
+  try {
+    $('pqcKemDisplay').textContent = 'Executing polynomial ring polynomial division and secret decapsulation…';
+    const res = await api('/api/pqc/kem/decapsulate', {
+      method: 'POST',
+      body: JSON.stringify({ secret_key_hex: pqcKemState.sk, ciphertext_hex: pqcKemState.ct })
+    });
+    const match = (res.shared_secret_hex === pqcKemState.ss);
+    $('pqcKemDisplay').innerHTML += `
+      <div style="margin-top:8px; padding-top:6px; border-top:1px dashed #334155;">
+        <div style="color:${match ? '#10b981' : '#f43f5e'}; font-weight:700;">
+          ${match ? '🔓 DECAPSULATION SUCCESSFUL: 100% RECONCILED MATCH' : '❌ RECONCILIATION MISMATCH'}
+        </div>
+        <div style="color:var(--text-muted);">Receiver Decapsulated Secret: <code style="color:#10b981;">${res.shared_secret_hex}</code></div>
+        <div style="font-size:10px; color:#94a3b8; margin-top:2px;">Status: ${esc(res.decapsulation_status)}</div>
+      </div>
+    `;
+    notify(match ? 'Secrets matched across quantum channel' : 'Decapsulation failed', match ? 'success' : 'error');
+  } catch (err) {
+    $('pqcKemDisplay').textContent = 'Decapsulation error: ' + err.message;
+    notify(err.message, 'error');
+  }
+});
+
+// Terminal 2: ML-DSA-65 Signatures
+$('btnPqcSignMessage')?.addEventListener('click', async () => {
+  try {
+    if (!pqcDsaState.pk || !pqcDsaState.sk) {
+      $('pqcDsaDisplay').textContent = 'Auto-generating NIST FIPS 204 ML-DSA-65 signing keypair over R_8380417…';
+      const kp = await api('/api/pqc/dsa/generate-keypair', { method: 'POST' });
+      pqcDsaState.pk = kp.public_key_hex;
+      pqcDsaState.sk = kp.secret_key_hex;
+    }
+    const msg = $('pqcSignMessageInput').value || 'GGISP Policy Statement';
+    $('pqcDsaDisplay').textContent = 'Computing Fiat-Shamir lattice signature with aborts…';
+    const res = await api('/api/pqc/dsa/sign', {
+      method: 'POST',
+      body: JSON.stringify({ secret_key_hex: pqcDsaState.sk, message: msg })
+    });
+    pqcDsaState.sig = res.signature_hex;
+    pqcDsaState.lastMsg = msg;
+    $('pqcDsaDisplay').innerHTML = `
+      <div style="color:#38bdf8; font-weight:700;">✍️ ML-DSA-65 SIGNATURE GENERATED:</div>
+      <div style="margin:4px 0;"><b>Algorithm:</b> ${esc(res.algorithm)} | <b>Signature Size:</b> ${res.signature_bytes_len} bytes</div>
+      <div style="color:var(--text-muted);">SHA3-256 Message Digest: <code style="color:#a855f7;">${res.message_digest_sha3_256}</code></div>
+      <div style="color:var(--text-muted); margin-top:2px;">Lattice Signature Vector (Hex): <code style="color:#38bdf8; word-break:break-all;">${res.signature_hex.substring(0, 80)}…</code></div>
+    `;
+    notify('Quantum signature generated', 'success');
+  } catch (err) {
+    $('pqcDsaDisplay').textContent = 'Signing error: ' + err.message;
+    notify(err.message, 'error');
+  }
+});
+
+$('btnPqcVerifyMessage')?.addEventListener('click', async () => {
+  if (!pqcDsaState.pk || !pqcDsaState.sig) {
+    notify('Sign a message first', 'error');
+    return;
+  }
+  try {
+    const msg = $('pqcSignMessageInput').value;
+    const res = await api('/api/pqc/dsa/verify', {
+      method: 'POST',
+      body: JSON.stringify({
+        public_key_hex: pqcDsaState.pk,
+        message: msg,
+        signature_hex: pqcDsaState.sig
+      })
+    });
+    $('pqcDsaDisplay').innerHTML += `
+      <div style="margin-top:8px; padding:6px 10px; background:rgba(16,185,129,0.15); border:1px solid #10b981; border-radius:6px; color:#a7f3d0;">
+        ✅ <b>AUTHENTIC VERIFICATION:</b> ML-DSA-65 verification passed. Status: <code>${esc(res.status)}</code>
+      </div>
+    `;
+    notify('Quantum signature authentic', 'success');
+  } catch (err) {
+    $('pqcDsaDisplay').innerHTML += `
+      <div style="margin-top:8px; padding:6px 10px; background:rgba(244,63,94,0.15); border:1px solid #f43f5e; border-radius:6px; color:#fecdd3;">
+        ❌ <b>VERIFICATION REJECTED:</b> ${esc(err.message)}
+      </div>
+    `;
+    notify('Signature verification failed', 'error');
+  }
+});
+
+$('btnPqcTamperTest')?.addEventListener('click', async () => {
+  if (!pqcDsaState.pk || !pqcDsaState.sig) {
+    notify('Sign a message first', 'error');
+    return;
+  }
+  try {
+    const tamperedMsg = $('pqcSignMessageInput').value + ' [MODIFIED_UNAUTHORIZED_ALTERATION]';
+    $('pqcDsaDisplay').innerHTML += `
+      <div style="margin-top:8px; padding:6px 10px; background:rgba(244,63,94,0.15); border:1px solid #f43f5e; border-radius:6px; color:#fecdd3;">
+        ⚠️ <b>TAMPER ATTACK SIMULATED:</b> Verifying modified string: <i>"${esc(tamperedMsg)}"</i>…
+      </div>
+    `;
+    const res = await api('/api/pqc/dsa/verify', {
+      method: 'POST',
+      body: JSON.stringify({
+        public_key_hex: pqcDsaState.pk,
+        message: tamperedMsg,
+        signature_hex: pqcDsaState.sig
+      })
+    });
+    if (!res.verified) {
+      $('pqcDsaDisplay').innerHTML += `
+        <div style="margin-top:4px; font-size:11px; color:#f43f5e; font-weight:700;">
+          🛡️ TAMPER DETECTED & ARRESTED: Cryptographic rejection triggered. Status: ${esc(res.status)}
+        </div>
+      `;
+      notify('Tamper correctly detected & rejected', 'success');
+    }
+  } catch (err) {
+    $('pqcDsaDisplay').innerHTML += `
+      <div style="margin-top:4px; font-size:11px; color:#f43f5e;">
+        🛡️ TAMPER DETECTED: Verification error: ${esc(err.message)}
+      </div>
+    `;
+    notify('Tamper successfully caught', 'success');
+  }
+});
+
+// Terminal 3: Hybrid Post-Quantum Envelope Encryption
+$('btnPqcEncryptEnvelope')?.addEventListener('click', async () => {
+  try {
+    if (!pqcEnvelopeState.pk || !pqcEnvelopeState.sk) {
+      $('pqcEnvelopeDisplay').textContent = 'Generating ML-KEM-768 recipient keypair for envelope…';
+      const kp = await api('/api/pqc/kem/generate-keypair', { method: 'POST' });
+      pqcEnvelopeState.pk = kp.public_key_hex;
+      pqcEnvelopeState.sk = kp.secret_key_hex;
+    }
+    const plaintext = $('pqcEnvelopePlaintext').value;
+    $('pqcEnvelopeDisplay').textContent = 'Encrypting with ML-KEM-768 KEM + AES-256-GCM authenticated cipher…';
+    const env = await api('/api/pqc/envelope/encrypt', {
+      method: 'POST',
+      body: JSON.stringify({
+        public_key_hex: pqcEnvelopeState.pk,
+        plaintext: plaintext,
+        associated_data: 'GGISP-PQC-POLICY-v1'
+      })
+    });
+    pqcEnvelopeState.envelope = env;
+    $('pqcEnvelopeDisplay').innerHTML = `
+      <div style="color:#f59e0b; font-weight:700;">🛡️ POST-QUANTUM ENVELOPE SEALED:</div>
+      <div style="margin:4px 0;"><b>Standard:</b> ${esc(env.pqc_standard)} | <b>Cipher:</b> ${esc(env.symmetric_cipher)}</div>
+      <div style="color:var(--text-muted);">KEM Encapsulated Key Header: <code style="color:#38bdf8;">${env.kem_ciphertext.substring(0, 48)}…</code></div>
+      <div style="color:var(--text-muted);">AES-GCM Nonce: <code>${env.nonce}</code> | Auth Tag: <code>${env.tag}</code></div>
+      <div style="color:var(--text-muted); margin-top:2px;">Ciphertext Payload: <code style="color:#10b981;">${env.ciphertext.substring(0, 48)}…</code></div>
+    `;
+    notify('Policy payload encrypted with PQC envelope', 'success');
+  } catch (err) {
+    $('pqcEnvelopeDisplay').textContent = 'Envelope encryption failed: ' + err.message;
+    notify(err.message, 'error');
+  }
+});
+
+$('btnPqcDecryptEnvelope')?.addEventListener('click', async () => {
+  if (!pqcEnvelopeState.sk || !pqcEnvelopeState.envelope) {
+    notify('Seal an envelope first', 'error');
+    return;
+  }
+  try {
+    $('pqcEnvelopeDisplay').textContent = 'Decapsulating KEM header and performing AES-256-GCM authentication…';
+    const res = await api('/api/pqc/envelope/decrypt', {
+      method: 'POST',
+      body: JSON.stringify({
+        secret_key_hex: pqcEnvelopeState.sk,
+        envelope: pqcEnvelopeState.envelope,
+        associated_data: 'GGISP-PQC-POLICY-v1'
+      })
+    });
+    $('pqcEnvelopeDisplay').innerHTML += `
+      <div style="margin-top:8px; padding-top:6px; border-top:1px dashed #334155;">
+        <div style="color:#10b981; font-weight:700;">🔓 ENVELOPE AUTHENTICATED & DECRYPTED:</div>
+        <div style="background:rgba(0,0,0,0.4); padding:8px; border-radius:6px; margin-top:4px; color:#f1f5f9; font-size:12px;">
+          ${esc(res.plaintext)}
+        </div>
+        <div style="font-size:10px; color:#94a3b8; margin-top:2px;">Status: ${esc(res.decryption_status)} (${res.bytes_decrypted} bytes decrypted)</div>
+      </div>
+    `;
+    notify('Envelope successfully decrypted', 'success');
+  } catch (err) {
+    $('pqcEnvelopeDisplay').textContent = 'Envelope decryption failed: ' + err.message;
+    notify(err.message, 'error');
+  }
+});
+
+// Terminal 4: Sign Merkle Root with PQC
+$('btnPqcSignMerkleRoot')?.addEventListener('click', async () => {
+  try {
+    $('pqcMerkleSignDisplay').textContent = 'Computing live Merkle Root across all 13 divisions and applying NIST FIPS 204 signature…';
+    const res = await api('/api/pqc/sign-merkle-root', { method: 'POST' });
+    $('pqcMerkleSignDisplay').innerHTML = `
+      <div style="margin-bottom:6px;">
+        <span style="color:#c084fc; font-weight:700;">LIVE MERKLE ROOT:</span><br>
+        <code style="color:#a855f7; word-break:break-all; font-size:11px;">${res.merkle_root}</code>
+      </div>
+      <div style="display:flex; gap:14px; font-size:11px; margin-bottom:6px;">
+        <div><b>Records Attested:</b> ${res.total_attested_records}</div>
+        <div><b>Standard:</b> ${esc(res.pqc_signature_standard)}</div>
+      </div>
+      <div style="margin-bottom:6px;">
+        <span style="color:#38bdf8; font-weight:700;">QUANTUM SIGNATURE (ML-DSA-65):</span><br>
+        <code style="color:#38bdf8; word-break:break-all; font-size:10px;">${res.pqc_digital_signature_hex.substring(0, 96)}…</code>
+      </div>
+      <div style="padding:6px 10px; background:rgba(16,185,129,0.15); border:1px solid #10b981; border-radius:6px; color:#a7f3d0; font-size:11px;">
+        🛡️ <b>TAMPER-PROOF ATTESTATION:</b> Status: ${esc(res.attestation_status)} (Verification: ${res.signature_verification ? 'PASS' : 'FAIL'})
+      </div>
+    `;
+    notify('Live Merkle Root signed with ML-DSA-65', 'success');
+  } catch (err) {
+    $('pqcMerkleSignDisplay').textContent = 'Merkle PQC signing failed: ' + err.message;
+    notify(err.message, 'error');
+  }
+});
+
+// Terminal 5: Shor Gate Calculator
+$('btnCalcShorGates')?.addEventListener('click', async () => {
+  try {
+    const algo = $('pqcShorAlgoSelect').value;
+    const bits = parseInt($('pqcShorBitsSelect').value);
+    const res = await api('/api/pqc/shor-gate-calculation', {
+      method: 'POST',
+      body: JSON.stringify({ classical_algorithm: algo, key_bits: bits })
+    });
+    $('pqcShorDisplay').innerHTML = `
+      <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
+        <span style="font-weight:700; color:#f43f5e;">${esc(res.algorithm)}-${res.classical_key_bits} Shor Analysis</span>
+        <span class="badge" style="background:rgba(244,63,94,0.2); border:1px solid #f43f5e; color:#fecdd3;">${esc(res.quantum_status)}</span>
+      </div>
+      <div style="display:grid; grid-template-columns: repeat(2, 1fr); gap:8px; font-size:11px; margin-bottom:6px;">
+        <div style="background:rgba(0,0,0,0.3); padding:6px; border-radius:4px;">
+          <small style="color:var(--text-dim); display:block;">LOGICAL QUBITS</small>
+          <b style="font-size:14px; color:#38bdf8;">${res.estimated_logical_qubits_required.toLocaleString()}</b>
+        </div>
+        <div style="background:rgba(0,0,0,0.3); padding:6px; border-radius:4px;">
+          <small style="color:var(--text-dim); display:block;">TOFFOLI DEPTH</small>
+          <b style="font-size:14px; color:#a855f7;">${res.quantum_circuit_depth_estimate}</b>
+        </div>
+      </div>
+      <div style="font-size:10px; color:#94a3b8; background:rgba(0,0,0,0.2); padding:6px; border-radius:4px;">
+        <b>Est. Physical Qubits (Surface Code):</b> ~${res.estimated_physical_qubits_required.toLocaleString()}<br>
+        <b>Effective Post-Quantum Security:</b> ${res.post_quantum_effective_security_bits} bits (Classical: 0 bits against Shor)
+      </div>
+    `;
+    notify('Shor calculation updated', 'success');
+  } catch (err) {
+    $('pqcShorDisplay').textContent = 'Calculation failed: ' + err.message;
+    notify(err.message, 'error');
+  }
+});
+
+// Terminal 6: Mosca HNDL Matrix
+$('btnLoadMoscaAudit')?.addEventListener('click', async () => {
+  try {
+    $('pqcMoscaTableDisplay').textContent = 'Auditing Mosca Theorem (X + Y > Z) across 13 multilateral domains…';
+    const audit = await api('/api/pqc/shor-risk-audit');
+    const badgeColor = lvl => lvl === 'CRITICAL_EXPOSURE' 
+      ? 'background:rgba(244,63,94,0.2); border:1px solid #f43f5e; color:#fecdd3;'
+      : 'background:rgba(16,185,129,0.2); border:1px solid #10b981; color:#a7f3d0;';
+
+    $('pqcMoscaTableDisplay').innerHTML = `
+      <div style="margin-bottom:6px; font-weight:700; color:#38bdf8;">
+        Mosca Audit: ${audit.domains_with_hndl_exposure} / ${audit.total_domains_audited} Critical Exposure Domains (${audit.hndl_threat_percentage}% Threat, CRQC: ${audit.crqc_availability_horizon_years} yrs)
+      </div>
+      <table style="width:100%; border-collapse:collapse; font-size:11px;">
+        <thead>
+          <tr style="border-bottom:1px solid #334155; color:var(--text-dim); text-align:left;">
+            <th style="padding:4px;">Domain</th>
+            <th style="padding:4px;">Shelf Life (X)</th>
+            <th style="padding:4px;">Migrate (Y)</th>
+            <th style="padding:4px;">Exposure Window</th>
+            <th style="padding:4px; text-align:right;">HNDL Risk</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${audit.domain_audits.map(d => `
+            <tr style="border-bottom:1px solid #1e293b;">
+              <td style="padding:5px 4px; color:#f1f5f9;"><b>${esc(d.domain_slug)}</b></td>
+              <td style="padding:5px 4px;">${d.data_shelf_life_years_x} yrs</td>
+              <td style="padding:5px 4px;">${d.migration_timeline_years_y} yrs</td>
+              <td style="padding:5px 4px; font-family:monospace; color:${d.exposure_window_years > 0 ? '#f43f5e' : '#10b981'};">
+                +${d.exposure_window_years} yrs
+              </td>
+              <td style="padding:5px 4px; text-align:right;">
+                <span class="badge" style="font-size:10px; ${badgeColor(d.hndl_compromise_risk)}">${esc(d.hndl_compromise_risk)}</span>
+              </td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    `;
+    notify('13 domains audited for Mosca HNDL exposure', 'success');
+  } catch (err) {
+    $('pqcMoscaTableDisplay').textContent = 'Audit failed: ' + err.message;
+    notify(err.message, 'error');
+  }
+});
+
+// ---------------- User Authentication & Author Access Subsystem ----------------
+async function checkAuthStatus() {
+  try {
+    const res = await api('/api/auth/me');
+    if (res.authenticated && res.user) {
+      state.isAuthenticated = true;
+      state.currentUser = res.user;
+      state.isAuthor = Boolean(res.is_author);
+      if ($('authModalBtn')) $('authModalBtn').style.display = 'none';
+      if ($('userLoggedInPill')) $('userLoggedInPill').style.display = 'flex';
+      if ($('userDisplayName')) $('userDisplayName').textContent = '👤 ' + (res.user.full_name || res.user.email);
+      if ($('userRoleBadge')) {
+        if (res.is_author) {
+          $('userRoleBadge').textContent = 'SOVEREIGN AUTHOR';
+          $('userRoleBadge').style.background = 'linear-gradient(135deg, rgba(217, 119, 6, 0.3), rgba(16, 185, 129, 0.3))';
+          $('userRoleBadge').style.borderColor = '#f59e0b';
+          $('userRoleBadge').style.color = '#fef08a';
+        } else {
+          $('userRoleBadge').textContent = (res.user.role || 'USER').toUpperCase();
+          $('userRoleBadge').style.background = 'rgba(56, 189, 248, 0.2)';
+          $('userRoleBadge').style.borderColor = '#38bdf8';
+          $('userRoleBadge').style.color = '#bae6fd';
+        }
+      }
+    } else {
+      state.isAuthenticated = false;
+      state.currentUser = null;
+      state.isAuthor = false;
+      if ($('authModalBtn')) $('authModalBtn').style.display = 'flex';
+      if ($('userLoggedInPill')) $('userLoggedInPill').style.display = 'none';
+    }
+  } catch (e) {
+    state.isAuthenticated = false;
+    state.currentUser = null;
+    state.isAuthor = false;
+    if ($('authModalBtn')) $('authModalBtn').style.display = 'flex';
+    if ($('userLoggedInPill')) $('userLoggedInPill').style.display = 'none';
+  }
+}
+
+// Modal open/close & tab switching
+$('authModalBtn')?.addEventListener('click', () => {
+  $('authModal').style.display = 'flex';
+});
+$('authModalClose')?.addEventListener('click', () => {
+  $('authModal').style.display = 'none';
+});
+window.addEventListener('click', (e) => {
+  if (e.target === $('authModal')) $('authModal').style.display = 'none';
+  if (e.target === $('guidanceModal')) $('guidanceModal').style.display = 'none';
+});
+
+// ---------------- Founder-Approved Policy Guidance (Human Authority Principle) ----------------
+const FALLBACK_GUIDANCE = [
+  {
+    id: 1, domain_name: "Nuclear Security", domain_slug: "nuclear-security",
+    project_title: "Civil Nuclear Fuel Cycle Non-Diversion Verification and Real-Time Telemetry Safeguards",
+    recommendation: "Mandate zero-knowledge cryptographic safeguards verification across all civil enrichment facilities prior to treaty ratification.",
+    rationale: "Preserves state proprietary engineering data while guaranteeing mathematical proof of non-diversion under IAEA INFCIRC/153 protocols.",
+    risks: "Requires international consensus on trusted execution environments and cryptographic standard adoption.",
+    author: "Founder"
+  },
+  {
+    id: 2, domain_name: "UN Security Council", domain_slug: "un-security-council",
+    project_title: "Security Council Veto Policy Dynamics and Multilateral Peace Enforcement Mechanisms",
+    recommendation: "Establish an automated veto-override threshold requiring 12 affirmative votes including at least 2 non-permanent members during mass atrocity designations.",
+    rationale: "Prevents geopolitical paralysis in acute humanitarian emergencies while maintaining Chapter VII enforcement credibility.",
+    risks: "Strong resistance from historical P5 permanent members requiring General Assembly coalition mobilization.",
+    author: "Founder"
+  },
+  {
+    id: 3, domain_name: "WTO and Global Trade", domain_slug: "wto-trade",
+    project_title: "Structural Gravity Trade Modeling and Global Tariff Supply-Chain Reconfiguration",
+    recommendation: "Deploy multilateral dynamic tariff band stabilization mechanisms to protect vulnerable economies from asymmetric trade shocks.",
+    rationale: "Structural gravity modeling demonstrates 41% volatility reduction in primary agricultural and mineral trade flows during supply disruptions.",
+    risks: "Requires real-time customs data synchronization and trade dispute arbitration compliance.",
+    author: "Founder"
+  },
+  {
+    id: 4, domain_name: "Global Sovereign Debt", domain_slug: "sovereign-debt",
+    project_title: "Stochastic Sovereign Debt Sustainability Analysis and Climate-Contingent Restructuring",
+    recommendation: "Mandate enhanced single-limb collective action clauses (CACs) with automatic climate disaster suspension riders across all sovereign bond issuances.",
+    rationale: "Eliminates holdout creditor litigation and reduces debt restructuring duration from 4.2 years to 11 months during systemic shocks.",
+    risks: "Potential initial basis point spread premium on new issuances without multilateral credit guarantees.",
+    author: "Founder"
+  },
+  {
+    id: 5, domain_name: "AI Governance", domain_slug: "ai-governance",
+    project_title: "Frontier AI Compute Threshold Auditing and Algorithmic Model Provenance Verification",
+    recommendation: "Enforce cryptographic audit trees and post-quantum zero-knowledge attestation for frontier AI model compute clusters exceeding 1e26 FLOPs.",
+    rationale: "Standardized NIST OSCAL and ISO/IEC 42001 verification guarantees unforgeable provenance of training runs without compromising model weights.",
+    risks: "Export control friction and compliance overhead for smaller commercial developer laboratories.",
+    author: "Founder"
+  },
+  {
+    id: 6, domain_name: "Cybersecurity", domain_slug: "cybersecurity",
+    project_title: "Quantum-Resilient Defensive Architecture and Critical Infrastructure Cross-Border Interoperability",
+    recommendation: "Adopt mandatory quantum-resilient cryptographic migration timelines (FIPS 203/204/205) for all national critical infrastructure and energy grids.",
+    rationale: "Defeats harvest-now-decrypt-later (HNDL) adversarial campaigns targeting critical assets with 10-30 year confidentiality horizons.",
+    risks: "Legacy SCADA protocol interoperability and computational overhead during the hybrid transition phase.",
+    author: "Founder"
+  },
+  {
+    id: 7, domain_name: "Global Health", domain_slug: "global-health",
+    project_title: "Cross-Border Pathogen Genomic Surveillance and Equitable Medical Supply Allocation",
+    recommendation: "Establish automated cross-border pathogen genomic surveillance data-sharing with guaranteed equitable medical countermeasure pre-allocation.",
+    rationale: "SEIR modeling demonstrates 83% transmission arrest when containment triggers activate within 72 hours of novel cluster detection.",
+    risks: "National biological data sovereignty concerns and intellectual property licensing disputes during emergencies.",
+    author: "Founder"
+  },
+  {
+    id: 8, domain_name: "Space Security", domain_slug: "space-security",
+    project_title: "Low-Earth Orbit Debris Conjunction Assessment and Space Traffic Management Treaty Protocols",
+    recommendation: "Codify Spaceport State Control conditioning civil launch and landing licenses on verified 5-year deorbit propulsion and CCSDS CDM compliance.",
+    rationale: "Reduces low-Earth orbit debris collision cascaded probability by 67% over a 20-year operational horizon.",
+    risks: "Propulsion mass penalty for commercial smallsat constellations and international verification friction.",
+    author: "Founder"
+  },
+  {
+    id: 9, domain_name: "Critical Minerals", domain_slug: "critical-minerals",
+    project_title: "Geospatial Mineral Prospectivity Mapping and Strategic Supply Chain Circularity",
+    recommendation: "Establish a multilateral critical minerals transparency protocol using OGC GeoJSON open coordinates and closed-loop battery recycling credit offsets.",
+    rationale: "Mitigates single-point supply chain bottlenecks where top-3 producing nations control over 75% of global refining capacity.",
+    risks: "Resource nationalism and verification latency in remote artisanal extraction corridors.",
+    author: "Founder"
+  },
+  {
+    id: 10, domain_name: "Ocean Governance", domain_slug: "ocean-governance",
+    project_title: "High Seas BBNJ Marine Protected Area Geofencing and Port State Control IUU Enforcement",
+    recommendation: "Implement automated PSMA electronic denial-of-port notices synchronized across all signatory regional ports against suspected IUU vessels.",
+    rationale: "Satellite AIS-VMS gap detection enforces High Seas marine sanctuary boundaries with unforgeable audit trails.",
+    risks: "Surveillance coordination overhead and inspection capacity constraints among developing coastal states.",
+    author: "Founder"
+  },
+  {
+    id: 11, domain_name: "International Taxation", domain_slug: "international-tax",
+    project_title: "OECD Pillar Two GloBE Global Minimum Tax Harmonization and CbCR Enforcement",
+    recommendation: "Deploy standardized XML GloBE reporting with Qualified Domestic Minimum Top-Up Tax (QDMTT) safe harbour verification across developing tax authorities.",
+    rationale: "A 15% effective global minimum tax reduces artificial corporate profit reallocation to low-tax jurisdictions by 70-80% over 5 years.",
+    risks: "Complex bilateral tax credit reconciliation and legislative implementation latency.",
+    author: "Founder"
+  },
+  {
+    id: 12, domain_name: "Global Development Finance", domain_slug: "development-finance",
+    project_title: "Multilateral Development Bank Guarantee Optimization and Private Capital Mobilization",
+    recommendation: "Deploy blended finance tranche architectures and first-loss risk-sharing guarantees to de-risk green infrastructure.",
+    rationale: "Mobilizes 4.8x private institutional co-investment per dollar of multilateral concessional development capital.",
+    risks: "Moral hazard if first-loss guarantees are mispriced without verified milestone monitoring.",
+    author: "Founder"
+  }
+];
+
+// ---------------- Founder-Approved Policy Guidance (Human Authority Principle) ----------------
+async function openApprovedGuidanceModal() {
+  const modal = $('guidanceModal');
+  if (modal) modal.style.display = 'flex';
+  const container = $('guidanceListContainer');
+  if (!container) return;
+  container.innerHTML = '<div style="color:#94a3b8; text-align:center; padding:30px;">Loading 12 Founder-Approved Policy Directives…</div>';
+
+  let items = [];
+  try {
+    const data = await api('/api/guidance/approved');
+    items = data.guidance || [];
+  } catch (err1) {
+    try {
+      const data2 = await api('/guidance/approved');
+      items = data2.guidance || [];
+    } catch (err2) {
+      console.warn('API guidance route unreachable, falling back to verified embedded directives:', err2);
+      items = FALLBACK_GUIDANCE;
+    }
+  }
+
+  if (!items || !items.length) {
+    items = FALLBACK_GUIDANCE;
+  }
+
+  container.innerHTML = items.map((item, idx) => `
+    <div style="background:#050914; border:1px solid #1e293b; border-radius:12px; padding:18px; display:flex; flex-direction:column; gap:10px;">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:8px;">
+        <div>
+          <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
+            <span class="badge" style="background:rgba(56,189,248,0.15); border:1px solid #38bdf8; color:#bae6fd; font-size:10px;">
+              ${esc(item.domain_name || item.domain_slug)}
+            </span>
+            <span style="font-size:11px; color:#34d399; font-weight:700;">✓ Human Authority Principle Verified</span>
+          </div>
+          <h4 style="margin:0; font-size:16px; color:#fff; font-family:'Outfit', sans-serif;">
+            ${idx + 1}. ${esc(item.project_title)}
+          </h4>
+        </div>
+        <span style="font-size:11px; color:var(--text-dim); background:rgba(255,255,255,0.05); padding:3px 8px; border-radius:6px; font-family:monospace;">
+          Directive #${item.id}
+        </span>
+      </div>
+
+      <div style="background:rgba(15,23,42,0.6); border-left:3px solid #f59e0b; padding:12px 16px; border-radius:0 8px 8px 0;">
+        <div style="font-size:11px; font-weight:700; color:#f59e0b; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:4px;">
+          Personally Authored Recommendation Statement:
+        </div>
+        <div style="font-size:13px; color:#f8fafc; line-height:1.6; font-weight:500;">
+          ${esc(item.recommendation)}
+        </div>
+      </div>
+
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; font-size:12px;">
+        <div style="background:rgba(255,255,255,0.02); border:1px solid #1e293b; padding:12px; border-radius:8px;">
+          <b style="color:#38bdf8; display:block; margin-bottom:4px;">Strategic Rationale:</b>
+          <span style="color:#cbd5e1; line-height:1.5;">${esc(item.rationale)}</span>
+        </div>
+        <div style="background:rgba(255,255,255,0.02); border:1px solid #1e293b; padding:12px; border-radius:8px;">
+          <b style="color:#f43f5e; display:block; margin-bottom:4px;">Evaluated Risks & Trade-Offs:</b>
+          <span style="color:#cbd5e1; line-height:1.5;">${esc(item.risks)}</span>
+        </div>
+      </div>
+
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; padding-top:8px; border-top:1px solid #1e293b; font-size:11px;">
+        <div style="color:var(--text-dim);">
+          ✍️ Personally approved by <b>Founder Bhuvan Jakkula</b> • Authority: ${esc(item.author || 'Founder')}
+        </div>
+        <a href="mailto:bjtmusic12@gmail.com?subject=Enquiry%20on%20Directive%20%23${item.id}%20(${encodeURIComponent(item.project_title)})" class="btn btn-secondary btn-sm" style="font-size:11px; padding:4px 10px; text-decoration:none; color:#38bdf8; border-color:#38bdf8;">
+          ✉️ Contact Founder Bhuvan Jakkula on this Directive
+        </a>
+      </div>
+    </div>
+  `).join('');
+}
+window.openApprovedGuidanceModal = openApprovedGuidanceModal;
+
+$('guidanceModalClose')?.addEventListener('click', () => {
+  $('guidanceModal').style.display = 'none';
+});
+
+$('tabAuthSignInBtn')?.addEventListener('click', () => {
+  $('tabAuthSignInBtn').classList.add('active');
+  $('tabAuthSignUpBtn').classList.remove('active');
+  $('authSignInPane').style.display = 'block';
+  $('authSignUpPane').style.display = 'none';
+});
+
+$('tabAuthSignUpBtn')?.addEventListener('click', () => {
+  $('tabAuthSignUpBtn').classList.add('active');
+  $('tabAuthSignInBtn').classList.remove('active');
+  $('authSignInPane').style.display = 'none';
+  $('authSignUpPane').style.display = 'block';
+});
+
+// Sign In submission
+$('authSignInForm')?.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const btn = $('btnSubmitSignIn');
+  btn.disabled = true;
+  btn.textContent = 'Verifying Credentials…';
+  try {
+    const email = $('authSignInEmail').value.trim();
+    const password = $('authSignInPassword').value;
+    const res = await api('/api/auth/signin', {
+      method: 'POST',
+      body: JSON.stringify({ email, password })
+    });
+    localStorage.setItem('ggisp_auth_token', res.token);
+    notify(res.message, 'success');
+    $('authModal').style.display = 'none';
+    await checkAuthStatus();
+  } catch (err) {
+    notify('Sign in failed: ' + err.message, 'error');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Sign In';
+  }
+});
+
+// Sign Up submission
+$('authSignUpForm')?.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const btn = $('btnSubmitSignUp');
+  btn.disabled = true;
+  btn.textContent = 'Creating Account…';
+  try {
+    const full_name = $('authSignUpName').value.trim();
+    const email = $('authSignUpEmail').value.trim();
+    const mobile_number = $('authSignUpMobile').value.trim();
+    const password = $('authSignUpPassword').value;
+    const res = await api('/api/auth/signup', {
+      method: 'POST',
+      body: JSON.stringify({ full_name, email, mobile_number, password })
+    });
+    localStorage.setItem('ggisp_auth_token', res.token);
+    notify(res.message, 'success');
+    $('authModal').style.display = 'none';
+    await checkAuthStatus();
+  } catch (err) {
+    notify('Sign up failed: ' + err.message, 'error');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Create Account';
+  }
+});
+
+$('btnCopySupportEmail')?.addEventListener('click', () => {
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText('bjtmusic12@gmail.com').then(() => {
+      notify('Support email (bjtmusic12@gmail.com) copied to clipboard', 'success');
+    }).catch(() => {
+      prompt('Copy customer support email:', 'bjtmusic12@gmail.com');
+    });
+  } else {
+    prompt('Copy customer support email:', 'bjtmusic12@gmail.com');
+  }
+});
+
+$('btnScrollToForm')?.addEventListener('click', () => {
+  $('enquiryFormSection')?.scrollIntoView({ behavior: 'smooth' });
+  $('enquiryFullName')?.focus();
+});
+
+document.querySelectorAll('.select-plan-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const plan = btn.dataset.plan;
+    const sel = $('enquirySelectedPlan');
+    if (sel && plan) {
+      if (plan.includes('academic')) sel.value = 'academic';
+      else if (plan.includes('sovereign')) sel.value = 'sovereign';
+      else sel.value = 'enterprise';
+    }
+    $('enquiryFormSection')?.scrollIntoView({ behavior: 'smooth' });
+    $('enquiryFullName')?.focus();
+    notify(`Selected: ${plan} (2 Months Free Trial activated)`, 'success');
+  });
+});
+
+$('customerEnquiryForm')?.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const btn = $('btnSubmitEnquiry');
+  btn.disabled = true;
+  btn.textContent = 'Submitting Enquiry…';
+  const respEl = $('enquiryFormResponse');
+  respEl.style.display = 'none';
+
+  try {
+    const payload = {
+      full_name: $('enquiryFullName').value.trim(),
+      email: $('enquiryEmail').value.trim(),
+      mobile_number: $('enquiryMobile').value.trim(),
+      organization: $('enquiryOrg').value.trim(),
+      selected_plan: $('enquirySelectedPlan').value,
+      message: $('enquiryMessage').value.trim()
+    };
+
+    const res = await api('/api/pricing/enquiries', {
+      method: 'POST',
+      body: JSON.stringify(payload)
+    });
+
+    respEl.style.display = 'block';
+    respEl.style.background = 'rgba(16, 185, 129, 0.15)';
+    respEl.style.border = '1px solid #10b981';
+    respEl.style.color = '#a7f3d0';
+    respEl.innerHTML = `
+      <b>✅ ENQUIRY RECEIVED & 2-MONTH TRIAL ACTIVATED:</b><br>
+      ${esc(res.message)}<br>
+      <div style="margin-top:6px; font-size:11px; color:#cbd5e1;">
+        Support Contact: <code>${esc(res.support_email)}</code> | Confirmation Ticket: #${res.enquiry_id}
+      </div>
+    `;
+
+    notify('Enquiry submitted successfully! 2-Month Free Trial registered.', 'success');
+    $('customerEnquiryForm').reset();
+  } catch (err) {
+    respEl.style.display = 'block';
+    respEl.style.background = 'rgba(244, 63, 94, 0.15)';
+    respEl.style.border = '1px solid #f43f5e';
+    respEl.style.color = '#fecdd3';
+    respEl.innerHTML = `<b>Submission Failed:</b> ${esc(err.message)}`;
+    notify('Failed to submit enquiry: ' + err.message, 'error');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '🚀 Submit Enquiry & Activate 2-Month Free Trial';
+  }
+});
+
+// Sign Out
+$('btnSignOut')?.addEventListener('click', async () => {
+  localStorage.removeItem('ggisp_auth_token');
+  try { await api('/api/auth/signout', { method: 'POST' }); } catch (_) {}
+  notify('Signed out', 'success');
+  await checkAuthStatus();
+});
+
+init();
+</script>
+</body>
+</html>
