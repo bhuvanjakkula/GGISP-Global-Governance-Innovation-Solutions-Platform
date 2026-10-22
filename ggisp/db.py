@@ -32,6 +32,16 @@ def database_path() -> Path:
     env_path = os.getenv("GGISP_DB_PATH")
     if env_path:
         return Path(env_path)
+    if os.getenv("VERCEL") or os.getenv("AWS_LAMBDA_FUNCTION_NAME"):
+        tmp_db = Path("/tmp/ggisp.db")
+        source_db = ROOT / "data" / "ggisp.db"
+        if not tmp_db.exists() and source_db.exists():
+            import shutil
+            try:
+                shutil.copy2(str(source_db), str(tmp_db))
+            except Exception:
+                pass
+        return tmp_db
     return ROOT / "data" / "ggisp.db"
 
 

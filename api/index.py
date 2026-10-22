@@ -1,0 +1,14 @@
+"""Vercel Serverless Function entrypoint for GGISP Platform."""
+import os
+import sys
+from pathlib import Path
+
+# Add project root directory to sys.path
+ROOT_DIR = Path(__file__).resolve().parent.parent
+if str(ROOT_DIR) not in sys.path:
+    sys.path.insert(0, str(ROOT_DIR))
+
+# Set VERCEL environment variable flag
+os.environ.setdefault("VERCEL", "1")
+
+from ggisp.main import app

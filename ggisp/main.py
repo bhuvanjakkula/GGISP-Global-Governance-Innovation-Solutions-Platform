@@ -54,7 +54,8 @@ app = FastAPI(
 
 from starlette.middleware.trustedhost import TrustedHostMiddleware
 
-app.add_middleware(TrustedHostMiddleware, allowed_hosts=["127.0.0.1", "localhost", "[::1]", "testserver"])
+allowed_hosts = ["*"] if os.getenv("VERCEL") else ["127.0.0.1", "localhost", "[::1]", "testserver", "*.vercel.app"]
+app.add_middleware(TrustedHostMiddleware, allowed_hosts=allowed_hosts)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
