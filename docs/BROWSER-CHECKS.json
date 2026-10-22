@@ -1,0 +1,54 @@
+[
+  {
+    "engine": "Peaceful safeguards review",
+    "metrics": "38\nWeighted Coverage Percent\n62\nRemaining Gap Percent"
+  },
+  {
+    "engine": "Institutional voting design",
+    "metrics": "80\nSupport Share Percent\nfalse\nPasses\n1\nVeto Blockers"
+  },
+  {
+    "engine": "Tariff basket comparison",
+    "metrics": "125,000\nBaseline Duty\n75,000\nPolicy Duty\n-50,000\nDuty Change"
+  },
+  {
+    "engine": "Debt trajectory",
+    "metrics": "88.594\nTerminal Debt Percent Gdp\n-1.406\nChange Percentage Points"
+  },
+  {
+    "engine": "AI assurance risk register",
+    "metrics": "6.7\nBaseline Score\n4.56\nResidual Score"
+  },
+  {
+    "engine": "Defensive investment economics",
+    "metrics": "200,000\nBaseline Expected Annual Loss\n90,000\nResidual Expected Annual Loss\n30,000\nAnnual Control Cost\n80,000\nNet Expected Annual Benefit"
+  },
+  {
+    "engine": "Equitable resource allocation",
+    "metrics": "1,000\nAllocated Units\n0\nUnused Units\n400\nRemaining Unmet Need"
+  },
+  {
+    "engine": "Civilian fleet disposal planning",
+    "metrics": "150\nSpacecraft Count\n20\nExpected Failed Disposals"
+  },
+  {
+    "engine": "Supply concentration and disruption",
+    "metrics": "5,200\nConcentration Hhi\n60\nDisrupted Share Percent\n40\nUncovered Shortfall Percent"
+  },
+  {
+    "engine": "Pollution prevention and cleanup",
+    "metrics": "700\nTerminal Pollution Tonnes\n1,500\nRemoved Tonnes"
+  },
+  {
+    "engine": "Fiscal revenue scenario",
+    "metrics": "1,500,000\nBaseline Revenue\n1,710,000\nPolicy Gross Revenue\n1,610,000\nPolicy Net Revenue\n110,000\nNet Revenue Change"
+  },
+  {
+    "engine": "Cross-domain investment optimizer",
+    "metrics": "118.3\nSelected Score\n90\nSpent\n10\nUnspent\n2\nSelected Count\n5\nFeasible Subsets Evaluated"
+  },
+  {
+    "engine": "Climate funding and abatement",
+    "metrics": "100,000\nCumulative Avoided Tonnes\n5,000,000\nTotal Program Cost\n2,000,000\nFunding Gap\n50\nCost Per Avoided Tonne"
+  }
+]

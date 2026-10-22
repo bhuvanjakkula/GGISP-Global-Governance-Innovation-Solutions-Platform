@@ -39,3 +39,37 @@ st_cas, cascade = test('http://127.0.0.1:8000/api/engineering/cascade/simulate',
     'available_emergency_fiscal_buffer_million_usd': 250.0
 })
 print(f"Cascade Solver: SVI {cascade['pre_intervention_systemic_vulnerability_index_100']} -> {cascade['post_intervention_residual_vulnerability_100']} (Arrest: {cascade['cascade_suppression_efficiency_percent']}%)")
+
+# 5. Test 20 Analytical & Advanced Workbench Engines
+st_wb_cat, wb_catalog = test('http://127.0.0.1:8000/api/engines')
+print(f"Workbench analytical engines catalog: {len(wb_catalog)} engines (Status: {st_wb_cat})")
+
+# Test Minimax Regret & Maximin Robust Policy
+st_rob, rob_res = test('http://127.0.0.1:8000/api/engines/robust-policy/calculate', method='POST', data={
+    'name': 'Live Robust Choice Test',
+    'parameters': {
+        'scenarios': [{'name': 'Favorable', 'weight': 1}, {'name': 'Adverse', 'weight': 1}],
+        'options': [{'name': 'High upside', 'outcomes': [100, 0]}, {'name': 'Resilient option', 'outcomes': [65, 55]}]
+    }
+})
+print(f"  [OK] Robust Policy Engine: Minimax Choice = '{rob_res['metrics']['minimax_regret_choice']}', Minimax Regret = {rob_res['metrics']['minimax_regret']}")
+
+# Test Supply Network Bottleneck Max-Flow / Min-Cut
+st_net, net_res = test('http://127.0.0.1:8000/api/engines/supply-network/calculate', method='POST', data={
+    'name': 'Critical Supply Bottleneck',
+    'parameters': {
+        'source': 'Supply', 'sink': 'Demand', 'required_throughput': 12,
+        'edges': [
+            {'origin': 'Supply', 'destination': 'Port A', 'capacity': 10, 'disruption_percent': 50},
+            {'origin': 'Supply', 'destination': 'Port B', 'capacity': 6, 'disruption_percent': 0},
+            {'origin': 'Port A', 'destination': 'Demand', 'capacity': 8, 'disruption_percent': 0},
+            {'origin': 'Port B', 'destination': 'Demand', 'capacity': 6, 'disruption_percent': 0}
+        ]
+    }
+})
+print(f"  [OK] Supply Network MaxFlow/MinCut: Baseline = {net_res['metrics']['baseline_maximum_throughput']}, Disrupted = {net_res['metrics']['disrupted_maximum_throughput']}")
+
+# 6. Test Connectors & Workbench Pages
+st_conn, conn_cat = test('http://127.0.0.1:8000/api/connectors')
+print(f"Connectors Catalog: World Bank status = '{conn_cat['world_bank']['status']}' (Status: {st_conn})")
+

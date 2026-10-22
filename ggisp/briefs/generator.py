@@ -161,6 +161,36 @@ def generate_markdown_brief(project_id: int) -> str:
                 "",
             ])
 
+    # Append Decision Lab scenario comparisons if available
+    try:
+        from ggisp.lab import runs as lab_runs, run_detail as lab_run_detail
+        saved_runs = lab_runs(project_id)
+        if saved_runs:
+            lines.extend(["---", "", "## 7. Saved Decision Laboratory Scenario Comparisons", ""])
+            for saved in saved_runs:
+                rd = lab_run_detail(saved["id"])
+                lines.extend([
+                    f"### Run {saved['id']}: {saved['name']}",
+                    f"- **Model Version:** `{saved['model_version']}` | **SHA-256 Digest:** `{saved['sha256']}`",
+                    f"- **Inputs:** `{json.dumps(rd['inputs'], sort_keys=True)}`",
+                    f"- **Terminal Summary:** `{json.dumps(rd['outputs']['summary'], sort_keys=True)}`",
+                    f"- **Limitations:** {rd['outputs'].get('limitations', 'N/A')}",
+                    "",
+                ])
+    except Exception:
+        pass
+
+    # Append Workbench multi-domain studies and exact evidence spans
+    try:
+        from ggisp.workbench import brief_sections
+        wb_sections = brief_sections(project_id)
+        if wb_sections:
+            lines.extend(["---"])
+            lines.extend(wb_sections)
+            lines.extend([""])
+    except Exception:
+        pass
+
     lines.extend([
         "---",
         "",

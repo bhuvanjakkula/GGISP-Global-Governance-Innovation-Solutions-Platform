@@ -171,6 +171,77 @@ def init_db() -> None:
             details TEXT DEFAULT '',
             happened_at TEXT NOT NULL DEFAULT (datetime('now'))
         );
+
+        CREATE TABLE IF NOT EXISTS scenario_runs (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            project_id INTEGER NOT NULL REFERENCES projects(id),
+            name TEXT NOT NULL, input_json TEXT NOT NULL, output_json TEXT NOT NULL,
+            sha256 TEXT NOT NULL, model_version TEXT NOT NULL,
+            created_at TEXT NOT NULL DEFAULT (datetime('now'))
+        );
+
+        CREATE TABLE IF NOT EXISTS source_snapshots (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            project_id INTEGER NOT NULL REFERENCES projects(id),
+            source_id INTEGER NOT NULL REFERENCES sources(id),
+            title TEXT NOT NULL,
+            content TEXT NOT NULL,
+            sha256 TEXT NOT NULL,
+            created_at TEXT NOT NULL DEFAULT (datetime('now'))
+        );
+
+        CREATE TABLE IF NOT EXISTS evidence_spans (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            project_id INTEGER NOT NULL REFERENCES projects(id),
+            claim_id INTEGER NOT NULL REFERENCES claims(id),
+            snapshot_id INTEGER NOT NULL REFERENCES source_snapshots(id),
+            start_offset INTEGER NOT NULL,
+            end_offset INTEGER NOT NULL,
+            quote TEXT NOT NULL,
+            note TEXT NOT NULL,
+            created_at TEXT NOT NULL DEFAULT (datetime('now'))
+        );
+
+        CREATE TABLE IF NOT EXISTS datasets (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            project_id INTEGER NOT NULL REFERENCES projects(id),
+            source_id INTEGER NOT NULL REFERENCES sources(id),
+            name TEXT NOT NULL,
+            rows_json TEXT NOT NULL,
+            sha256 TEXT NOT NULL,
+            created_at TEXT NOT NULL DEFAULT (datetime('now'))
+        );
+
+        CREATE TABLE IF NOT EXISTS analysis_runs (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            project_id INTEGER NOT NULL REFERENCES projects(id),
+            engine_id TEXT NOT NULL,
+            name TEXT NOT NULL,
+            payload_json TEXT NOT NULL,
+            sha256 TEXT NOT NULL,
+            created_at TEXT NOT NULL DEFAULT (datetime('now'))
+        );
+
+        CREATE TABLE IF NOT EXISTS analysis_reviews (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            run_id INTEGER NOT NULL REFERENCES analysis_runs(id),
+            reviewer TEXT NOT NULL,
+            verdict TEXT NOT NULL,
+            note TEXT NOT NULL,
+            created_at TEXT NOT NULL DEFAULT (datetime('now'))
+        );
+
+        CREATE TABLE IF NOT EXISTS source_reviews (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            project_id INTEGER NOT NULL REFERENCES projects(id),
+            source_id INTEGER NOT NULL REFERENCES sources(id),
+            note TEXT NOT NULL,
+            created_at TEXT NOT NULL DEFAULT (datetime('now'))
+        );
+
+        CREATE INDEX IF NOT EXISTS analysis_project ON analysis_runs(project_id);
+        CREATE INDEX IF NOT EXISTS snapshot_project ON source_snapshots(project_id);
+        CREATE INDEX IF NOT EXISTS evidence_claim ON evidence_spans(claim_id);
         """)
 
         # Insert or update 13 domains

@@ -1,0 +1,37 @@
+[
+  {
+    "engine": "Robust policy choice under uncertainty",
+    "context": "Robust policy choice under uncertainty · method version 1.0.1 · user-supplied assumptions",
+    "metrics": "Resilient option\nMinimax Regret Choice\n35\nMinimax Regret\n1\nMinimax Regret Tied Options\nResilient option\nMaximin Choice\nResilient option\nWeighted Mean Choice\n2\nPareto Efficient Options"
+  },
+  {
+    "engine": "Coalition voting-power analysis",
+    "context": "Coalition voting-power analysis · method version 1.0.0 · user-supplied assumptions",
+    "metrics": "8\nCoalitions Evaluated\n3\nWinning Coalitions\n5\nTotal Critical Swings"
+  },
+  {
+    "engine": "AI benchmark uncertainty and group audit",
+    "context": "AI benchmark uncertainty and group audit · method version 1.0.0 · user-supplied assumptions",
+    "metrics": "140\nTotal Trials\n5\nPooled Failure Rate Percent\n7\nObserved Group Gap Pp\n1\nGroups With Upper Bound Above Tolerance"
+  },
+  {
+    "engine": "Stochastic debt fan scenarios",
+    "context": "Stochastic debt fan scenarios · method version 1.0.0 · user-supplied assumptions",
+    "metrics": "88.3026\nTerminal Median Debt Percent Gdp\n0.07\nTerminal Threshold Exceedance Fraction\n104.5022\nMean Of Worst Five Percent\n0\nClipped Rate Draws\n42\nSeed\n500\nSimulations"
+  },
+  {
+    "engine": "Supply-network bottleneck optimization",
+    "context": "Supply-network bottleneck optimization · method version 1.0.0 · user-supplied assumptions",
+    "metrics": "14\nBaseline Maximum Throughput\n11\nDisrupted Maximum Throughput\n1\nUnmet Required Throughput\n11\nDisrupted Minimum Cut Capacity\n0\nMax Flow Min Cut Gap"
+  },
+  {
+    "engine": "Public-health SEIR scenario laboratory",
+    "context": "Public-health SEIR scenario laboratory · method version 1.0.0 · user-supplied assumptions",
+    "metrics": "461.281\nBaseline Peak Hospital Demand\n31.9953\nPolicy Peak Hospital Demand\n0\nPolicy Days Above Capacity\n120\nPolicy Peak Day\n0\nMaximum Population Balance Error"
+  },
+  {
+    "engine": "Cross-domain impact propagation graph",
+    "context": "Cross-domain impact propagation graph · method version 1.0.0 · user-supplied assumptions",
+    "metrics": "3\nIterations\ntrue\nConverged\n1\nLargest Absolute Accumulated Score\n1.833\nSum Absolute Accumulated Scores"
+  }
+]

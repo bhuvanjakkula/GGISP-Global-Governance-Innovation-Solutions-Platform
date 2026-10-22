@@ -14,3 +14,13 @@ def client(tmp_path, monkeypatch):
     
     with TestClient(app) as test_client:
         yield test_client
+
+
+def make_project(client):
+    response = client.post('/api/projects', json={
+        'domain_slug': 'sovereign-debt', 'title': 'Debt and development test',
+        'problem': 'What happens to illustrative debt paths with different interest rate assumptions?'
+    })
+    assert response.status_code == 201, response.text
+    return response.json()['id']
+

@@ -1,0 +1,345 @@
+{
+  "safeguards": {
+    "controls": [
+      {
+        "name": "Review of public safeguards reporting",
+        "weight": 3,
+        "implementation_percent": 50
+      },
+      {
+        "name": "Independent policy review",
+        "weight": 2,
+        "implementation_percent": 20
+      }
+    ]
+  },
+  "voting": {
+    "members": [
+      {
+        "name": "Group A",
+        "weight": 3,
+        "supports": true,
+        "veto": true
+      },
+      {
+        "name": "Group B",
+        "weight": 2,
+        "supports": false,
+        "veto": true
+      },
+      {
+        "name": "Group C",
+        "weight": 5,
+        "supports": true,
+        "veto": false
+      }
+    ],
+    "required_share_percent": 60,
+    "veto_enabled": true
+  },
+  "trade": {
+    "items": [
+      {
+        "name": "Illustrative machinery",
+        "import_value": 1000000,
+        "baseline_tariff_percent": 10,
+        "policy_tariff_percent": 6
+      },
+      {
+        "name": "Illustrative materials",
+        "import_value": 500000,
+        "baseline_tariff_percent": 5,
+        "policy_tariff_percent": 3
+      }
+    ]
+  },
+  "debt": {
+    "initial_debt_percent_gdp": 90,
+    "interest_rate_percent": 5,
+    "nominal_gdp_growth_percent": 4,
+    "primary_surplus_percent_gdp": 1,
+    "years": 10
+  },
+  "ai-assurance": {
+    "risks": [
+      {
+        "name": "Unsupported citations",
+        "likelihood": 0.5,
+        "severity": 8,
+        "mitigation_percent": 40
+      },
+      {
+        "name": "Unequal performance",
+        "likelihood": 0.3,
+        "severity": 9,
+        "mitigation_percent": 20
+      }
+    ]
+  },
+  "cyber-loss": {
+    "annual_event_probability": 0.2,
+    "impact_per_event": 1000000,
+    "likelihood_reduction_percent": 40,
+    "impact_reduction_percent": 25,
+    "annual_control_cost": 30000
+  },
+  "health-allocation": {
+    "available_units": 1000,
+    "regions": [
+      {
+        "name": "Region A",
+        "unmet_need": 800,
+        "vulnerability_weight": 2
+      },
+      {
+        "name": "Region B",
+        "unmet_need": 600,
+        "vulnerability_weight": 1
+      }
+    ]
+  },
+  "space-disposal": {
+    "groups": [
+      {
+        "name": "Fleet A",
+        "spacecraft_count": 100,
+        "disposal_success_probability": 0.9
+      },
+      {
+        "name": "Fleet B",
+        "spacecraft_count": 50,
+        "disposal_success_probability": 0.8
+      }
+    ]
+  },
+  "minerals": {
+    "suppliers": [
+      {
+        "name": "Supplier A",
+        "share_percent": 60,
+        "disrupted": true
+      },
+      {
+        "name": "Supplier B",
+        "share_percent": 40,
+        "disrupted": false
+      }
+    ],
+    "replacement_capacity_percent": 20
+  },
+  "ocean": {
+    "initial_pollution_tonnes": 1000,
+    "annual_inflow_tonnes": 200,
+    "prevention_percent": 40,
+    "annual_cleanup_capacity_tonnes": 150,
+    "years": 10
+  },
+  "tax": {
+    "taxable_base": 10000000,
+    "baseline_effective_rate_percent": 15,
+    "policy_effective_rate_percent": 18,
+    "policy_base_change_percent": -5,
+    "annual_administration_cost": 100000
+  },
+  "portfolio": {
+    "budget": 100,
+    "investments": [
+      {
+        "name": "Evidence infrastructure",
+        "division": "ai-governance",
+        "cost": 30,
+        "benefit_score": 35,
+        "delivery_probability": 0.9,
+        "equity_multiplier": 1,
+        "requires": []
+      },
+      {
+        "name": "Water resilience",
+        "division": "climate-finance",
+        "cost": 60,
+        "benefit_score": 80,
+        "delivery_probability": 0.8,
+        "equity_multiplier": 1.2,
+        "requires": [
+          "Evidence infrastructure"
+        ]
+      },
+      {
+        "name": "Health supplies",
+        "division": "global-health",
+        "cost": 50,
+        "benefit_score": 65,
+        "delivery_probability": 0.9,
+        "equity_multiplier": 1.1,
+        "requires": []
+      }
+    ],
+    "synergies": [
+      {
+        "first": "Evidence infrastructure",
+        "second": "Water resilience",
+        "benefit_score": 10
+      }
+    ]
+  },
+  "climate": {
+    "baseline_annual_emissions_tonnes": 100000,
+    "reduction_percent": 20,
+    "annual_program_cost": 1000000,
+    "committed_funding": 3000000,
+    "years": 5
+  },
+  "robust-policy": {
+    "scenarios": [
+      {
+        "name": "Favorable",
+        "weight": 1
+      },
+      {
+        "name": "Adverse",
+        "weight": 1
+      }
+    ],
+    "options": [
+      {
+        "name": "High upside",
+        "outcomes": [
+          100,
+          0
+        ]
+      },
+      {
+        "name": "Resilient option",
+        "outcomes": [
+          65,
+          55
+        ]
+      },
+      {
+        "name": "Weak option",
+        "outcomes": [
+          30,
+          20
+        ]
+      }
+    ]
+  },
+  "voting-power": {
+    "players": [
+      {
+        "name": "Group A",
+        "weight": 2,
+        "veto": false
+      },
+      {
+        "name": "Group B",
+        "weight": 1,
+        "veto": false
+      },
+      {
+        "name": "Group C",
+        "weight": 1,
+        "veto": false
+      }
+    ],
+    "quota": 3
+  },
+  "benchmark-audit": {
+    "groups": [
+      {
+        "name": "Evaluation group A",
+        "trials": 100,
+        "failures": 3
+      },
+      {
+        "name": "Evaluation group B",
+        "trials": 40,
+        "failures": 4
+      }
+    ],
+    "failure_tolerance_percent": 10
+  },
+  "stochastic-debt": {
+    "initial_debt_percent_gdp": 90,
+    "mean_interest_percent": 5,
+    "mean_growth_percent": 4,
+    "primary_surplus_percent_gdp": 1,
+    "interest_std_pp": 1,
+    "growth_std_pp": 2,
+    "interest_growth_correlation": -0.3,
+    "breach_threshold_percent_gdp": 100,
+    "years": 10,
+    "simulations": 500,
+    "seed": 42
+  },
+  "supply-network": {
+    "source": "Supply",
+    "sink": "Demand",
+    "required_throughput": 12,
+    "edges": [
+      {
+        "origin": "Supply",
+        "destination": "Port A",
+        "capacity": 10,
+        "disruption_percent": 50
+      },
+      {
+        "origin": "Supply",
+        "destination": "Port B",
+        "capacity": 6,
+        "disruption_percent": 0
+      },
+      {
+        "origin": "Port A",
+        "destination": "Demand",
+        "capacity": 8,
+        "disruption_percent": 0
+      },
+      {
+        "origin": "Port B",
+        "destination": "Demand",
+        "capacity": 6,
+        "disruption_percent": 0
+      }
+    ]
+  },
+  "health-seir": {
+    "population": 100000,
+    "initial_exposed": 50,
+    "initial_infectious": 20,
+    "reproduction_number": 2,
+    "incubation_days": 5,
+    "infectious_days": 7,
+    "intervention_day": 20,
+    "contact_reduction_percent": 40,
+    "hospital_demand_fraction": 0.05,
+    "hospital_capacity": 200,
+    "days": 120
+  },
+  "cross-impact": {
+    "shocks": [
+      {
+        "division": "sovereign-debt",
+        "initial_shock": 1
+      }
+    ],
+    "links": [
+      {
+        "from_domain": "sovereign-debt",
+        "to_domain": "development-finance",
+        "transmission_weight": 0.7
+      },
+      {
+        "from_domain": "development-finance",
+        "to_domain": "global-health",
+        "transmission_weight": 0.5
+      },
+      {
+        "from_domain": "development-finance",
+        "to_domain": "climate-finance",
+        "transmission_weight": 0.5
+      }
+    ],
+    "damping": 0.7
+  }
+}

@@ -48,6 +48,9 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
+from starlette.middleware.trustedhost import TrustedHostMiddleware
+
+app.add_middleware(TrustedHostMiddleware, allowed_hosts=["127.0.0.1", "localhost", "[::1]", "testserver"])
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -628,3 +631,17 @@ def simulate_planetary_cascade(data: dict):
     from ggisp.engineering.cascade_solver import CascadeShockInput, solve_planetary_cascade
     inp = CascadeShockInput(**data)
     return solve_planetary_cascade(inp)
+
+
+# ---------------------------------------------------------
+# Innovation Workbench, Comparative Lab & Connectors
+# ---------------------------------------------------------
+from ggisp.lab import router as lab_router
+app.include_router(lab_router)
+
+from ggisp.workbench import router as workbench_router
+app.include_router(workbench_router)
+
+from ggisp.connectors import router as connector_router
+app.include_router(connector_router)
+
