@@ -1,56 +1,11 @@
 {
-  "version": 2,
-  "name": "ggisp-platform-v2",
-  "builds": [
-    {
-      "src": "api/index.py",
-      "use": "@vercel/python"
-    },
-    {
-      "src": "index.html",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "pricing.html",
-      "use": "@vercel/static"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/api/(.*)",
-      "dest": "api/index.py"
-    },
-    {
-      "src": "/docs",
-      "dest": "api/index.py"
-    },
-    {
-      "src": "/openapi.json",
-      "dest": "api/index.py"
-    },
-    {
-      "src": "/pricing",
-      "dest": "/pricing.html"
-    },
-    {
-      "src": "/stripe",
-      "dest": "/pricing.html"
-    },
-    {
-      "src": "/plans",
-      "dest": "/pricing.html"
-    },
-    {
-      "src": "/enquiries",
-      "dest": "/pricing.html"
-    },
-    {
-      "src": "/",
-      "dest": "/index.html"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "api/index.py"
-    }
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": "/api/index.py" },
+    { "source": "/docs", "destination": "/api/index.py" },
+    { "source": "/openapi.json", "destination": "/api/index.py" },
+    { "source": "/pricing", "destination": "/pricing.html" },
+    { "source": "/stripe", "destination": "/pricing.html" },
+    { "source": "/plans", "destination": "/pricing.html" },
+    { "source": "/enquiries", "destination": "/pricing.html" }
   ]
 }
