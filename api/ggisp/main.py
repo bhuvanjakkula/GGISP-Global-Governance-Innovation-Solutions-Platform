@@ -13,7 +13,7 @@ from urllib.parse import urlsplit
 
 from fastapi import FastAPI, HTTPException, Query, Response, status
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse, JSONResponse, PlainTextResponse
+from fastapi.responses import FileResponse, HTMLResponse, JSONResponse, PlainTextResponse
 from pydantic import BaseModel, Field, field_validator
 
 from ggisp.ai.assistant import run_ai_draft
@@ -47,12 +47,15 @@ except Exception as _e:
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    init_db()
-    from ggisp.auth import init_auth_tables
-    init_auth_tables()
-    from ggisp.pricing import init_enquiries_table
-    init_enquiries_table()
-    logger.info("GGISP Platform v0.2 initialized successfully with sovereign author access & pricing models.")
+    try:
+        init_db()
+        from ggisp.auth import init_auth_tables
+        init_auth_tables()
+        from ggisp.pricing import init_enquiries_table
+        init_enquiries_table()
+        logger.info("GGISP Platform v0.2 initialized successfully with sovereign author access & pricing models.")
+    except Exception as exc:
+        logger.warning("Lifespan initialization warning: %s", exc)
     yield
 
 
@@ -169,13 +172,34 @@ class SaveSimulationRequest(BaseModel):
 # Web Dashboard & Static Endpoints
 # ---------------------------------------------------------
 
+def _load_html_asset(filename: str) -> str:
+    candidates = [
+        ROOT / "ggisp" / filename,
+        ROOT / filename,
+        Path(__file__).resolve().parent / filename,
+        Path(__file__).resolve().parent.parent / filename,
+        Path.cwd() / "ggisp" / filename,
+        Path.cwd() / filename,
+    ]
+    for c in candidates:
+        try:
+            if c.exists() and c.is_file():
+                return c.read_text(encoding="utf-8")
+        except Exception:
+            continue
+    return ""
+
+
 @app.get("/", include_in_schema=False)
 @app.get("/index.html", include_in_schema=False)
 def index():
-    html_file = ROOT / "ggisp" / "index.html"
-    if not html_file.exists():
-        html_file = ROOT / "index.html"
-    return FileResponse(html_file)
+    content = _load_html_asset("index.html")
+    if content:
+        return HTMLResponse(content=content, media_type="text/html; charset=utf-8")
+    for p in [ROOT / "ggisp" / "index.html", ROOT / "index.html"]:
+        if p.exists():
+            return FileResponse(str(p))
+    return HTMLResponse("<!DOCTYPE html><html><body><h1>GGISP Platform</h1></body></html>", media_type="text/html; charset=utf-8")
 
 
 @app.get("/pricing", include_in_schema=False)
@@ -184,12 +208,13 @@ def index():
 @app.get("/plans", include_in_schema=False)
 @app.get("/enquiries", include_in_schema=False)
 def pricing_page():
-    pricing_file = ROOT / "ggisp" / "pricing.html"
-    if not pricing_file.exists():
-        pricing_file = ROOT / "pricing.html"
-    if not pricing_file.exists():
-        pricing_file = ROOT / "ggisp" / "index.html"
-    return FileResponse(pricing_file)
+    content = _load_html_asset("pricing.html")
+    if content:
+        return HTMLResponse(content=content, media_type="text/html; charset=utf-8")
+    for p in [ROOT / "ggisp" / "pricing.html", ROOT / "pricing.html"]:
+        if p.exists():
+            return FileResponse(str(p))
+    return index()
 
 
 @app.get("/api/health")

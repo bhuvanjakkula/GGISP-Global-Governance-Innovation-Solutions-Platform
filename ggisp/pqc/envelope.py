@@ -12,7 +12,11 @@ import os
 import secrets
 from typing import Any, Dict
 
-from cryptography.hazmat.primitives.ciphers.aead import AESGCM
+try:
+    from cryptography.hazmat.primitives.ciphers.aead import AESGCM
+except ImportError:
+    AESGCM = None
+
 from ggisp.pqc.ml_kem import ml_kem_768
 
 
@@ -26,6 +30,9 @@ class QuantumEnvelope:
         associated_data: bytes = b"GGISP-PQC-ENVELOPE-v1",
     ) -> Dict[str, Any]:
         """Encrypt payload using ML-KEM-768 key encapsulation and AES-256-GCM."""
+        if AESGCM is None:
+            raise RuntimeError("The cryptography package is required for AES-256-GCM operations.")
+
         if isinstance(plaintext, str):
             payload_bytes = plaintext.encode("utf-8")
         else:
@@ -71,6 +78,8 @@ class QuantumEnvelope:
         shared_secret = ml_kem_768.decapsulate(secret_key_bytes, kem_ciphertext)
 
         # 2. Decrypt with AES-256-GCM
+        if AESGCM is None:
+            raise RuntimeError("The cryptography package is required for AES-256-GCM operations.")
         aesgcm = AESGCM(shared_secret)
         full_ciphertext = ciphertext + tag
         return aesgcm.decrypt(nonce, full_ciphertext, associated_data)
