@@ -165,6 +165,28 @@ assert me_data['is_author'] is True
 assert 'ALL_13_DIVISIONS' in me_data['permissions']
 print(f"  [OK] Author Profile & Permissions: {len(me_data['permissions'])} Sovereign Permissions Active")
 
-print("\nALL LIVE PRODUCTION, QUANTUM-SAFE & AUTHOR AUTHENTICATION ENDPOINTS VALIDATED SUCCESSFULLY.")
+# 9. Test Pricing Models, 2-Month Free Trial & Customer Enquiries
+print("\n--- Verifying Pricing Models & Customer Enquiries Subsystem ---")
+st_p, plans_data = test('http://127.0.0.1:8000/api/pricing/plans')
+assert '2 MONTHS FREE TRIAL' in plans_data['special_offer']
+assert plans_data['support_contact'] == 'bjtmusic12@gmail.com'
+assert len(plans_data['plans']) == 3
+print(f"  [OK] Pricing Catalog: {len(plans_data['plans'])} Plans (Special Offer: '{plans_data['special_offer']}', Contact: {plans_data['support_contact']})")
+
+st_enq, enq_res = test('http://127.0.0.1:8000/api/pricing/enquiries', method='POST', data={
+    'full_name': 'H.E. Marcus Vance',
+    'email': 'marcus.vance@sovereign-reserve.int',
+    'mobile_number': '+44 20 7946 0912',
+    'organization': 'Multilateral Reserve Board',
+    'selected_plan': 'enterprise',
+    'message': 'Activating our 2-month free institutional trial for systemic risk modeling.'
+})
+assert enq_res['status'] == 'SUCCESS'
+assert enq_res['support_email'] == 'bjtmusic12@gmail.com'
+assert enq_res['free_trial_activated'] is True
+print(f"  [OK] Customer Enquiry & 2-Month Trial: Activated (Ticket #{enq_res['enquiry_id']}, Contact: {enq_res['support_email']})")
+
+print("\nALL LIVE PRODUCTION, QUANTUM-SAFE, AUTHENTICATION & PRICING ENDPOINTS VALIDATED SUCCESSFULLY.")
+
 
 

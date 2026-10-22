@@ -39,7 +39,9 @@ async def lifespan(app: FastAPI):
     init_db()
     from ggisp.auth import init_auth_tables
     init_auth_tables()
-    logger.info("GGISP Platform v0.2 initialized successfully with sovereign author access.")
+    from ggisp.pricing import init_enquiries_table
+    init_enquiries_table()
+    logger.info("GGISP Platform v0.2 initialized successfully with sovereign author access & pricing models.")
     yield
 
 
@@ -652,6 +654,10 @@ app.include_router(pqc_router)
 
 from ggisp.auth import router as auth_router
 app.include_router(auth_router)
+
+from ggisp.pricing import router as pricing_router
+app.include_router(pricing_router)
+
 
 
 
