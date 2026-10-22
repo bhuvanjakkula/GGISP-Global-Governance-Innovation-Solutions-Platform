@@ -33,25 +33,33 @@ def database_path() -> Path:
     if env_path:
         return Path(env_path)
     if os.getenv("VERCEL") or os.getenv("AWS_LAMBDA_FUNCTION_NAME"):
-        tmp_db = Path("/tmp/ggisp.db")
-        source_db = ROOT / "data" / "ggisp.db"
-        if not tmp_db.exists() and source_db.exists():
-            import shutil
-            try:
-                shutil.copy2(str(source_db), str(tmp_db))
-            except Exception:
-                pass
-        return tmp_db
-    return ROOT / "data" / "ggisp.db"
+        return Path("/tmp/ggisp.db")
+    try:
+        data_dir = ROOT / "data"
+        data_dir.mkdir(parents=True, exist_ok=True)
+        test_file = data_dir / ".write_test"
+        test_file.write_text("ok")
+        test_file.unlink()
+        return data_dir / "ggisp.db"
+    except Exception:
+        return Path("/tmp/ggisp.db")
 
+
+_db_initialized = False
 
 @contextmanager
 def db():
+    global _db_initialized
     path = database_path()
     path.parent.mkdir(parents=True, exist_ok=True)
     con = sqlite3.connect(str(path), timeout=15)
     con.row_factory = sqlite3.Row
     con.execute("PRAGMA foreign_keys = ON")
+    if not _db_initialized:
+        has_table = con.execute("SELECT count(*) FROM sqlite_master WHERE type='table' AND name='domains'").fetchone()[0]
+        if not has_table:
+            _run_init_script(con)
+        _db_initialized = True
     try:
         yield con
         con.commit()
@@ -67,8 +75,16 @@ def calculate_hash(text: str) -> str:
     return hashlib.sha256(text.encode("utf-8")).hexdigest()
 
 
-def init_db() -> None:
-    with db() as con:
+def init_db(con=None) -> None:
+    if con is not None:
+        _run_init_script(con)
+    else:
+        with db() as conn:
+            _run_init_script(conn)
+
+
+def _run_init_script(con) -> None:
+    with con:
         con.executescript("""
         CREATE TABLE IF NOT EXISTS domains (
             slug TEXT PRIMARY KEY,
