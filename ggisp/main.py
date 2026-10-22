@@ -645,3 +645,7 @@ app.include_router(workbench_router)
 from ggisp.connectors import router as connector_router
 app.include_router(connector_router)
 
+from ggisp.pqc import pqc_router
+app.include_router(pqc_router)
+
+

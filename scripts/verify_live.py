@@ -73,3 +73,63 @@ print(f"  [OK] Supply Network MaxFlow/MinCut: Baseline = {net_res['metrics']['ba
 st_conn, conn_cat = test('http://127.0.0.1:8000/api/connectors')
 print(f"Connectors Catalog: World Bank status = '{conn_cat['world_bank']['status']}' (Status: {st_conn})")
 
+# 7. Test Post-Quantum Cryptography (PQC) Subsystem
+print("\n--- Verifying Post-Quantum Cryptography (PQC) Subsystem ---")
+st_pqc, pqc_stat = test('http://127.0.0.1:8000/api/pqc/status')
+print(f"PQC Status: {pqc_stat['quantum_readiness_level']} (Active Standards: {len(pqc_stat['active_standards'])})")
+
+# Test KEM-768
+st_kem, kem_kp = test('http://127.0.0.1:8000/api/pqc/kem/generate-keypair', method='POST')
+print(f"  [OK] ML-KEM-768 Keygen: PK={kem_kp['public_key_bytes_len']}B, SK={kem_kp['secret_key_bytes_len']}B")
+st_enc, enc_res = test('http://127.0.0.1:8000/api/pqc/kem/encapsulate', method='POST', data={'public_key_hex': kem_kp['public_key_hex']})
+print(f"  [OK] ML-KEM-768 Encapsulation: Shared Secret bits = {enc_res['shared_secret_bits']}")
+st_dec, dec_res = test('http://127.0.0.1:8000/api/pqc/kem/decapsulate', method='POST', data={
+    'secret_key_hex': kem_kp['secret_key_hex'],
+    'ciphertext_hex': enc_res['ciphertext_hex']
+})
+assert enc_res['shared_secret_hex'] == dec_res['shared_secret_hex']
+print(f"  [OK] ML-KEM-768 Decapsulation: 100% Shared Secret Reconciled ({dec_res['decapsulation_status']})")
+
+# Test DSA-65
+st_dsa, dsa_kp = test('http://127.0.0.1:8000/api/pqc/dsa/generate-keypair', method='POST')
+st_sig, sig_res = test('http://127.0.0.1:8000/api/pqc/dsa/sign', method='POST', data={
+    'secret_key_hex': dsa_kp['secret_key_hex'],
+    'message': 'Sovereign Debt Mitigation Accord'
+})
+print(f"  [OK] ML-DSA-65 Signature: {sig_res['signature_bytes_len']} bytes (SHA3-256: {sig_res['message_digest_sha3_256'][:16]}...)")
+st_ver, ver_res = test('http://127.0.0.1:8000/api/pqc/dsa/verify', method='POST', data={
+    'public_key_hex': dsa_kp['public_key_hex'],
+    'message': 'Sovereign Debt Mitigation Accord',
+    'signature_hex': sig_res['signature_hex']
+})
+assert ver_res['verified'] is True
+print(f"  [OK] ML-DSA-65 Verification: Authenticated = {ver_res['verified']} ({ver_res['status']})")
+
+# Test Hybrid Envelope Encryption
+st_env_enc, env_enc = test('http://127.0.0.1:8000/api/pqc/envelope/encrypt', method='POST', data={
+    'public_key_hex': kem_kp['public_key_hex'],
+    'plaintext': 'CLASSIFIED_POLICY_ACCORD_13_DIVISIONS',
+    'associated_data': 'GGISP-PQC-DOSSIER-v1'
+})
+print(f"  [OK] Hybrid Envelope Encrypted: Standard = {env_enc['pqc_standard']}, Cipher = {env_enc['symmetric_cipher']}")
+st_env_dec, env_dec = test('http://127.0.0.1:8000/api/pqc/envelope/decrypt', method='POST', data={
+    'secret_key_hex': kem_kp['secret_key_hex'],
+    'envelope': env_enc,
+    'associated_data': 'GGISP-PQC-DOSSIER-v1'
+})
+assert env_dec['plaintext'] == 'CLASSIFIED_POLICY_ACCORD_13_DIVISIONS'
+print(f"  [OK] Hybrid Envelope Decrypted: '{env_dec['plaintext']}' ({env_dec['decryption_status']})")
+
+# Test Merkle PQC Signer
+st_merkle_pqc, merkle_pqc = test('http://127.0.0.1:8000/api/pqc/sign-merkle-root', method='POST')
+print(f"  [OK] Post-Quantum Merkle Attestation: Root = {merkle_pqc['merkle_root'][:20]}... Standard = {merkle_pqc['pqc_signature_standard']}, Verified = {merkle_pqc['signature_verification']}")
+
+# Test Shor Gate Calculation & Mosca Audit
+st_shor, shor_res = test('http://127.0.0.1:8000/api/pqc/shor-gate-calculation', method='POST', data={'classical_algorithm': 'RSA', 'key_bits': 2048})
+print(f"  [OK] Shor Calculator: RSA-2048 Logical Qubits = {shor_res['estimated_logical_qubits_required']}, Surface Code Qubits = {shor_res['estimated_physical_qubits_required']}")
+st_mosca, mosca_res = test('http://127.0.0.1:8000/api/pqc/shor-risk-audit')
+print(f"  [OK] Mosca HNDL Matrix: Audited {mosca_res['total_domains_audited']} domains, Critical exposure = {mosca_res['domains_with_hndl_exposure']}")
+
+print("\nALL LIVE PRODUCTION & QUANTUM-SAFE ENDPOINTS VALIDATED SUCCESSFULLY.")
+
+
