@@ -194,6 +194,12 @@ def _load_html_asset(filename: str) -> str:
 @app.get("/index.html", include_in_schema=False)
 def index():
     content = _load_html_asset("index.html")
+    if not content:
+        try:
+            from ggisp.embedded_pages import INDEX_HTML
+            content = INDEX_HTML
+        except Exception:
+            pass
     if content:
         return HTMLResponse(content=content, media_type="text/html; charset=utf-8")
     for p in [ROOT / "ggisp" / "index.html", ROOT / "index.html"]:
@@ -209,6 +215,12 @@ def index():
 @app.get("/enquiries", include_in_schema=False)
 def pricing_page():
     content = _load_html_asset("pricing.html")
+    if not content:
+        try:
+            from ggisp.embedded_pages import PRICING_HTML
+            content = PRICING_HTML
+        except Exception:
+            pass
     if content:
         return HTMLResponse(content=content, media_type="text/html; charset=utf-8")
     for p in [ROOT / "ggisp" / "pricing.html", ROOT / "pricing.html"]:

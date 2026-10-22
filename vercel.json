@@ -3,14 +3,7 @@
   "builds": [
     {
       "src": "main.py",
-      "use": "@vercel/python",
-      "config": {
-        "includeFiles": [
-          "index.html",
-          "pricing.html",
-          "ggisp/**"
-        ]
-      }
+      "use": "@vercel/python"
     }
   ],
   "routes": [
