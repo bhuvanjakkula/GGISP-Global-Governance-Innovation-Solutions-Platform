@@ -130,6 +130,41 @@ print(f"  [OK] Shor Calculator: RSA-2048 Logical Qubits = {shor_res['estimated_l
 st_mosca, mosca_res = test('http://127.0.0.1:8000/api/pqc/shor-risk-audit')
 print(f"  [OK] Mosca HNDL Matrix: Audited {mosca_res['total_domains_audited']} domains, Critical exposure = {mosca_res['domains_with_hndl_exposure']}")
 
-print("\nALL LIVE PRODUCTION & QUANTUM-SAFE ENDPOINTS VALIDATED SUCCESSFULLY.")
+# 8. Test User Authentication & Author Access Subsystem
+print("\n--- Verifying Authentication & Author Access Subsystem ---")
+# Sign up standard user
+st_su, su_res = test('http://127.0.0.1:8000/api/auth/signup', method='POST', data={
+    'full_name': 'Live Verification Analyst',
+    'email': 'verify_analyst_2026@ggisp.org',
+    'mobile_number': '+1 202 555 0199',
+    'password': 'LiveVerifyPassword123!'
+})
+print(f"  [OK] Sign Up: {su_res['user']['email']} (Role: {su_res['user']['role']}, Status: {st_su})")
+
+# Sign in author
+st_auth, auth_res = test('http://127.0.0.1:8000/api/auth/signin', method='POST', data={
+    'email': 'bhuvanjakkula@gmail.com',
+    'password': ''
+})
+assert auth_res['user']['is_author'] is True
+print(f"  [OK] Author Sign In: {auth_res['user']['email']} -> {auth_res['user']['role']} (All Access: {auth_res['user']['access_all_features']})")
+
+# Direct author access
+st_dir, dir_res = test('http://127.0.0.1:8000/api/auth/author-access', method='POST', data={
+    'email': 'bhuvanjakkula@gmail.com'
+})
+assert dir_res['user']['is_author'] is True
+print(f"  [OK] Direct Author Access: Verified author token generated")
+
+# Profile check with token
+author_token = dir_res['token']
+req_me = urllib.request.Request('http://127.0.0.1:8000/api/auth/me', headers={'Authorization': f'Bearer {author_token}'})
+with urllib.request.urlopen(req_me, timeout=5) as res:
+    me_data = json.loads(res.read().decode('utf-8'))
+assert me_data['is_author'] is True
+assert 'ALL_13_DIVISIONS' in me_data['permissions']
+print(f"  [OK] Author Profile & Permissions: {len(me_data['permissions'])} Sovereign Permissions Active")
+
+print("\nALL LIVE PRODUCTION, QUANTUM-SAFE & AUTHOR AUTHENTICATION ENDPOINTS VALIDATED SUCCESSFULLY.")
 
 

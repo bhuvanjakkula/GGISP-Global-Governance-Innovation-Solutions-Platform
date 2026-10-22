@@ -37,7 +37,9 @@ ROOT = Path(__file__).resolve().parent.parent
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     init_db()
-    logger.info("GGISP Platform v0.2 initialized successfully.")
+    from ggisp.auth import init_auth_tables
+    init_auth_tables()
+    logger.info("GGISP Platform v0.2 initialized successfully with sovereign author access.")
     yield
 
 
@@ -647,5 +649,9 @@ app.include_router(connector_router)
 
 from ggisp.pqc import pqc_router
 app.include_router(pqc_router)
+
+from ggisp.auth import router as auth_router
+app.include_router(auth_router)
+
 
 
