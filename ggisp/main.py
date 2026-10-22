@@ -158,13 +158,24 @@ class SaveSimulationRequest(BaseModel):
 # ---------------------------------------------------------
 
 @app.get("/", include_in_schema=False)
-@app.get("/pricing", include_in_schema=False)
-@app.get("/enquiries", include_in_schema=False)
 def index():
     html_file = ROOT / "ggisp" / "index.html"
     if not html_file.exists():
         html_file = ROOT / "index.html"
     return FileResponse(html_file)
+
+
+@app.get("/pricing", include_in_schema=False)
+@app.get("/stripe", include_in_schema=False)
+@app.get("/plans", include_in_schema=False)
+@app.get("/enquiries", include_in_schema=False)
+def pricing_page():
+    pricing_file = ROOT / "ggisp" / "pricing.html"
+    if not pricing_file.exists():
+        pricing_file = ROOT / "pricing.html"
+    if not pricing_file.exists():
+        pricing_file = ROOT / "ggisp" / "index.html"
+    return FileResponse(pricing_file)
 
 
 @app.get("/api/health")
