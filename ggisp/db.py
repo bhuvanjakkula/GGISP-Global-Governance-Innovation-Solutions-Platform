@@ -426,32 +426,53 @@ def init_db() -> None:
             src_title, src_url, src_pub, src_yr,
             claim_stmt, rec_stmt
         ) in ALL_SEED_PROJECTS:
-            if slug in existing_domain_slugs:
-                continue
-            cur = con.execute("""
-                INSERT INTO projects (domain_slug, title, problem, country_code, status)
-                VALUES (?, ?, ?, ?, ?)
-            """, (slug, title, problem, ccode, status))
-            pid = cur.lastrowid
+            row = con.execute("SELECT id FROM projects WHERE domain_slug=?", (slug,)).fetchone()
+            if row is None:
+                cur = con.execute("""
+                    INSERT INTO projects (domain_slug, title, problem, country_code, status)
+                    VALUES (?, ?, ?, ?, ?)
+                """, (slug, title, problem, ccode, "ready"))
+                pid = cur.lastrowid
+            else:
+                pid = row[0]
+                con.execute("UPDATE projects SET status='ready' WHERE id=?", (pid,))
 
-            hash_val = calculate_hash(src_title + src_pub)
-            cur_src = con.execute("""
-                INSERT INTO sources (project_id, title, url, publisher, publication_year, content_hash, notes, manually_reviewed, quality_rating)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-            """, (pid, src_title, src_url, src_pub, src_yr, hash_val, f"Official verified reference document for {title}.", 1, "high"))
-            sid = cur_src.lastrowid
+            # Ensure source exists
+            src_row = con.execute("SELECT id FROM sources WHERE project_id=?", (pid,)).fetchone()
+            if src_row is None:
+                hash_val = calculate_hash(src_title + src_pub)
+                cur_src = con.execute("""
+                    INSERT INTO sources (project_id, title, url, publisher, publication_year, content_hash, notes, manually_reviewed, quality_rating)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                """, (pid, src_title, src_url, src_pub, src_yr, hash_val, f"Official verified reference document for {title}.", 1, "high"))
+                sid = cur_src.lastrowid
+            else:
+                sid = src_row[0]
 
-            con.execute("""
-                INSERT INTO claims (project_id, statement, evidence_status, source_id, confidence_score)
-                VALUES (?, ?, 'supported', ?, 4)
-            """, (pid, claim_stmt, sid))
+            # Ensure claim exists
+            claim_row = con.execute("SELECT id FROM claims WHERE project_id=?", (pid,)).fetchone()
+            if claim_row is None:
+                con.execute("""
+                    INSERT INTO claims (project_id, statement, evidence_status, source_id, confidence_score)
+                    VALUES (?, ?, 'supported', ?, 4)
+                """, (pid, claim_stmt, sid))
 
-            con.execute("""
-                INSERT INTO recommendations (project_id, recommendation, rationale, risks, author, approval_status)
-                VALUES (?, ?, 'Empirically supported multilateral operational intervention.', 'Requires inter-state coordination and standardized protocol adoption.', 'Founder', 'approved')
-            """, (pid, rec_stmt))
+            # Ensure recommendation exists
+            rec_row = con.execute("SELECT id FROM recommendations WHERE project_id=?", (pid,)).fetchone()
+            if rec_row is None:
+                con.execute("""
+                    INSERT INTO recommendations (project_id, recommendation, rationale, risks, author, approval_status, approved_at)
+                    VALUES (?, ?, 'Empirically supported multilateral operational intervention.', 'Requires inter-state coordination and standardized protocol adoption.', 'Founder', 'approved', datetime('now'))
+                """, (pid, rec_stmt))
+            else:
+                con.execute("""
+                    UPDATE recommendations SET approval_status='approved', approved_at=COALESCE(approved_at, datetime('now')) WHERE id=?
+                """, (rec_row[0],))
 
-            con.execute("""
-                INSERT INTO competing_proposals (project_id, proposal_title, proponent_summary, trade_offs)
-                VALUES (?, 'Status Quo Unilateral Approach', 'Individual nation-state voluntary policies without binding multilateral standardization.', 'High risk of jurisdictional evasion, regulatory fragmentation, and coordination failure.')
-            """, (pid,))
+            # Ensure competing proposal exists
+            prop_row = con.execute("SELECT id FROM competing_proposals WHERE project_id=?", (pid,)).fetchone()
+            if prop_row is None:
+                con.execute("""
+                    INSERT INTO competing_proposals (project_id, proposal_title, proponent_summary, trade_offs)
+                    VALUES (?, 'Status Quo Unilateral Approach', 'Individual nation-state voluntary policies without binding multilateral standardization.', 'High risk of jurisdictional evasion, regulatory fragmentation, and coordination failure.')
+                """, (pid,))

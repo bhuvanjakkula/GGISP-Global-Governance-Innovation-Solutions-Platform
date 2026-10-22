@@ -839,6 +839,17 @@ document.querySelectorAll('.df-btn').forEach(btn => {
   });
 });
 
+async function updateMetricsSummary() {
+  try {
+    const summary = await api('/api/metrics/summary');
+    if ($('metricProjects')) $('metricProjects').textContent = summary.projects;
+    if ($('metricEvidence')) $('metricEvidence').textContent = summary.total_evidence;
+    if ($('metricApproved')) $('metricApproved').textContent = summary.approved_guidance;
+  } catch (e) {
+    console.error('Error loading metrics summary:', e);
+  }
+}
+
 // ---------------- Initial Load ----------------
 async function init() {
   try {
@@ -851,6 +862,7 @@ async function init() {
 
     renderDomains();
     renderProjects();
+    await updateMetricsSummary();
 
     if (projects.length > 0) {
       selectProject(projects[0].id);
@@ -906,6 +918,7 @@ async function selectProject(id) {
     const detail = await api(`/api/projects/${id}`);
     state.currentDetail = detail;
     renderDossier(detail);
+    await updateMetricsSummary();
   } catch (e) {
     notify('Error loading project: ' + e.message, 'error');
   }

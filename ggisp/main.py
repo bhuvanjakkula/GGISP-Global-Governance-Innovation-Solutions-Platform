@@ -184,6 +184,29 @@ def domains():
     return [serialize(r) for r in rows]
 
 
+@app.get("/api/metrics/summary")
+def get_system_metrics():
+    """Retrieve verified multilateral metrics summary across all 13 domains."""
+    with db() as con:
+        divisions_count = con.execute("SELECT COUNT(*) FROM domains").fetchone()[0]
+        projects_count = con.execute("SELECT COUNT(*) FROM projects").fetchone()[0]
+        sources_count = con.execute("SELECT COUNT(*) FROM sources").fetchone()[0]
+        claims_count = con.execute("SELECT COUNT(*) FROM claims").fetchone()[0]
+        recs_count = con.execute("SELECT COUNT(*) FROM recommendations").fetchone()[0]
+        approved_recs = con.execute("SELECT COUNT(*) FROM recommendations WHERE approval_status='approved'").fetchone()[0]
+        sims_count = con.execute("SELECT COUNT(*) FROM simulations").fetchone()[0]
+    return {
+        "divisions": divisions_count,
+        "projects": projects_count,
+        "sources": sources_count,
+        "claims": claims_count,
+        "total_evidence": sources_count + claims_count,
+        "total_recommendations": recs_count,
+        "approved_guidance": approved_recs,
+        "total_simulations": sims_count,
+    }
+
+
 # ---------------------------------------------------------
 # Research Projects Management
 # ---------------------------------------------------------

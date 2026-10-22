@@ -7,9 +7,11 @@ def test(url, method='GET', data=None):
     with urllib.request.urlopen(req, data=body, timeout=5) as res:
         return res.status, json.loads(res.read().decode('utf-8'))
 
-# 1. Test Projects
+# 1. Test Projects & Metrics Summary
 st, projects = test('http://127.0.0.1:8000/api/projects')
 print(f"Projects count: {len(projects)} (Status: {st})")
+st_m, metrics = test('http://127.0.0.1:8000/api/metrics/summary')
+print(f"Metrics summary: Divisions: {metrics['divisions']}, Projects: {metrics['projects']}, Evidence: {metrics['total_evidence']}, Approved: {metrics['approved_guidance']} (Status: {st_m})")
 
 # 2. Test Catalog & All 13 Engines & Playbooks
 st, catalog = test('http://127.0.0.1:8000/api/engines/catalog')

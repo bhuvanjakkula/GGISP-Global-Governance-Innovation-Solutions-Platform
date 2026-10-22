@@ -19,3 +19,15 @@ def test_seed_demo_projects_available(client):
     projects = res.json()
     assert len(projects) >= 1
     assert any(p["domain_slug"] == "sovereign-debt" for p in projects)
+
+
+def test_metrics_summary(client):
+    res = client.get("/api/metrics/summary")
+    assert res.status_code == 200
+    data = res.json()
+    assert data["divisions"] == 13
+    assert data["projects"] >= 1
+    assert "total_evidence" in data
+    assert "approved_guidance" in data
+    assert "total_simulations" in data
+
