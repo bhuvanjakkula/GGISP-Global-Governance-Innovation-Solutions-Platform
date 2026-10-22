@@ -34,6 +34,7 @@ PRICING_PLANS = [
         ],
         "target_audience": "Academic researchers, NGOs, and policy fellows",
         "cta_label": "Start 2-Month Free Trial",
+        "stripe_payment_url": "https://buy.stripe.com/test_28E14f26D7mt5BfbSvcjS0y",
     },
     {
         "id": "enterprise",
@@ -54,6 +55,7 @@ PRICING_PLANS = [
         ],
         "target_audience": "Multinational corporations, banks, sovereign funds, and global consultancies",
         "cta_label": "Start 2-Month Free Trial",
+        "stripe_payment_url": "https://buy.stripe.com/test_7sY4gr6mT0Y5fbP2hVcjS0z",
     },
     {
         "id": "sovereign",
@@ -74,6 +76,7 @@ PRICING_PLANS = [
         ],
         "target_audience": "Ministries of finance, foreign affairs, central banks, and UN agencies",
         "cta_label": "Request Sovereign Onboarding",
+        "stripe_payment_url": "https://buy.stripe.com/test_3cI9AL7qX2290gV2hVcjS0A",
     },
 ]
 

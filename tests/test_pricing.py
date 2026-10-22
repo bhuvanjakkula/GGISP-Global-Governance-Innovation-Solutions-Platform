@@ -29,6 +29,15 @@ def test_get_pricing_plans_includes_2_months_free_trial():
 
     sovereign = [p for p in data["plans"] if p["id"] == "sovereign"][0]
     assert sovereign["monthly_price_usd"] == 25000
+    assert sovereign["stripe_payment_url"] == "https://buy.stripe.com/test_3cI9AL7qX2290gV2hVcjS0A"
+
+    academic = [p for p in data["plans"] if p["id"] == "researcher"][0]
+    assert academic["monthly_price_usd"] == 490
+    assert academic["stripe_payment_url"] == "https://buy.stripe.com/test_28E14f26D7mt5BfbSvcjS0y"
+
+    enterprise = [p for p in data["plans"] if p["id"] == "enterprise"][0]
+    assert enterprise["monthly_price_usd"] == 2450
+    assert enterprise["stripe_payment_url"] == "https://buy.stripe.com/test_7sY4gr6mT0Y5fbP2hVcjS0z"
 
 
 def test_submit_customer_enquiry_success():

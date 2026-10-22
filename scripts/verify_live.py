@@ -173,7 +173,14 @@ assert plans_data['support_contact'] == 'bjtmusic12@gmail.com'
 assert len(plans_data['plans']) == 3
 sov_plan = [p for p in plans_data['plans'] if p['id'] == 'sovereign'][0]
 assert sov_plan['monthly_price_usd'] == 25000
-print(f"  [OK] Pricing Catalog: {len(plans_data['plans'])} Plans (Sovereign: ${sov_plan['monthly_price_usd']}/mo, Special Offer: '{plans_data['special_offer']}', Contact: {plans_data['support_contact']})")
+assert sov_plan['stripe_payment_url'] == 'https://buy.stripe.com/test_3cI9AL7qX2290gV2hVcjS0A'
+acad_plan = [p for p in plans_data['plans'] if p['id'] == 'researcher'][0]
+assert acad_plan['monthly_price_usd'] == 490
+assert acad_plan['stripe_payment_url'] == 'https://buy.stripe.com/test_28E14f26D7mt5BfbSvcjS0y'
+ent_plan = [p for p in plans_data['plans'] if p['id'] == 'enterprise'][0]
+assert ent_plan['monthly_price_usd'] == 2450
+assert ent_plan['stripe_payment_url'] == 'https://buy.stripe.com/test_7sY4gr6mT0Y5fbP2hVcjS0z'
+print(f"  [OK] Pricing Catalog & Stripe Links: {len(plans_data['plans'])} Plans verified with direct Stripe checkout links.")
 
 st_enq, enq_res = test('http://127.0.0.1:8000/api/pricing/enquiries', method='POST', data={
     'full_name': 'H.E. Marcus Vance',
