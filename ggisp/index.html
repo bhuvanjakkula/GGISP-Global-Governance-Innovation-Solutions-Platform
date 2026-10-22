@@ -400,7 +400,7 @@
       <button class="nav-btn" data-tab="specialist">13 Specialist Innovation Engines</button>
       <button class="nav-btn" data-tab="engineering" style="color: #38bdf8; font-weight: 700;">⚡ Planetary Engineering Solvers</button>
       <button class="nav-btn" data-tab="pqc" style="color: #34d399; font-weight: 700;">🛡️ Post-Quantum Cyber (PQC)</button>
-      <button class="nav-btn" data-tab="pricing" style="color: #f59e0b; font-weight: 700;">💎 Pricing & Enquiries (2 Mo Free)</button>
+      <button class="nav-btn" data-tab="pricing" id="navBtnPricing" style="background: rgba(245, 158, 11, 0.2); border: 1px solid #f59e0b; color: #fef08a; font-weight: 800;">💎 Pricing & Enquiries (2 Mo Free)</button>
       <a href="/workbench" target="_blank" class="nav-btn" style="color:#c084fc; text-decoration:none; display:inline-flex; align-items:center; gap:4px;">🔬 Innovation Workbench ↗</a>
       <a href="/lab" target="_blank" class="nav-btn" style="color:#38bdf8; text-decoration:none; display:inline-flex; align-items:center; gap:4px;">📊 Comparative Lab ↗</a>
     </div>
@@ -429,6 +429,25 @@
       <button class="df-btn" data-family="environment">Environment</button>
     </div>
     <div id="domainList">Loading divisions…</div>
+
+    <!-- Customer Support & Pricing Sidebar Widget -->
+    <div class="panel" style="margin-top: 16px; background: rgba(245, 158, 11, 0.08); border: 1px solid rgba(245, 158, 11, 0.3); padding: 12px; border-radius: 8px;">
+      <div class="eyebrow" style="color: #f59e0b; margin-bottom: 4px;">CUSTOMER SUPPORT & PLANS</div>
+      <div style="font-size: 12px; font-weight: 700; color: #fff; margin-bottom: 4px;">2 MONTHS FREE TRIAL</div>
+      <div style="font-size: 11px; color: var(--text-muted); line-height: 1.5; margin-bottom: 8px;">
+        • Academic: $490/mo<br>
+        • Enterprise: $2,450/mo<br>
+        • Sovereign: $25,000/mo
+      </div>
+      <div style="font-size: 11px; color: #cbd5e1; margin-bottom: 10px;">
+        Support Contact:<br>
+        <code style="color: #38bdf8; font-size: 10px; word-break: break-all;">bjtmusic12@gmail.com</code>
+      </div>
+      <button class="btn btn-secondary btn-sm" onclick="switchTab('pricing')" style="width: 100%; justify-content: center; border-color: #f59e0b; color: #fef08a; cursor: pointer; font-size: 11px; font-weight: 700;">
+        💎 View Pricing & Stripe Plans
+      </button>
+    </div>
+
     <div style="margin-top: 16px; padding-top: 12px; border-top: 1px solid var(--border);" class="help">
       All 13 divisions share verified evidence, cryptographic source hashes, and founder-reviewed advisory workflows.
     </div>
@@ -436,6 +455,27 @@
 
   <!-- Main View -->
   <main>
+    <!-- Prominent Global Launch & Pricing Announcement Banner -->
+    <div class="panel" style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(14, 165, 233, 0.15)); border: 1px solid rgba(245, 158, 11, 0.5); margin-bottom: 16px; padding: 14px 18px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;">
+      <div style="display: flex; align-items: center; gap: 14px;">
+        <span style="font-size: 26px;">🎉</span>
+        <div>
+          <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+            <span class="badge" style="background: #f59e0b; color: #000; font-weight: 800; font-size: 10px; padding: 2px 8px;">2 MONTHS FREE TRIAL</span>
+            <span style="font-size: 13px; font-weight: 700; color: #fff;">Subscription Models & Customer Support Active</span>
+          </div>
+          <div style="font-size: 12px; color: #cbd5e1; margin-top: 3px;">
+            Academic ($490/mo) • Institutional ($2,450/mo) • Sovereign ($25,000/mo) | Support: <code style="color: #38bdf8; font-weight: 700;">bjtmusic12@gmail.com</code>
+          </div>
+        </div>
+      </div>
+      <div style="display: flex; gap: 8px; align-items: center;">
+        <button class="btn btn-primary btn-sm" onclick="switchTab('pricing')" style="background: linear-gradient(135deg, #f59e0b, #d97706); color: #000; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 5px;">
+          💎 Open Pricing & Stripe Plans →
+        </button>
+      </div>
+    </div>
+
     <div class="metrics" id="metricsBar">
       <div class="metric-card"><small>Specialist Divisions</small><div class="metric-num">13</div><small>Multilateral domains</small></div>
       <div class="metric-card"><small>Active Research Projects</small><div class="metric-num" id="metricProjects">0</div><small>Across all divisions</small></div>
@@ -456,7 +496,7 @@
 
           <!-- Create Project -->
           <div class="panel">
-            <div class="eyebrow">NEW ENQUIRY</div>
+            <div class="eyebrow">NEW RESEARCH PROJECT DOSSIER</div>
             <h2>Create Research Project</h2>
             <form id="createProjectForm">
               <div style="margin-bottom: 10px;">
@@ -1234,12 +1274,16 @@ const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt
 const tag = (type, text) => `<span class="tag ${type}">${esc(text)}</span>`;
 
 async function api(url, options = {}) {
+  let finalUrl = url;
+  if (window.location.protocol === 'file:' && url.startsWith('/')) {
+    finalUrl = 'http://127.0.0.1:8000' + url;
+  }
   const token = localStorage.getItem('ggisp_auth_token');
   const headers = { 'Content-Type': 'application/json', ...(options.headers || {}) };
   if (token && !headers['Authorization']) {
     headers['Authorization'] = 'Bearer ' + token;
   }
-  const resp = await fetch(url, {
+  const resp = await fetch(finalUrl, {
     ...options,
     headers
   });
@@ -1261,16 +1305,38 @@ function notify(text, type = 'success') {
 }
 
 // ---------------- Navigation & Tabs ----------------
+function switchTab(tabName) {
+  document.querySelectorAll('.nav-btn[data-tab]').forEach(b => b.classList.remove('active'));
+  const targetBtn = document.querySelector(`.nav-btn[data-tab="${tabName}"]`);
+  if (targetBtn) targetBtn.classList.add('active');
+  document.querySelectorAll('.tab-content').forEach(tc => tc.style.display = 'none');
+  const targetTab = $('tab-' + tabName);
+  if (targetTab) {
+    targetTab.style.display = 'block';
+    state.activeTab = tabName;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  if (tabName === 'specialist' && (!state.specialistCatalog || !state.specialistCatalog.length)) {
+    loadSpecialistCatalog();
+  }
+}
+window.switchTab = switchTab;
+
+function checkRoute() {
+  const hash = (window.location.hash || '').replace('#', '').toLowerCase();
+  const path = (window.location.pathname || '').toLowerCase();
+  if (hash === 'pricing' || hash === 'enquiries' || hash === 'plans' || path === '/pricing' || path === '/enquiries') {
+    switchTab('pricing');
+  } else if (hash && $('tab-' + hash)) {
+    switchTab(hash);
+  }
+}
+window.addEventListener('hashchange', checkRoute);
+window.addEventListener('popstate', checkRoute);
+
 document.querySelectorAll('.nav-btn[data-tab]').forEach(btn => {
   btn.addEventListener('click', () => {
-    document.querySelectorAll('.nav-btn[data-tab]').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    document.querySelectorAll('.tab-content').forEach(tc => tc.style.display = 'none');
-    $('tab-' + btn.dataset.tab).style.display = 'block';
-    state.activeTab = btn.dataset.tab;
-    if (btn.dataset.tab === 'specialist' && (!state.specialistCatalog || !state.specialistCatalog.length)) {
-      loadSpecialistCatalog();
-    }
+    switchTab(btn.dataset.tab);
   });
 });
 
@@ -1323,6 +1389,7 @@ async function init() {
     loadOfficialData('KEN');
     await loadSpecialistCatalog();
     await checkAuthStatus();
+    checkRoute();
   } catch (err) {
     notify('Failed to initialize: ' + err.message, 'error');
   }
@@ -2698,11 +2765,16 @@ $('authSignUpForm')?.addEventListener('submit', async (e) => {
   }
 });
 
-// ---------------- Pricing Models & Customer Enquiries ----------------
 $('btnCopySupportEmail')?.addEventListener('click', () => {
-  navigator.clipboard.writeText('bjtmusic12@gmail.com').then(() => {
-    notify('Support email (bjtmusic12@gmail.com) copied to clipboard', 'success');
-  });
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText('bjtmusic12@gmail.com').then(() => {
+      notify('Support email (bjtmusic12@gmail.com) copied to clipboard', 'success');
+    }).catch(() => {
+      prompt('Copy customer support email:', 'bjtmusic12@gmail.com');
+    });
+  } else {
+    prompt('Copy customer support email:', 'bjtmusic12@gmail.com');
+  }
 });
 
 $('btnScrollToForm')?.addEventListener('click', () => {
